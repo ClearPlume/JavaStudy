@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="keywords" content="asdf asdf fads sdaf"/>
+        <title>Html练习</title>
+        <style type="text/css">
+            .table-cell-min {
+                width: 15%;
+            }
+
+            .table-cell {
+                width: 20%;
+            }
+
+            .table-cell-max {
+                width: 40%;
+            }
+
+            table, td, th {
+                border: cyan solid 3px;
+                border-collapse: collapse;
+            }
+
+            .right-align-cell {
+                text-align: right;
+                padding-right: 10px;
+
+            }
+
+            .left-align-cell {
+                text-align: left;
+                padding-left: 10px;
+            }
+
+            .left-align-cell, .right-align-cell {
+                padding-top: 5px;
+                padding-bottom: 5px;
+                width: 50%;
+                border: cyan solid 3px;
+                border-collapse: collapse;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 有序列表 -->
+        <ol type="1" id="first">水果种类
+            <li>苹果</li>
+            <li>香蕉</li>
+            <li>橘子</li>
+        </ol>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 无序列表 -->
+        <ul>交通工具
+            <li>火车</li>
+            <li>飞机</li>
+            <li>轮船</li>
+        </ul>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 定义列表 -->
+        <h3>常用电子设备</h3>
+        <dl>
+            <dt>手机</dt>
+            <dd>手机是用来进行日常娱乐活动的便携式小型电子设备</dd>
+            <dt>电脑</dt>
+            <dd>同手机，但便携性下降</dd>
+            <dt>手环</dt>
+            <dd>比手机更小型化，但功能高度特化，只有部分功能</dd>
+        </dl>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 列表嵌套 -->
+        <ul>
+            <li>
+                <ol type="1">水果种类
+                    <li>苹果</li>
+                    <li>香蕉</li>
+                    <li>橘子</li>
+                </ol>
+            </li>
+            <li>
+                <ul>交通工具
+                    <li>火车</li>
+                    <li>飞机</li>
+                    <li>轮船</li>
+                </ul>
+            </li>
+        </ul>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 图片标签 -->
+        <img src="image/avater.jpg"
+             alt="头像"
+             title="这是头像"
+             style="border: cyan dotted 5px"/>
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 超链接 -->
+        <a href="http://www.baidu.com" target="_blank">在其它页面打开百度</a>
+        <a href="target_test.html" target="_self">在当前页面跳转本地其它页面</a>
+        <a href="#first">回到页面中id为“first”的位置</a>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 学生表 -->
+        <table style="text-align: center; width: 300px; margin: auto">
+            <caption>学生表</caption>
+            <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+            </tr>
+            <tr>
+                <td rowspan="2">101</td>
+                <td>坠天使</td>
+                <td>男</td>
+            </tr>
+            <tr>
+                <td>天使</td>
+                <td>女</td>
+            </tr>
+            <tr>
+                <td>103</td>
+                <td colspan="2">天</td>
+            </tr>
+        </table>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 简历表格 -->
+        <table style="text-align: center; width: 550px; height: 700px; margin: auto">
+            <caption><h2>个人简历</h2></caption>
+            <tr>
+                <td class="table-cell-min">姓名</td>
+                <td class="table-cell"></td>
+                <td class="table-cell-min">出生年月</td>
+                <td class="table-cell"></td>
+                <td class="table-cell-max" rowspan="4"></td>
+            </tr>
+            <tr>
+                <td>性别</td>
+                <td></td>
+                <td>毕业院校</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>民族</td>
+                <td></td>
+                <td>就读院系</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>籍贯</td>
+                <td></td>
+                <td>政治面貌</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>专业</td>
+                <td></td>
+                <td rowspan="3">联系电话</td>
+                <td rowspan="3" colspan="2"></td>
+            </tr>
+            <tr>
+                <td>学位</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>E-Mail</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>联系地址</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>家庭地址</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>求学经历</td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td>社会实践<br/>及<br/>工作经历</td>
+                <td colspan="4"></td>
+            </tr>
+        </table>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 文本格式化标签 -->
+        <h1 style="color: cornflowerblue; text-align: center">文本格式化标签</h1>
+        <p style="text-align: center">这是<b>粗体字</b></p>
+        <p style="text-align: center">这是<big>大号字</big></p>
+        <p style="text-align: center">这是<em>着重字</em></p>
+        <p style="text-align: center">这是<i>斜体字</i></p>
+        <p style="text-align: center">这是<small>小号字</small></p>
+        <p style="text-align: center">这是<strong>加重语气</strong></p>
+        <p style="text-align: center">这是<sub>下标字</sub></p>
+        <p style="text-align: center">这是<sup>上标字</sup></p>
+        <p style="text-align: center">这是
+            <ins>插入字</ins>
+        </p>
+        <p style="text-align: center">这是
+            <del>删除字</del>
+        </p>
+
+        <hr style="border-top: cyan 3px dotted; border-bottom: none; border-left: none; border-right: none">
+
+        <!-- 用户注册表单 -->
+        <form action="http://www.baidu.com" method="get">
+            <table style="width: 600px; height: 720px; margin: auto">
+                <caption>
+                    <h1>用户注册</h1>
+                </caption>
+                <tr>
+                    <td class="right-align-cell">用户名</td>
+                    <td class="left-align-cell">
+                        <label for="uname-text"></label>
+                        <input type="text" id="uname-text" name="uname-text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell">密码</td>
+                    <td class="left-align-cell">
+                        <label for="pwd-text"></label>
+                        <input type="password" id="pwd-text" name="pwd-text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell">确认密码</td>
+                    <td class="left-align-cell">
+                        <label for="cpwd-text"></label>
+                        <input type="password" id="cpwd-text" name="cpwd-text"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell">性别</td>
+                    <td class="left-align-cell">
+                        <label><input type="radio" value="男" name="sex"/>男</label>
+                        <label><input type="radio" value="女" name="sex"/>女</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell">爱好</td>
+                    <td class="left-align-cell">
+                        <label><input type="checkbox" name="hobby" value="FreeStyle"/>FreeStyle</label>
+                        <label><input type="checkbox" name="hobby" value="吃鸡"/>吃鸡</label>
+                        <label><input type="checkbox" name="hobby" value="吃鸭"/>吃鸭</label>
+                        <label><input type="checkbox" name="hobby" value="吃狗肉"/>吃狗肉</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell">上传头像</td>
+                    <td class="left-align-cell">
+                        <label for="upload-avatar"></label>
+                        <input type="file" name="upload-avatar" id="upload-avatar"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell">居住地</td>
+                    <td class="left-align-cell">
+                        <label for="select-city"></label>
+                        <select name="select-city" id="select-city">
+                            <option value="null">------</option>
+                            <option value="bj">北京</option>
+                            <option value="tj">天津</option>
+                            <option value="sh">上海</option>
+                            <option value="cq">重庆</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="right-align-cell" height="200px">个人介绍</td>
+                    <td class="left-align-cell" height="200px">
+                        <label for="intro-text"></label>
+                        <textarea id="intro-text" name="intro-text" cols="35" rows="10"></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="left-align-cell" colspan="2" style="text-align: center">
+                        <label for="submit-btn"></label>
+                        <input id="submit-btn" type="submit" value="提交"/>
+                        <label for="reset-btn"></label>
+                        <input id="reset-btn" type="reset"/></td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>

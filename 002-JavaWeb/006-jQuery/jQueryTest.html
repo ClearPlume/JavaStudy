@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>jQuery学习</title>
+        <script type="text/javascript" src="js_lib/jquery-1.8.3.js"></script>
+        <style type="text/css">
+            input[type="checkbox"] {
+                outline: darkmagenta solid 2px;
+            }
+
+            table, tr, td, th {
+                border-width: 3px;
+                border-color: darkcyan;
+                border-style: solid;
+                border-collapse: collapse;
+                padding: 3px 10px;
+            }
+
+            tr, td, th {
+                width: 80px;
+            }
+
+            #input-stu {
+                background-color: #000;
+                opacity: 0.35;
+                position: absolute;
+                left: 0;
+                top: 0;
+                color: cyan;
+                display: none;
+            }
+        </style>
+    </head>
+    <body style="text-align: center">
+        <button id="insert-stu" style="display: block">添加学生</button>
+        <table id="tb_stu">
+            <tr>
+                <th><label><input id="all-select" type="checkbox"/></label></th>
+                <th>学生编号</th>
+                <th>学生姓名</th>
+                <th>所在班级</th>
+                <th>性别</th>
+                <th>年龄</th>
+                <th style="width: 160px">操作</th>
+            </tr>
+        </table>
+
+        <div id="input-stu">
+            <label>编号：<input type="text" id="input-stu-no"/></label><br/>
+            <label>姓名：<input type="text" id="input-stu-name"/></label><br/>
+            <label>班级：<input type="text" id="input-stu-class"/></label><br/>
+            <label>性别：
+                <select id="input-stu-sex">
+                    <option>----</option>
+                    <option>男</option>
+                    <option>女</option>
+                </select>
+            </label><br/>
+            <label>年龄：<input type="text" id="input-stu-age"/></label><br/>
+            <button id="submit-btn">提交</button>
+            &nbsp;&nbsp;
+            <button id="cancel-btn">取消</button>
+        </div>
+    </body>
+    <script type="text/javascript">
+        let inputDiv;
+        let newRow;
+        let tbStu;
+        let isAddRow;
+        let allSelectCount = 0;
+
+        $(document).ready(function () {
+            inputDiv = $("#input-stu");
+            inputDiv.height("100%");
+            inputDiv.width(innerWidth);
+
+            let selectAll = $("#all-select");
+
+            selectAll.click(function () {
+                $("input[operateRow='true']").each(function () {
+                    this.checked = selectAll.prop("checked");
+                });
+            });
+
+            tbStu = $("#tb_stu");
+
+            $("#insert-stu").click(function () {
+                isAddRow = true;
+
+                // 创建数据行
+                newRow = $("<tr></tr>");
+
+                // 复选框格
+                let checkBoxTD = $("<td></td>");
+                let checkBox = $("<input type='checkbox' operateRow = 'true'/>");
+                checkBox.click(function () {
+                    selectAll.prop("checked", allSelectCount === getSelectedCount());
+                });
+                checkBoxTD.append(checkBox);
+                allSelectCount++;
+                newRow.append(checkBoxTD);
+
+                // 学生编号、学生姓名、所在班级、性别、年龄
+                for (let i = 0; i < 5; i++) {
+                    newRow.append($("<td dataRow = 'true'></td>"));
+                }
+
+                // 操作格
+                let operatorTD = $("<td></td>");
+                let btnStyle = {"font-size": "16px", "padding": "0 20px"};
+                let modifyBtn = $("<button>修改</button>");
+                modifyBtn.css(btnStyle);
+                modifyBtn.click(function () {
+                    isAddRow = false;
+                    newRow = modifyBtn.parent().parent()
+                    operateRow(true, newRow);
+                });
+                operatorTD.append(modifyBtn);
+                let deleteBtn = $("<button>删除</button>");
+                deleteBtn.css(btnStyle);
+                deleteBtn.click(function () {
+                    if (confirm("确认删除数据行？")) {
+                        deleteBtn.parent().parent().remove();
+                        allSelectCount--;
+                    }
+                });
+                operatorTD.append(deleteBtn);
+                newRow.append(operatorTD);
+
+                tbStu.append(newRow);
+                operateRow(false);
+            });
+        });
+
+        function getSelectedCount() {
+            let selectCount = 0;
+
+            $("input[operateRow='true']").each(function () {
+                if (this.checked) {
+                    selectCount++;
+                }
+            });
+
+            return selectCount;
+        }
+
+        function operateRow(modify, row) {
+            if (modify) {
+                let data = getTableRowInfo(row);
+                $("#input-stu-no").val(data[0]);
+                $("#input-stu-name").val(data[1]);
+                $("#input-stu-class").val(data[2]);
+                let inputSex = $("#input-stu-sex")[0];
+                inputSex.selectedIndex = data[3] === "男" ? 1 : 2;
+                $("#input-stu-age").val(data[4]);
+            } else {
+                $("#input-stu-no").val("");
+                $("#input-stu-name").val("");
+                $("#input-stu-class").val("");
+                let inputSex = $("#input-stu-sex")[0];
+                inputSex[0].selected = "selected";
+                $("#input-stu-age").val("");
+            }
+
+            inputDiv.css("display", "block");
+        }
+
+        $("#submit-btn").click(function () {
+            let data = getInputMsg();
+            let inputSex = $("#input-stu-sex")[0];
+            let selectedSex = inputSex[inputSex.selectedIndex].innerText;
+
+            if (selectedSex !== "----") {
+                insertDataToRow(data);
+                inputDiv.css("display", "none");
+                isAddRow = false;
+            } else {
+                alert("请选择性别！");
+            }
+        });
+
+        $("#cancel-btn").click(function () {
+            inputDiv.css("display", "none");
+
+            if (isAddRow) {
+                newRow.remove();
+                allSelectCount--;
+            }
+
+            isAddRow = false;
+        });
+
+        function getInputMsg() {
+            let data = [];
+
+            data[0] = $("#input-stu-no").val();
+            data[1] = $("#input-stu-name").val();
+            data[2] = $("#input-stu-class").val();
+            let inputSex = $("#input-stu-sex")[0];
+            let selectedValue = inputSex[inputSex.selectedIndex].innerText;
+            data[3] = selectedValue === "----" ? "" : selectedValue;
+            data[4] = $("#input-stu-age").val();
+
+            return data;
+        }
+
+        function insertDataToRow(data) {
+            let dataIndex = 0;
+
+            newRow.children().each(function (index, item) {
+                if (item.getAttribute("dataRow")) {
+                    item.innerText = data[dataIndex++];
+                }
+            });
+        }
+
+        function getTableRowInfo(row) {
+            let data = [];
+            let dataIndex = 0;
+
+            row.children().each(function (index, item) {
+                if (item.getAttribute("dataRow")) {
+                    data[dataIndex++] = item.innerText;
+                }
+            });
+
+            return data;
+        }
+    </script>
+</html>

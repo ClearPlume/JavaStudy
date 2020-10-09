@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>样式练习</title>
+        <link rel="stylesheet" type="text/css" href="base.css">
+        <style type="text/css">
+            #header {
+                font: normal 45px 楷体;
+                color: cyan;
+                text-align: center;
+            }
+
+            .last-line {
+                font: normal 30px 方正姚体;
+                color: cadetblue;
+                text-align: center;
+            }
+
+            div {
+                text-align: center;
+            }
+
+            span {
+                font: normal 30px 华文新魏;
+                color: blueviolet;
+                text-align: center;
+                margin: auto;
+                text-decoration: underline dashed darkcyan
+            }
+
+            hr {
+                border-width: 5px 0 0 0;
+                border-color: cyan;
+                border-style: dotted;
+            }
+
+            input[type="text"] {
+                border: 2px dashed cadetblue;
+            }
+
+            a {
+                font: normal 30px 楷体;
+                text-shadow: 3px 3px 3px darkcyan;
+            }
+
+            a:link {
+                color: green
+            }
+
+            a:hover {
+                color: cadetblue
+            }
+
+            a:active {
+                color: cornflowerblue
+            }
+
+            a:visited {
+                color: chartreuse
+            }
+
+            p {
+                text-align: center;
+                font: normal 30px 楷体;
+            }
+
+            #outer-div1 div {
+                color: cadetblue;
+                box-shadow: 10px 10px 5px 5px cyan;
+            }
+
+            #outer-div2 > div > div {
+                color: cornflowerblue;
+                background-color: darkcyan;
+            }
+
+            #outer-div2 + div {
+                color: green;
+                font: italic 30px 楷体;
+            }
+
+            .list {
+                list-style: upper-roman inside;
+            }
+        </style>
+    </head>
+    <body>
+        <p id="header">春晓</p>
+        <p class="first-line">春眠不觉晓</p>
+        <p style="font: normal 30px 隶书; color: cornflowerblue; text-align: center">处处闻啼鸟</p>
+        <span display="block">夜来风雨声</span>
+        <p class="last-line">花落知多少</p>
+
+        <hr>
+
+        <div><label><input type="text"></label></div>
+        <div><label><input type="radio"></label></div>
+
+        <hr>
+
+        <a href="http://www.baidu.com" target="_blank">点击前往百度</a>
+
+        <hr>
+
+        <div id="outer-div1">外部div1
+            <div>内部div1
+                <div>内部div子div1</div>
+                <div>内部div子div2</div>
+                <div>内部div子div3</div>
+            </div>
+            <div>内部div2
+                <div>内部div子div1</div>
+                <div>内部div子div2</div>
+                <div>内部div子div3</div>
+            </div>
+            <div>内部div3</div>
+        </div>
+        <div id="outer-div2">外部div2
+            <div>内部div1
+                <div>内部div子div1</div>
+                <div>内部div子div2</div>
+                <div>内部div子div3</div>
+            </div>
+            <div>内部div2</div>
+            <div>内部div3</div>
+        </div>
+        <div id="outer-div3">外部div3
+            <div>内部div1</div>
+            <div>内部div2</div>
+            <div>内部div3</div>
+        </div>
+        <div id="outer-div4">外部div4
+            <div>内部div1</div>
+            <div>内部div2</div>
+            <div>内部div3</div>
+        </div>
+
+        <hr>
+
+        <ul class="list">
+            <li>列表1</li>
+            <li>列表2</li>
+            <li>列表3</li>
+        </ul>
+    </body>
+</html>

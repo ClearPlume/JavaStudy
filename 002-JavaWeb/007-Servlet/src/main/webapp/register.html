@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>注册</title>
+        <link rel="stylesheet" type="text/css" href="/007_Servlet/css/register.css">
+        <script src="js/jquery-1.8.3.js" type="text/javascript"></script>
+    </head>
+    <body>
+        <div class="register-form-div">
+            <h2 class="register-title">注册</h2>
+            <form action="/007_Servlet/register" id="register-form" method="post">
+                <div class="register">
+                    <div class="input">
+                        <div class="input-tip">
+                            用户名：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="name" type="text"></label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            密码：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="pwd" type="password"></label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            确认密码：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="pwd2" type="password"></label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            年龄：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="age" type="text"></label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            性别：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="sex" type="radio" value="男">男</label>
+                            <label><input class="register-input-normal" name="sex" type="radio" value="女">女</label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            爱好：
+                        </div>
+                        <div class="input-input">
+                            <label>
+                                <input class="register-input-normal" name="hobbies" type="checkbox" value="抽烟">抽烟
+                            </label>
+                            <label>
+                                <input class="register-input-normal" name="hobbies" type="checkbox" value="喝洒">喝洒
+                            </label>
+                            <label>
+                                <input class="register-input-normal" name="hobbies" type="checkbox" value="烫头">烫头
+                            </label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            邮箱：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="email" type="text"></label>
+                        </div>
+                    </div>
+                    <div class="input">
+                        <div class="input-tip">
+                            手机：
+                        </div>
+                        <div class="input-input">
+                            <label><input class="register-input-normal" name="phone" type="text"></label>
+                        </div>
+                    </div>
+                    <div class="valid-code">
+                        <div class="valid-code-tip">验证码：</div>
+                        <div class="valid-code-input">
+                            <label>
+                                <input class="register-input-normal" name="valid-code" type="text">
+                            </label>
+                        </div>
+                        <div class="valid-code-img">
+                            <a id="refresh-valid-code-img-a" href="javascript:void(0)">
+                                <img alt="点此刷新" src="" title="看不清？点击刷新">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="register-btn">
+                        <button type="submit">注册</button>
+                    </div>
+                    <div class="go-login">
+                        <a href="login.html">前往登录</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+    <script type="text/javascript">
+        $("#register-form").submit(function () {
+            $("#register-form input[name='pwd2']").prop("disabled", "true")
+            $("#register-form input[name='valid-code']").prop("disabled", "true")
+            return verifyRegisterInfo();
+        })
+
+        function verifyRegisterInfo() {
+            let valid = true
+            let reg
+
+            $("#register-form input").each(function () {
+                switch (this.name) {
+                    case "name":
+                        reg = /^[a-zA-Z]\w{5,15}$/
+                        break
+                    case "pwd":
+                        reg = /^\w{6,16}$/
+                        break
+                    case "pwd2":
+                        reg = /^\w{6,16}$/
+                        break
+                    case "age":
+                        reg = /^[1-9]\d?$/
+                        break
+                    case "sex":
+                        reg = /^\u7537|\u5973$/
+                        break
+                    case "hobbies":
+                        reg = /^.*$/
+                        break
+                    case "email":
+                        reg = /^[1-9a-zA-Z]\w{5,15}@[\w^_]{2,5}\.[\w^_]{2,5}(\.[\w^_]{2,5})?$/
+                        break
+                    case "phone":
+                        reg = /^1[3-9]\d{9}$/
+                        break
+                    case "valid-code":
+                        reg = /^\w{4}$/
+                        break
+                }
+
+                let inputValid = verifyByRegex(this.value, reg)
+                if (this.name === "pwd2") {
+                    inputValid = inputValid && doubleCheckPwd()
+                }
+                if (this.name === "sex") {
+                    let sex = $(".input-input input[name='sex']")
+                    inputValid = inputValid && (sex[0].checked || sex[1].checked)
+                }
+                if (inputValid) {
+                    $(this).removeClass("insert-emp-input-error")
+                    $(this).addClass("insert-emp-input-normal")
+                } else {
+                    $(this).removeClass("insert-emp-input-normal")
+                    $(this).addClass("insert-emp-input-error")
+                }
+
+                valid = valid && inputValid
+            })
+
+            return valid
+        }
+
+        function verifyByRegex(value, reg) {
+            return reg.test(value)
+        }
+
+        function doubleCheckPwd() {
+            let pwd = $(".input-input input[name='pwd']")
+            let pwd2 = $(".input-input input[name='pwd2']")
+
+            return pwd.val() === pwd2.val()
+        }
+
+        $("#refresh-valid-code-img-a").click(function () {
+            $("#refresh-valid-code-img-a img").prop("src", "/007_Servlet/validCode?" + new Date().getMilliseconds())
+        })
+    </script>
+</html>

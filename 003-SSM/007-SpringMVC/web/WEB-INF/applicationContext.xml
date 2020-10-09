@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <!--扫描@Service注解-->
+    <context:component-scan base-package="top.fallenangel.spring.mvc.model.service"/>
+
+    <!--引入jdbc.properties-->
+    <context:property-placeholder location="classpath:db_employee.properties"/>
+
+    <!--配置数据源-->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${emp_driver}"/>
+        <property name="url" value="${emp_url}"/>
+        <property name="username" value="${emp_user}"/>
+        <property name="password" value="${emp_pwd}"/>
+    </bean>
+
+    <!--配置Session工厂-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="basicDataSource"/>
+        <property name="mapperLocations" value="classpath:*Dao.xml"/>
+    </bean>
+
+    <!--dao扫描-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="top.fallenangel.spring.mvc.model.dao"/>
+    </bean>
+</beans>

@@ -1,0 +1,120 @@
+.input-tip, .input-input {
+    display: inline-block;
+}
+
+.input-tip {
+    width: 90px;
+}
+
+.input-input input[type='text'], .input-input input[type='password'] {
+    width: 160px;
+}
+
+.register-form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.input {
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+.back-employee a {
+    text-decoration-line: none;
+    transition: color 0.2s ease-in-out;
+}
+
+.back-employee {
+    margin: 3px auto;
+}
+
+.back-employee a:link {
+    color: darkgray;
+}
+
+.back-employee a:visited {
+    color: darkgray;
+}
+
+.back-employee a:hover {
+    color: orangered;
+}
+
+.back-employee a:active {
+    color: darkred;
+}
+
+.register-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.register-input-normal {
+    border: solid lightgray 1px;
+}
+
+.register-input-error {
+    border: solid orangered 1px;
+    outline: solid orangered 1px;
+}
+
+.register-form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-btn {
+    height: 30px;
+}
+
+.register-btn button {
+    transition: background-color;
+    transition-duration: 0.2s;
+    background-color: indianred;
+    color: azure;
+    border-width: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.register-btn button:hover {
+    background-color: orangered;
+    cursor: grab;
+}
+
+.register-title {
+    text-align: center;
+    width: 100px;
+    font-weight: normal;
+    border-style: solid;
+    border-width: 0 0 2px 0;
+    border-color: indianred;
+}
+
+.valid-code {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.valid-code div {
+    display: inline-block;
+}
+
+.valid-code input {
+    width: 70px;
+}

@@ -1,0 +1,79 @@
+.name-tip, .name-input, .pwd-tip, .pwd-input {
+    display: inline-block;
+}
+
+.name-tip, .pwd-tip {
+    width: 90px;
+}
+
+.name, .pwd {
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.delete {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.delete-input-normal {
+    border: solid lightgray 1px;
+}
+
+.delete-input-error {
+    border: solid orangered 1px;
+}
+
+.delete-form-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.delete-btn {
+    height: 30px;
+}
+
+.delete-btn button {
+    transition: background-color;
+    transition-duration: 0.2s;
+    background-color: indianred;
+    color: azure;
+    border-width: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.delete-btn button:hover {
+    background-color: red;
+    cursor: grab;
+}
+
+.delete-title {
+    text-align: center;
+    width: 100px;
+    font-weight: normal;
+    border-style: solid;
+    border-width: 0 0 2px 0;
+    border-color: indianred;
+}
+
+.valid-code {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.valid-code div {
+    display: inline-block;
+}
+
+.valid-code input {
+    width: 70px;
+}

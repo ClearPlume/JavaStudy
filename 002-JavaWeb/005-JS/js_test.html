@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>JS测试</title>
+        <style type="text/css">
+            hr {
+                border-width: 3px 0 0 0;
+                border-color: cyan;
+                border-style: dashed;
+            }
+        </style>
+    </head>
+
+    <body style="text-align: center">
+        <h4>注册</h4>
+        <form action="javascript:void(0)">
+            用户名：<label><input type="text" name="username" id="username"/></label>
+            <br/>
+            密码：<label><input type="password" name="pwd1" id="pwd1"/></label>
+            <br/>
+            确认密码：<label><input type="password" name="pwd2" id="pwd2"/></label>
+            <br/>
+            邮箱：<label><input type="text" name="email" id="email"/></label>
+            <br/>
+            手机号：<label><input type="text" name="phone" id="phone"/></label>
+            <br/>
+            <label><input type="submit" value="提交"/></label>
+            <label><input type="reset" value="重置"/></label>
+        </form>
+
+        <hr>
+
+        <h4>地域选择</h4>
+        <label>
+            <select name="province" id="province">
+            </select>
+        </label>
+        <label>
+            <select name="city" id="city">
+            </select>
+        </label>
+        <label>
+            <select name="street" id="street">
+            </select>
+        </label>
+
+        <hr>
+
+        <h4>消息发送</h4>
+        <div>
+            <label>
+                <textarea id="msg-area" cols="30" rows="10" readonly="readonly" style="resize: none;"></textarea>
+            </label>
+
+            <div>
+                <label style="margin-right: 10px">
+                    <input id="insert-msg" type="text" style="width: 180px"/>
+                </label>
+                <button id="send-msg" onclick="sendMSG()" style="font-size: 14px; padding: 0 20px">发送</button>
+            </div>
+        </div>
+
+        <hr>
+
+        <h4>调整字体</h4>
+        <a href="javascript:void(0)" onclick="changeFontSize18()">改变字号到18pt</a>
+        <br/>
+        <a href="javascript:void(0)" onclick="changeFontSize14()">改变字号到14pt</a>
+        <br/>
+        <a href="javascript:void(0)" onclick="changeFontSize12()">改变字号到12pt</a>
+    </body>
+
+    <script type="text/javascript">
+        onload = function () {
+            bindFormCheck();
+            provinceSelection();
+        }
+
+        // 绑定表单的验证事件
+        function bindFormCheck() {
+            document.querySelectorAll(":is(input[type='text'], input[type='password'])").forEach(function (item) {
+                item.onblur = function () {
+                    switch (this.name) {
+                        case "username" :
+                            verify(this, /^[\da-zA-Z]{6,16}$/);
+                            break;
+                        case "pwd1":
+                            verify(this, /^[\da-zA-Z&*(]{6,}$/);
+                            break;
+                        case "pwd2":
+                            if (verify(this, /^[\da-zA-Z&*(]{6,}$/)) {
+                                doubleCheckPwd();
+                            }
+                            break;
+                        case "email":
+                            verify(this, /^\w{6,16}@([a-z]{1,5})\.[a-z]{1,5}(\.[a-z]{1,5})?$/);
+                            break;
+                        case "phone":
+                            verify(this, /^1[3-9]\d{9}$/);
+                            break;
+                    }
+                }
+            });
+        }
+
+        // 验证item的value是否匹配正则reg
+        function verify(item, reg) {
+            if (!reg.test(item.value)) {
+                item.value = "";
+                return false;
+            }
+            return true;
+        }
+
+        // 验证“确认密码”和“密码”是否一致
+        function doubleCheckPwd() {
+            let pwd1 = document.getElementById("pwd1");
+            let pwd2 = document.getElementById("pwd2");
+            if (pwd1.value !== pwd2.value) {
+                pwd1.value = "";
+                pwd2.value = "";
+            }
+        }
+
+        // 地域Map
+        let region = new Map();
+
+        let sxProvince = new Map();
+        sxProvince.set("吕梁", ["离石", "方山", "大武"]);
+        sxProvince.set("太原", ["万柏林", "小店"]);
+        sxProvince.set("大同", ["云冈石窟"])
+
+        let cqProvince = new Map();
+        cqProvince.set("渝中", ["解放碑", "朝天门"]);
+        cqProvince.set("九龙坡", ["巴国城", "龙门阵"]);
+
+        let bjProvince = new Map();
+        bjProvince.set("丰台", ["新发地", "花乡"]);
+        bjProvince.set("房山", ["拱辰街道", "长阳"]);
+
+        let shProvince = new Map();
+        shProvince.set("松江", ["中山街道", "泰晤士"]);
+        shProvince.set("虹口", ["鲁迅墓", "多伦路"]);
+
+        let nullProvince = new Map();
+        nullProvince.set("----", ["----"]);
+
+        region.set("----", nullProvince)
+        region.set("山西", sxProvince);
+        region.set("重庆", cqProvince);
+        region.set("北京", bjProvince);
+        region.set("上海", shProvince);
+
+        function getProvinces() {
+            let provinces = [];
+            let index = 0;
+
+            for (let province of region.keys()) {
+                provinces[index++] = province;
+            }
+
+            return provinces;
+        }
+
+        function getCities(province) {
+            let cities = [];
+            let provinceMap = region.get(province);
+            let index = 0;
+
+            for (let city of provinceMap.keys()) {
+                cities[index++] = city;
+            }
+
+            return cities;
+        }
+
+        function getStreets(province, city) {
+            return region.get(province).get(city);
+        }
+
+        // 初始化省份选择
+        function provinceSelection() {
+            let provinceSelector = document.querySelector("#province");
+            let citySelector = document.querySelector("#city");
+            let streetSelector = document.querySelector("#street");
+
+            setSelector(provinceSelector, getProvinces());
+            setSelector(citySelector, getCities(getSelectedValue(provinceSelector)));
+            setSelector(streetSelector, getStreets(getSelectedValue(provinceSelector), getSelectedValue(citySelector)));
+
+            let selectedProvince;
+            let selectedCity;
+
+            provinceSelector.onchange = function () {
+                selectedProvince = getSelectedValue(provinceSelector);
+                clearSelector(citySelector, streetSelector);
+                setSelector(citySelector, getCities(selectedProvince));
+                selectedCity = getSelectedValue(citySelector)
+                setSelector(streetSelector, getStreets(selectedProvince, selectedCity));
+            };
+            citySelector.onchange = function () {
+                selectedCity = getSelectedValue(citySelector)
+                clearSelector(streetSelector);
+                setSelector(streetSelector, getStreets(selectedProvince, selectedCity));
+            };
+        }
+
+        // 清空select下拉框
+        function clearSelector(...selectors) {
+            selectors.forEach(function (selector) {
+                while (selector.lastChild) {
+                    selector.removeChild(selector.lastChild);
+                }
+            });
+        }
+
+        // 向选择器中填充数据
+        function setSelector(selector, data) {
+            for (let d of data) {
+                let option = document.createElement("option");
+                option.innerText = d;
+                selector.appendChild(option);
+            }
+        }
+
+        // 获取选择器选中的项
+        function getSelectedValue(selector) {
+            return selector[selector.selectedIndex].value;
+        }
+
+        let msgArea = document.querySelector("#msg-area");
+        let insertMSGTB = document.querySelector("#insert-msg");
+        let sendMSGBtn = document.querySelector("#send-msg");
+
+        // 发送消息
+        function sendMSG() {
+            let msg = insertMSGTB.value.trim();
+            if (msg !== "") {
+                let lineStart = msgArea.value === "" ? "" : "\n";
+                msgArea.value = `${msgArea.value}${lineStart}坠天使${new Date().toLocaleString()}\n`;
+                msgArea.value = `${msgArea.value}${msg}\n`;
+                insertMSGTB.value = "";
+                insertMSGTB.focus();
+                msgArea.scrollTop = msgArea.scrollHeight;
+            }
+        }
+
+        insertMSGTB.onkeypress = function (event) {
+            if (event.key === "Enter") {
+                sendMSG();
+            }
+        }
+
+        sendMSGBtn.onkeypress = function (event) {
+            if (event.key === "Enter") {
+                sendMSG();
+            }
+        }
+
+        /* 改变页面字体大小 */
+        function changeFontSize18() {
+            document.body.style.fontSize = "18pt";
+        }
+
+        function changeFontSize14() {
+            document.body.style.fontSize = "14pt";
+        }
+
+        function changeFontSize12() {
+            document.body.style.fontSize = "12pt";
+        }
+    </script>
+</html>

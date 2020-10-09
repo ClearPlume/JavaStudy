@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.fallenangel.mapper.EmployeeMapper">
+    <insert id="insert">
+        INSERT INTO emp
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="EMPNO != null and EMPNO != ''">
+                empno,
+            </if>
+            <if test="ENAME != null and ENAME != ''">
+                ename,
+            </if>
+            <if test="JOB != null and JOB != ''">
+                job,
+            </if>
+            <if test="MGR != null and MGR != ''">
+                mgr,
+            </if>
+            <if test="HIREDATE != null">
+                hiredate,
+            </if>
+            <if test="SAL != null and SAL != ''">
+                sal,
+            </if>
+            <if test="COMM != null and COMM != ''">
+                comm,
+            </if>
+            <if test="DEPTNO != null and DEPTNO != ''">
+                deptno,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="EMPNO != null and EMPNO != ''">
+                #{EMPNO},
+            </if>
+            <if test="ENAME != null and ENAME != ''">
+                #{ENAME},
+            </if>
+            <if test="JOB != null and JOB != ''">
+                #{JOB},
+            </if>
+            <if test="MGR != null and MGR != ''">
+                #{MGR},
+            </if>
+            <if test="HIREDATE != null">
+                #{HIREDATE},
+            </if>
+            <if test="SAL != null and SAL != ''">
+                #{SAL},
+            </if>
+            <if test="COMM != null and COMM != ''">
+                #{COMM},
+            </if>
+            <if test="DEPTNO != null and DEPTNO != ''">
+                #{DEPTNO},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM emp WHERE EMPNO IN
+        <foreach collection="array" open="(" close=")" item="empno" separator=",">
+            #{empno}
+        </foreach>
+    </delete>
+
+    <update id="modify">
+        UPDATE emp
+        SET ENAME    = #{ENAME},
+            JOB      = #{JOB},
+            MGR      = #{MGR},
+            HIREDATE = #{HIREDATE},
+            SAL      = #{SAL},
+            COMM     = #{COMM},
+            DEPTNO   = #{DEPTNO}
+        WHERE EMPNO = #{EMPNO}
+    </update>
+
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM emp
+    </select>
+
+    <select id="getEmployeesWithPage" resultType="employee">
+        SELECT *
+        FROM emp
+        LIMIT #{pageStart}, #{pageSize}
+    </select>
+
+    <select id="query" resultType="employee">
+        SELECT *
+        FROM emp
+        WHERE EMPNO = #{empno}
+    </select>
+
+    <select id="jobs" resultType="map">
+        SELECT DISTINCT JOB
+        FROM emp
+    </select>
+</mapper>

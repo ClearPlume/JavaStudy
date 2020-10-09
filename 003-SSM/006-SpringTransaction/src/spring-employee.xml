@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <!--配置扫描包-->
+    <context:component-scan base-package="
+        top.fallenangel.employee.service,
+        top.fallenangel.employee.controller"/>
+
+    <!--打开事务注解驱动-->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--引入jdbc.properties-->
+    <context:property-placeholder location="classpath:db_employee.properties"/>
+
+    <!--配置DataSource-->
+    <bean id="basicDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${emp_driver}"/>
+        <property name="url" value="${emp_url}"/>
+        <property name="username" value="${emp_user}"/>
+        <property name="password" value="${emp_pwd}"/>
+    </bean>
+
+    <!--配置Session工厂-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="basicDataSource"/>
+        <property name="mapperLocations" value="classpath:top/fallenangel/employee/model/dao/*Dao.xml"/>
+    </bean>
+
+    <!--配置扫描dao-->
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+        <property name="basePackage" value="top.fallenangel.employee.model.dao"/>
+    </bean>
+
+    <!--配置事务管理器-->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="basicDataSource"/>
+    </bean>
+
+    <!--配置事务传播行为-->
+    <!--<tx:advice id="transactionInterceptor" transaction-manager="transactionManager">-->
+    <!--    <tx:attributes>-->
+    <!--        <tx:method name="save*" propagation="REQUIRED"/>-->
+    <!--        <tx:method name="modify*" propagation="REQUIRED"/>-->
+    <!--        <tx:method name="delete*" propagation="REQUIRED"/>-->
+    <!--    </tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--配置事务管理器与切入点的关系-->
+    <!--<aop:config>-->
+    <!--    <aop:pointcut id="transactionPointcut" expression="execution(* top.fallenangel.employee.service.*.*(..))"/>-->
+
+    <!--    &lt;!&ndash;事务内置切入点&ndash;&gt;-->
+    <!--    <aop:advisor advice-ref="transactionInterceptor" pointcut-ref="transactionPointcut"/>-->
+    <!--</aop:config>-->
+</beans>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.spring.mvc.model.dao.IDeptDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.spring.mvc.entity.Dept">
+        <id column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <result column="area_id" jdbcType="INTEGER" property="area.areaId"/>
+        <result column="area_name" jdbcType="VARCHAR" property="area.areaName"/>
+        <result column="parent_area_id" jdbcType="INTEGER" property="area.parentAreaId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        dept_id, area_id, dept_name
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dept
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from t_dept d
+                 left join t_area a on d.area_id = a.area_id
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_dept
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteAll">
+        delete
+        from t_dept
+        where dept_id in
+        <foreach collection="array" separator="," item="deptId" open="(" close=")">
+            #{deptId,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="dept_id" keyProperty="deptId" parameterType="top.fallenangel.spring.mvc.entity.Dept"
+            useGeneratedKeys="true">
+        insert into t_dept (area_id, dept_name)
+        values (#{area.areaId,jdbcType=INTEGER}, #{deptName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="dept_id" keyProperty="deptId"
+            parameterType="top.fallenangel.spring.mvc.entity.Dept" useGeneratedKeys="true">
+        insert into t_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="area.areaId != null">
+                area_id,
+            </if>
+            <if test="deptName != null">
+                dept_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="area.areaId != null">
+                #{area.areaId,jdbcType=INTEGER},
+            </if>
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.spring.mvc.entity.Dept">
+        update t_dept
+        <set>
+            <if test="area.areaId != null">
+                area_id = #{area.areaId,jdbcType=INTEGER},
+            </if>
+            <if test="deptName != null">
+                dept_name = #{deptName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.spring.mvc.entity.Dept">
+        update t_dept
+        set area_id   = #{area.areaId,jdbcType=INTEGER},
+            dept_name = #{deptName,jdbcType=VARCHAR}
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </update>
+    <select id="count" resultType="int">
+        select count(*)
+        from t_dept
+    </select>
+</mapper>

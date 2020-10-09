@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.springmybatis.model.dao.IFlowerDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.springmybatis.model.bean.Flower">
+        <id column="f_id" jdbcType="INTEGER" property="fId"/>
+        <result column="f_name" jdbcType="CHAR" property="fName"/>
+        <result column="f_price" jdbcType="DOUBLE" property="fPrice"/>
+        <result column="c_id" jdbcType="INTEGER" property="cId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        f_id, f_name, f_price, c_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_flower
+        where f_id = #{fId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from tb_flower
+    </select>
+    <select id="selectAllSelective" resultMap="BaseResultMap">
+        select *
+        from tb_flower f join tb_classify c on f.c_id = c.c_id
+        <where>
+            <if test="cName != null">
+                c.c_name = #{cName}
+            </if>
+            <if test="minPrice != null and maxPrice != null">
+                and f.f_price between #{minPrice} and #{maxPrice}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from tb_flower
+        where f_id = #{fId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="f_id" keyProperty="fId"
+            parameterType="top.fallenangel.springmybatis.model.bean.Flower" useGeneratedKeys="true">
+        insert into tb_flower (f_name, f_price, c_id)
+        values (#{fName,jdbcType=CHAR}, #{fPrice,jdbcType=DOUBLE}, #{cId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="f_id" keyProperty="fId"
+            parameterType="top.fallenangel.springmybatis.model.bean.Flower" useGeneratedKeys="true">
+        insert into tb_flower
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fName != null">
+                f_name,
+            </if>
+            <if test="fPrice != null">
+                f_price,
+            </if>
+            <if test="cId != null">
+                c_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fName != null">
+                #{fName,jdbcType=CHAR},
+            </if>
+            <if test="fPrice != null">
+                #{fPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="cId != null">
+                #{cId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.springmybatis.model.bean.Flower">
+        update tb_flower
+        <set>
+            <if test="fName != null">
+                f_name = #{fName,jdbcType=CHAR},
+            </if>
+            <if test="fPrice != null">
+                f_price = #{fPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="cId != null">
+                c_id = #{cId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where f_id = #{fId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.springmybatis.model.bean.Flower">
+        update tb_flower
+        set f_name  = #{fName,jdbcType=CHAR},
+            f_price = #{fPrice,jdbcType=DOUBLE},
+            c_id    = #{cId,jdbcType=INTEGER}
+        where f_id = #{fId,jdbcType=INTEGER}
+    </update>
+</mapper>

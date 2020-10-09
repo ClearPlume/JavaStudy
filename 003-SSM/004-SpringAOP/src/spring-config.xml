@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="account" class="top.fallenangel.springaop.configuration.Account"/>
+
+    <bean id="accountHelper" class="top.fallenangel.springaop.configuration.AccountHelper"/>
+
+    <aop:config>
+        <aop:pointcut id="accountPointCut" expression="execution(public int top.fallenangel.springaop.configuration.Account.out())"/>
+
+        <aop:aspect ref="accountHelper">
+            <!--<aop:before method="validAuth" pointcut-ref="accountPointCut"/>-->
+            <!--<aop:before method="validAmount" pointcut-ref="accountPointCut"/>-->
+            <!--<aop:after method="generateStatement" pointcut-ref="accountPointCut"/>-->
+            <!--<aop:after method="sendMsg" pointcut-ref="accountPointCut"/>-->
+            <aop:around method="aroundOut" pointcut-ref="accountPointCut"/>
+            <aop:after-returning method="getResult" pointcut-ref="accountPointCut" returning="amount"/>
+            <aop:after-throwing method="exception" pointcut-ref="accountPointCut"/>
+        </aop:aspect>
+    </aop:config>
+</beans>

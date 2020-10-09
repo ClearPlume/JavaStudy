@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <groupId>top.fallenangel</groupId>
+    <artifactId>002-JavaWeb</artifactId>
+    <version>1.0</version>
+    <modelVersion>4.0.0</modelVersion>
+    <name>002-JavaWeb</name>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>Util</module>
+        <module>002-JDBC</module>
+        <module>007-Servlet</module>
+        <module>008-JSP</module>
+        <module>009-MVC</module>
+        <module>010-JSON</module>
+        <module>011-Ajax</module>
+        <module>012-Mybatis</module>
+        <module>013-LastSummary</module>
+        <module>014-LastCheck</module>
+    </modules>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>13</maven.compiler.source>
+        <maven.compiler.target>13</maven.compiler.target>
+
+        <!--version control-->
+        <junit-version>4.12</junit-version>
+        <mysql-version>8.0.19</mysql-version>
+        <annotation-version>20.0.0</annotation-version>
+        <servlet-version>4.0.0</servlet-version>
+        <util-version>1.0</util-version>
+        <jstl.jstl-version>1.2</jstl.jstl-version>
+        <jstl.jsp-api-version>2.0</jstl.jsp-api-version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--junit 4.1.2-->
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit-version}</version>
+            </dependency>
+
+            <!--mysql 8.0.19-->
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>${mysql-version}</version>
+            </dependency>
+
+            <!--annotations 20.0.0-->
+            <dependency>
+                <groupId>org.jetbrains</groupId>
+                <artifactId>annotations</artifactId>
+                <version>${annotation-version}</version>
+            </dependency>
+
+            <!--servlet 4.0.0-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${servlet-version}</version>
+            </dependency>
+
+            <!--util 1.0-->
+            <dependency>
+                <groupId>top.fallenangel</groupId>
+                <artifactId>Util</artifactId>
+                <version>${util-version}</version>
+            </dependency>
+
+            <!--jstl 1.2-->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jstl</artifactId>
+                <version>${jstl.jstl-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>jsp-api</artifactId>
+                <version>${jstl.jsp-api-version}</version>
+            </dependency>
+
+            <!--fastjson-->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>1.2.73</version>
+            </dependency>
+
+            <!--mybatis-->
+            <dependency>
+                <groupId>org.mybatis</groupId>
+                <artifactId>mybatis</artifactId>
+                <version>3.5.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

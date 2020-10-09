@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.springtransaction.model.dao.IAccountDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.springtransaction.model.bean.Account">
+        <id column="a_id" jdbcType="INTEGER" property="aId"/>
+        <result column="a_name" jdbcType="CHAR" property="aName"/>
+        <result column="a_amount" jdbcType="INTEGER" property="aAmount"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        a_id, a_name, a_amount
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_account
+        where a_id = #{aId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from tb_account
+        where a_id = #{aId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="a_id" keyProperty="aId"
+            parameterType="top.fallenangel.springtransaction.model.bean.Account" useGeneratedKeys="true">
+        insert into tb_account (a_name, a_amount)
+        values (#{aName,jdbcType=CHAR}, #{aAmount,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="a_id" keyProperty="aId"
+            parameterType="top.fallenangel.springtransaction.model.bean.Account" useGeneratedKeys="true">
+        insert into tb_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="aName != null">
+                a_name,
+            </if>
+            <if test="aAmount != null">
+                a_amount,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="aName != null">
+                #{aName,jdbcType=CHAR},
+            </if>
+            <if test="aAmount != null">
+                #{aAmount,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.springtransaction.model.bean.Account">
+        update tb_account
+        <set>
+            <if test="aName != null">
+                a_name = #{aName,jdbcType=CHAR},
+            </if>
+            <if test="aAmount != null">
+                a_amount = #{aAmount,jdbcType=INTEGER},
+            </if>
+        </set>
+        where a_id = #{aId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.springtransaction.model.bean.Account">
+        update tb_account
+        set a_name   = #{aName,jdbcType=CHAR},
+            a_amount = #{aAmount,jdbcType=INTEGER}
+        where a_id = #{aId,jdbcType=INTEGER}
+    </update>
+    <update id="out">
+        update tb_account
+        set a_amount = a_amount - #{param2}
+        where a_name = #{param1}
+    </update>
+    <update id="in">
+        update tb_account
+        set a_amount = a_amount + #{param2}
+        where a_name = #{param1}
+    </update>
+</mapper>

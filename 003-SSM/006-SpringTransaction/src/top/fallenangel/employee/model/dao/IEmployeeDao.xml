@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.employee.model.dao.IEmployeeDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.employee.model.bean.Employee">
+        <id column="emp_id" jdbcType="INTEGER" property="empId"/>
+        <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="dept_id" jdbcType="INTEGER" property="dept.deptId"/>
+        <result column="dept_name" jdbcType="VARCHAR" property="dept.deptName"/>
+        <result column="area_id" jdbcType="INTEGER" property="dept.area.areaId"/>
+        <result column="area_name" jdbcType="VARCHAR" property="dept.area.areaName"/>
+        <result column="parent_area_id" jdbcType="INTEGER" property="dept.area.parentAreaId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        emp_id, dept_id, emp_name
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_employee
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from t_employee e
+                 left join t_dept d on e.dept_id = d.dept_id
+                 left join t_area a on d.area_id = a.area_id
+    </select>
+    <select id="selectAllByVO" resultMap="BaseResultMap">
+        select *
+        from t_employee e
+        left join t_dept d on e.dept_id = d.dept_id
+        left join t_area a on d.area_id = a.area_id
+        <where>
+            <if test="empName != null and empName != ''">
+                emp_name = #{empName}
+            </if>
+            <if test="dept != null and dept.deptId != null">
+                and d.dept_id = #{dept.deptId}
+            </if>
+            <if test="dept != null and dept.area != null and dept.area.areaID != null">
+                and a.area_id = #{dept.area.areaId}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_employee
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="emp_id" keyProperty="empId"
+            parameterType="top.fallenangel.employee.model.bean.Employee" useGeneratedKeys="true">
+        insert into t_employee (dept_id, emp_name)
+        values (#{dept.deptId,jdbcType=INTEGER}, #{empName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="emp_id" keyProperty="empId"
+            parameterType="top.fallenangel.employee.model.bean.Employee" useGeneratedKeys="true">
+        insert into t_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="empName != null">
+                emp_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptId != null">
+                #{deptId,jdbcType=INTEGER},
+            </if>
+            <if test="empName != null">
+                #{empName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.employee.model.bean.Employee">
+        update t_employee
+        <set>
+            <if test="deptId != null">
+                dept_id = #{deptId,jdbcType=INTEGER},
+            </if>
+            <if test="empName != null">
+                emp_name = #{empName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.employee.model.bean.Employee">
+        update t_employee
+        set dept_id  = #{dept.deptId,jdbcType=INTEGER},
+            emp_name = #{empName,jdbcType=VARCHAR}
+        where emp_id = #{empId,jdbcType=INTEGER}
+    </update>
+</mapper>

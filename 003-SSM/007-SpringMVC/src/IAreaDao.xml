@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.spring.mvc.model.dao.IAreaDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.spring.mvc.entity.Area">
+        <id column="area_id" jdbcType="INTEGER" property="areaId"/>
+        <result column="parent_area_id" jdbcType="INTEGER" property="parentAreaId"/>
+        <result column="area_name" jdbcType="VARCHAR" property="areaName"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        area_id, parent_area_id, area_name
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_area
+        where area_id = #{areaId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from t_area
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_area
+        where area_id = #{areaId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteAll">
+        delete
+        from t_area
+        where area_id    in
+        <foreach collection="array" separator="," item="areaId" open="(" close=")">
+            #{areaId,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="area_id" keyProperty="areaId" parameterType="top.fallenangel.spring.mvc.entity.Area"
+            useGeneratedKeys="true">
+        insert into t_area (parent_area_id, area_name)
+        values (#{parentAreaId,jdbcType=INTEGER}, #{areaName,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" keyColumn="area_id" keyProperty="areaId"
+            parameterType="top.fallenangel.spring.mvc.entity.Area" useGeneratedKeys="true">
+        insert into t_area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="parentAreaId != null">
+                parent_area_id,
+            </if>
+            <if test="areaName != null">
+                area_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="parentAreaId != null">
+                #{parentAreaId,jdbcType=INTEGER},
+            </if>
+            <if test="areaName != null">
+                #{areaName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.spring.mvc.entity.Area">
+        update t_area
+        <set>
+            <if test="parentAreaId != null">
+                parent_area_id = #{parentAreaId,jdbcType=INTEGER},
+            </if>
+            <if test="areaName != null">
+                area_name = #{areaName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where area_id = #{areaId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.spring.mvc.entity.Area">
+        update t_area
+        set parent_area_id = #{parentAreaId,jdbcType=INTEGER},
+            area_name      = #{areaName,jdbcType=VARCHAR}
+        where area_id = #{areaId,jdbcType=INTEGER}
+    </update>
+</mapper>

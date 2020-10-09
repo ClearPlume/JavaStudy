@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>登录</title>
+        <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
+        <link href="css/login.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="login-form-div">
+            <h2 class="login-title">登录</h2>
+            <form action="/009_MVC/login" id="login-form" method="post">
+                <div class="login">
+                    <div class="name">
+                        <div class="name-tip">
+                            用户名：
+                        </div>
+                        <div class="name-input">
+                            <label><input class="login-input-normal" name="name" type="text"></label>
+                        </div>
+                    </div>
+                    <div class="pwd">
+                        <div class="pwd-tip">
+                            密码：
+                        </div>
+                        <div class="name-input">
+                            <label><input class="login-input-normal" name="pwd" type="password"></label>
+                        </div>
+                    </div>
+                    <div class="valid-code">
+                        <div class="valid-code-tip">验证码：</div>
+                        <div class="valid-code-input">
+                            <label>
+                                <input class="login-input-normal" name="valid-code" type="text">
+                            </label>
+                        </div>
+                        <div class="valid-code-img">
+                            <a id="refresh-valid-code-img-a" href="javascript:void(0)">
+                                <img alt="点此刷新" src="" title="看不清？点击刷新">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="login-btn">
+                        <button type="submit">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+    <script type="text/javascript">
+        $("#login-form").submit(function () {
+            return verifyLoginInfo();
+        })
+
+        function verifyLoginInfo() {
+            let valid = true
+            let reg
+
+            $("#login-form input").each(function () {
+                switch (this.name) {
+                    case "name":
+                        reg = /^[a-zA-Z]\w{5,15}$/
+                        break
+                    case "pwd":
+                        reg = /^\w{6,16}$/
+                        break
+                    case "valid-code":
+                        reg = /^\w{4}$/
+                        break
+                    case "auto-login":
+                        reg = /^.*$/
+                        break
+                }
+
+                let inputValid = verifyByRegex(this.value, reg)
+                if (inputValid) {
+                    $(this).removeClass("login-input-error")
+                    $(this).addClass("login-input-normal")
+                } else {
+                    $(this).removeClass("login-input-normal")
+                    $(this).addClass("login-input-error")
+                }
+
+                valid = valid && inputValid
+            })
+
+            return valid
+        }
+
+        function verifyByRegex(value, reg) {
+            return reg.test(value)
+        }
+
+        $("#refresh-valid-code-img-a").click(function () {
+            $("#refresh-valid-code-img-a img").prop("src", "/009_MVC/validCode?time=" + new Date().getMilliseconds())
+        })
+    </script>
+</html>
