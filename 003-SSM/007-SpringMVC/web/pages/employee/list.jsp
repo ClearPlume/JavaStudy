@@ -12,6 +12,7 @@
 <%--@elvariable id="areas" type="java.util.List<top.fallenangel.spring.mvc.entity.Area>"--%>
 <%--@elvariable id="employeeVO" type="top.fallenangel.spring.mvc.entity.EmployeeVO"--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
 <html>
     <head>
@@ -40,6 +41,10 @@
         .page-num {
             display: inline;
         }
+
+        .input-box {
+            width: 120px;
+        }
     </style>
     <body>
         <a href="${pageContext.request.contextPath}">首页</a>
@@ -57,31 +62,23 @@
             </thead>
             <tr>
                 <td colspan="6">
-                    <form action="${pageContext.request.contextPath}/employee/list?page=${curPage}" id="search-form"
-                          method="post"
-                          style="display: inline">
+                    <form:form action="list?page=${curPage}" modelAttribute="employeeVO" cssStyle="display: inline">
+                        <form:input path="empName" placeholder="员工姓名" cssClass="input-box"/>
+                        <form:select path="deptId" cssClass="input-box">
+                            <form:option value="-1" label="请选择员工部门"/>
+                            <form:options items="${depts}" itemValue="deptId" itemLabel="deptName"/>
+                        </form:select>
+                        <form:select path="areaId" cssClass="input-box">
+                            <form:option value="-1" label="请选择部门位置"/>
+                            <form:options items="${areas}" itemValue="areaId" itemLabel="areaName"/>
+                        </form:select>
                         <label>
-                            <input id="empName" name="empName" placeholder="员工姓名" type="text">
+                            <input type="submit" value="搜索">
                         </label>
                         <label>
-                            <select name="deptId" id="deptId">
-                                <option value="-1">请选择员工部门</option>
-                                <c:forEach items="${depts}" var="dept">
-                                    <option value="${dept.deptId}">${dept.deptName}</option>
-                                </c:forEach>
-                            </select>
+                            <input type="reset" value="重置">
                         </label>
-                        <label>
-                            <select name="areaId" id="areaId">
-                                <option value="-1">请选择部门位置</option>
-                                <c:forEach items="${areas}" var="area">
-                                    <option value="${area.areaId}">${area.areaName}</option>
-                                </c:forEach>
-                            </select>
-                        </label>
-                        <button type="submit">搜索</button>
-                        <button type="reset">重置</button>
-                    </form>
+                    </form:form>
                 </td>
             </tr>
             <tr>
@@ -153,16 +150,6 @@
         </table>
     </body>
     <script type="text/javascript">
-        let searchForm
-
-        searchForm = document.querySelector("#search-form")
-
-        document.querySelector("#empName").value = "${employeeVO.empName}"
-
-        document.querySelector("#deptId").value = Number.parseInt("${employeeVO.deptId}")
-
-        document.querySelector("#areaId").value = Number.parseInt("${employeeVO.areaId}")
-
         document.querySelector("#add-btn").onclick = function () {
             location.href = "${pageContext.request.contextPath}/employee/edit"
         }
@@ -249,6 +236,8 @@
          */
         function pageChange(page, offset = 0) {
             let finalPage = page + offset
+            let searchForm = document.querySelector("#employeeVO");
+
             searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + finalPage
             searchForm.submit()
         }

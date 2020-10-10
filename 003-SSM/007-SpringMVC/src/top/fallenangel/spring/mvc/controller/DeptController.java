@@ -25,26 +25,27 @@ public class DeptController {
         return deptService.list();
     }
 
-    @RequestMapping("add")
-    public void add(Map<String, Object> areas) {
-        areas.put("areas", areaService.list());
+    @RequestMapping("edit")
+    public Dept edit(Integer deptId, Map<String, Object> param) {
+        Dept dept;
+
+        if (deptId == null) {
+            dept = new Dept();
+        } else {
+            dept = deptService.get(deptId);
+        }
+        param.put("areas", areaService.list());
+
+        return dept;
     }
 
     @RequestMapping("save")
     public String save(Dept dept) {
-        deptService.save(dept);
-        return "redirect:/dept/list";
-    }
-
-    @RequestMapping("gai")
-    public Dept gai(int deptId, Map<String, Object> deptArea) {
-        deptArea.put("areas", areaService.list());
-        return deptService.get(deptId);
-    }
-
-    @RequestMapping("modify")
-    public String modify(Dept dept) {
-        deptService.modify(dept);
+        if (dept.getDeptId() == null) {
+            deptService.save(dept);
+        } else {
+            deptService.modify(dept);
+        }
         return "redirect:/dept/list";
     }
 

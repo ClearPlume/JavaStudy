@@ -79,7 +79,7 @@
     </body>
     <script type="text/javascript">
         document.querySelector("#add-btn").onclick = function () {
-            location.href = "${pageContext.request.contextPath}/dept/add"
+            location.href = "${pageContext.request.contextPath}/dept/edit"
         }
         document.querySelector("#delete-selection-btn").onclick = function () {
             let selectedSelections = document.querySelectorAll("input[type='checkbox']")
@@ -105,7 +105,7 @@
 
         document.querySelectorAll(".modify-btn").forEach(function (btn) {
             btn.onclick = function () {
-                location.href = "${pageContext.request.contextPath}/dept/gai?deptId=" + btn.value
+                location.href = "${pageContext.request.contextPath}/dept/edit?deptId=" + btn.value
             }
         })
 

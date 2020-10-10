@@ -21,23 +21,26 @@ public class AreaController {
         return areaService.list();
     }
 
-    @RequestMapping("add")
-    public void add() { }
+    @RequestMapping("edit")
+    public Area edit(Integer areaId) {
+        Area area;
+
+        if (areaId == null) {
+            area = new Area();
+        } else {
+            area = areaService.get(areaId);
+        }
+
+        return area;
+    }
 
     @RequestMapping("save")
     public String save(Area area) {
-        areaService.save(area);
-        return "redirect:/area/list";
-    }
-
-    @RequestMapping("gai")
-    public Area gai(int areaId) {
-        return areaService.get(areaId);
-    }
-
-    @RequestMapping("modify")
-    public String modify(Area area) {
-        areaService.modify(area);
+        if (area.getAreaId() == null) {
+            areaService.save(area);
+        } else {
+            areaService.modify(area);
+        }
         return "redirect:/area/list";
     }
 
