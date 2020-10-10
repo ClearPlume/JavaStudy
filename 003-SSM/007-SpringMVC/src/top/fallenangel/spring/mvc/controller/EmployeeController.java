@@ -59,26 +59,27 @@ public class EmployeeController {
         return employeeService.list(employeeVO);
     }
 
-    @RequestMapping("add")
-    public void add(Map<String, Object> deptArea) {
-        deptArea.put("depts", deptService.list());
+    @RequestMapping("edit")
+    public Employee edit(Integer empId, Map<String, Object> param) {
+        Employee employee;
+
+        if (empId == null) {
+            employee = new Employee();
+        } else {
+            employee = employeeService.get(empId);
+        }
+        param.put("depts", deptService.list());
+
+        return employee;
     }
 
     @RequestMapping("save")
     public String save(Employee employee) {
-        employeeService.save(employee);
-        return "redirect:/employee/list";
-    }
-
-    @RequestMapping("gai")
-    public Employee gai(int empId, Map<String, Object> deptArea) {
-        deptArea.put("depts", deptService.list());
-        return employeeService.get(empId);
-    }
-
-    @RequestMapping("modify")
-    public String modify(Employee employee) {
-        employeeService.modify(employee);
+        if (employee.getEmpId() == null) {
+            employeeService.save(employee);
+        } else {
+            employeeService.modify(employee);
+        }
         return "redirect:/employee/list";
     }
 

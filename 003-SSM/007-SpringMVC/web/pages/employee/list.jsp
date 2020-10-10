@@ -164,7 +164,7 @@
         document.querySelector("#areaId").value = Number.parseInt("${employeeVO.areaId}")
 
         document.querySelector("#add-btn").onclick = function () {
-            location.href = "${pageContext.request.contextPath}/employee/add"
+            location.href = "${pageContext.request.contextPath}/employee/edit"
         }
 
         document.querySelector("#delete-selection-btn").onclick = function () {
@@ -191,7 +191,7 @@
 
         document.querySelectorAll(".modify-btn").forEach(function (btn) {
             btn.onclick = function () {
-                location.href = "${pageContext.request.contextPath}/employee/gai?empId=" + btn.value
+                location.href = "${pageContext.request.contextPath}/employee/edit?empId=" + btn.value
             }
         })
 
