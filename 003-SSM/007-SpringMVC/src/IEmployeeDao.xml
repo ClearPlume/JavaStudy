@@ -14,14 +14,14 @@
     </sql>
     <sql id="SelectCondition">
         <where>
-            <if test="employee.empName != null and employee.empName != ''">
-                e.emp_name like concat('%', #{employee.empName}, '%')
+            <if test="empName != null and empName != ''">
+                e.emp_name like concat('%', #{empName}, '%')
             </if>
-            <if test="employee.dept != null and employee.dept.deptId != null and employee.dept.deptId != -1">
-                and e.dept_id = #{employee.dept.deptId}
+            <if test="dept != null and dept.deptId != null and dept.deptId != -1">
+                and e.dept_id = #{dept.deptId}
             </if>
-            <if test="employee.dept != null and employee.dept.area != null and employee.dept.area.areaId != null and employee.dept.area.areaId != -1">
-                and d.area_id = #{employee.dept.area.areaId}
+            <if test="dept != null and dept.area != null and dept.area.areaId != null and dept.area.areaId != -1">
+                and d.area_id = #{dept.area.areaId}
             </if>
         </where>
     </sql>
@@ -39,14 +39,6 @@
         left join t_area a on d.area_id = a.area_id
         <include refid="SelectCondition"/>
         order by e.emp_id
-        limit #{pager.pageStart}, #{pager.pageSize}
-    </select>
-    <select id="count" resultType="java.lang.Integer">
-        select count(*)
-        from t_employee e
-        left join t_dept d on e.dept_id = d.dept_id
-        left join t_area a on d.area_id = a.area_id
-        <include refid="SelectCondition"/>
     </select>
     <delete id="deleteAll">
         delete

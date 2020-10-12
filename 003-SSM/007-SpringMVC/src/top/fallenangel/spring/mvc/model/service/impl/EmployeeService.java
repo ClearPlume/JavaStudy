@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import top.fallenangel.spring.mvc.entity.Employee;
 import top.fallenangel.spring.mvc.model.dao.IEmployeeDao;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
-import top.fallenangel.spring.mvc.util.Pager;
 
 import java.util.List;
 
@@ -17,9 +16,8 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<Employee> list(Employee employee, Pager pager) {
-        pager.setTotalRecord(employeeDao.count(employee));
-        return employeeDao.selectAll(employee, pager);
+    public List<Employee> list(Employee employee) {
+        return employeeDao.selectAll(employee);
     }
 
     @Override
@@ -40,10 +38,5 @@ public class EmployeeService implements IEmployeeService {
     @Override
     public void delete(Integer[] empId) {
         employeeDao.deleteAll(empId);
-    }
-
-    @Override
-    public Integer count(Employee employee) {
-        return employeeDao.count(employee);
     }
 }

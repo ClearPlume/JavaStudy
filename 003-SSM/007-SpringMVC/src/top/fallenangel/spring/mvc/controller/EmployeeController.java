@@ -1,14 +1,15 @@
 package top.fallenangel.spring.mvc.controller;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import top.fallenangel.spring.mvc.entity.Employee;
 import top.fallenangel.spring.mvc.model.service.IAreaService;
 import top.fallenangel.spring.mvc.model.service.IDeptService;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
-import top.fallenangel.spring.mvc.util.Pager;
 
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -25,11 +26,12 @@ public class EmployeeController {
     }
 
     @RequestMapping("list")
-    public List<Employee> list(Map<String, Object> params, Pager pager, Employee employee) {
+    public PageInfo<Employee> list(Map<String, Object> params, Employee employee, @RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
         params.put("depts", deptService.list());
         params.put("areas", areaService.list());
 
-        return employeeService.list(employee, pager);
+        PageHelper.startPage(page, pageSize);
+        return PageInfo.of(employeeService.list(employee));
     }
 
     @RequestMapping("edit")
