@@ -235,10 +235,10 @@
              * @param {number} offset 偏移量(-1, 0, 1)
              */
             function pageChange(page, offset) {
-                let finalPage = page + offset
+                let actualPage = page + offset
                 let searchForm = $("#employee")[0]
 
-                searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + finalPage + "&pageSize=" + $("#page-size-select").val()
+                searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + actualPage + "&pageSize=" + $("#page-size-select").val()
                 searchForm.submit()
             }
         </script>
