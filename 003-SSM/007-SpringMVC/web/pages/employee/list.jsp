@@ -11,24 +11,24 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
+<!DOCTYPE html>
 <html>
     <head>
         <title>员工列表</title>
-    </head>
-    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/list_table.css">
-    <style type="text/css">
-        .page-num {
-            display: inline;
-        }
+        <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/list_table.css">
+        <style type="text/css">
+            .page-num {
+                display: inline;
+            }
 
-        .input-box {
-            width: 120px;
-        }
-    </style>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+            .input-box {
+                width: 120px;
+            }
+        </style>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+    </head>
     <body>
         <a href="${pageContext.request.contextPath}">首页</a>
-        <%--<img src="${pageContext.request.contextPath}/img/avatar.jpg" alt="头像">--%>
         <table>
             <caption><h2>员工表</h2></caption>
             <thead>
@@ -96,7 +96,7 @@
                 <td colspan="6">
                     <ul style="list-style-type: none; margin: 0 auto">
                         <li class="page-num">
-                            <button onclick="pageChange(${1})"
+                            <button onclick="pageChange(1, 0)"
                             ${pager.hasPrev ? "" : "disabled='disabled'"}>
                                 首页
                             </button>
@@ -109,7 +109,7 @@
                         </li>
                         <li class="page-num">
                             <label>
-                                <select onchange="pageChange(Number(this.value))">
+                                <select onchange="pageChange(Number(this.value), 0)">
                                     <c:forEach begin="1" end="${pager.pages}" var="pageInList">
                                         <option value="${pageInList}" ${pageInList == pager.page ? "selected='selected'" : ""}>${pageInList}</option>
                                     </c:forEach>
@@ -123,7 +123,7 @@
                             </button>
                         </li>
                         <li class="page-num">
-                            <button onclick="pageChange(${pager.pages})"
+                            <button onclick="pageChange(${pager.pages}, 0)"
                             ${pager.hasNext ? "" : "disabled='disabled'"}>
                                 尾页
                             </button>
@@ -131,7 +131,7 @@
                         <li class="page-num">
                             每页
                             <label>
-                                <select id="page-size-select" onchange="pageChange(${pager.page})">
+                                <select id="page-size-select" onchange="pageChange(${pager.page}, 0)">
                                     <option value="5" ${pager.pageSize == 5 ? "selected='selected'" : ""}>5</option>
                                     <option value="10" ${pager.pageSize == 10 ? "selected='selected'" : ""}>10</option>
                                     <option value="15" ${pager.pageSize == 15 ? "selected='selected'" : ""}>15</option>
@@ -142,104 +142,105 @@
                             条
                         </li>
                         <li class="page-num">
-                            共<span style="color: #095f8a; font-weight: bold">${pager.totalRecord}</span>条
+                            共 <span style="color: #095f8a; font-weight: bold">${pager.totalRecord}</span> 条
                         </li>
                     </ul>
                 </td>
             </tr>
         </table>
-    </body>
-    <script type="text/javascript">
-        $("#add-btn").click(function () {
-            location.href = "${pageContext.request.contextPath}/employee/edit"
-        })
+        <script type="text/javascript">
+            $("#add-btn").click(function () {
+                location.href = "${pageContext.request.contextPath}/employee/edit"
+            })
 
-        document.querySelector("#delete-selection-btn").onclick = function () {
-            let selectedSelections = document.querySelectorAll("td input[type='checkbox']")
-            let data = ""
+            $("#delete-selection-btn").click(function () {
+                let selectedSelections = $(":checkbox:checked")
+                let data = ""
 
-            selectedSelections.forEach(function (selection, index) {
-                if (selection.checked) {
-                    data += "empId=" + selection.value
-                }
-                if (selection.checked && index < selectedSelections.length - 1) {
-                    data += "&"
+                selectedSelections.each(function (index, selection) {
+                    if (selection.id !== "select-all-checkbox" && selection.checked) {
+                        data += "empId=" + selection.value
+
+                        if (index < selectedSelections.length - 1) {
+                            data += "&"
+                        }
+                    }
+                })
+
+                if (data === "") {
+                    alert("未选中数据！")
+                } else {
+                    if (confirm("是否确认删除选中数据？")) {
+                        location.href = "${pageContext.request.contextPath}/employee/delete?" + data
+                    }
                 }
             })
 
-            if (data === "") {
-                alert("未选中数据！")
-            } else {
-                if (confirm("是否确认删除选中数据？")) {
-                    location.href = "${pageContext.request.contextPath}/employee/delete?" + data
+            $(".modify-btn").each(function (index, btn) {
+                btn.onclick = function () {
+                    location.href = "${pageContext.request.contextPath}/employee/edit?empId=" + btn.value
                 }
-            }
-        }
-
-        document.querySelectorAll(".modify-btn").forEach(function (btn) {
-            btn.onclick = function () {
-                location.href = "${pageContext.request.contextPath}/employee/edit?empId=" + btn.value
-            }
-        })
-
-        document.querySelectorAll(".delete-btn").forEach(function (btn) {
-            btn.onclick = function () {
-                if (confirm("是否确认删除选中数据？")) {
-                    location.href = "${pageContext.request.contextPath}/employee/delete?empId=" + btn.value
-                }
-            }
-        })
-
-        document.querySelector("#invert-selection-btn").onclick = function () {
-            singleSelectionList.forEach(function (selection) {
-                selection.checked = !selection.checked
             })
 
-            selectAllCheckbox.checked = getSelectedCount() === singleSelectionList.length
-        }
-
-        let singleSelectionList = document.querySelectorAll(".single-selection-checkbox")
-        let selectAllCheckbox = document.querySelector("#select-all-checkbox");
-
-        selectAllCheckbox.onchange = function () {
-            let allSelect = this.checked
-            singleSelectionList.forEach(function (selection) {
-                selection.checked = allSelect
+            $(".delete-btn").each(function (index, btn) {
+                btn.onclick = function () {
+                    if (confirm("是否确认删除选中数据？")) {
+                        location.href = "${pageContext.request.contextPath}/employee/delete?empId=" + btn.value
+                    }
+                }
             })
-        }
 
-        singleSelectionList.forEach(function (selection) {
-            selection.onchange = function () {
+            let singleSelectionList = $(".single-selection-checkbox")
+            let selectAllCheckbox = $("#select-all-checkbox")[0]
+
+            $("#invert-selection-btn").click(function () {
+                singleSelectionList.each(function (index, selection) {
+                    selection.checked = !selection.checked
+                })
+
                 selectAllCheckbox.checked = getSelectedCount() === singleSelectionList.length
+            })
+
+            selectAllCheckbox.onchange = function () {
+                let allSelect = this.checked
+                singleSelectionList.each(function (index, selection) {
+                    selection.checked = allSelect
+                })
             }
-        })
 
-        /**
-         * 获取选中的复选框数量
-         */
-        function getSelectedCount() {
-            let selectedCount = 0
-
-            singleSelectionList.forEach(function (selection) {
-                if (selection.checked) {
-                    selectedCount++
+            singleSelectionList.each(function (index, selection) {
+                selection.onchange = function () {
+                    selectAllCheckbox.checked = getSelectedCount() === singleSelectionList.length
                 }
             })
 
-            return selectedCount
-        }
+            /**
+             * 获取选中的复选框数量
+             */
+            function getSelectedCount() {
+                let selectedCount = 0
 
-        /**
-         * 点击按钮翻页
-         * @param {number} page 目标页码
-         * @param {number} offset 偏移量(-1, 0, 1)
-         */
-        function pageChange(page, offset = 0) {
-            let finalPage = page + offset
-            let searchForm = document.querySelector("#employee")
+                singleSelectionList.each(function (index, selection) {
+                    if (selection.checked) {
+                        selectedCount++
+                    }
+                })
 
-            searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + finalPage + "&pageSize=" + $("#page-size-select").val()
-            searchForm.submit()
-        }
-    </script>
+                return selectedCount
+            }
+
+            /**
+             * 点击按钮翻页
+             * @param {number} page 目标页码
+             * @param {number} offset 偏移量(-1, 0, 1)
+             */
+            function pageChange(page, offset) {
+                let finalPage = page + offset
+                let searchForm = $("#employee")[0]
+
+                searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + finalPage + "&pageSize=" + $("#page-size-select").val()
+                searchForm.submit()
+            }
+        </script>
+    </body>
 </html>
