@@ -11,26 +11,7 @@
     <head>
         <title>区域列表</title>
     </head>
-    <style type="text/css">
-        tbody td, th {
-            border-color: blueviolet;
-            border-width: 3px;
-            border-collapse: collapse;
-            border-style: solid;
-            width: 100px;
-            height: 30px;
-        }
-
-        table {
-            text-align: center;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
-
-        caption h2 {
-            font-weight: normal;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/list_table.css">
     <body>
         <a href="${pageContext.request.contextPath}">首页</a>
         <table>

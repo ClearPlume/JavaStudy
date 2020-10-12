@@ -5,12 +5,9 @@
 --%>
 <%--@elvariable id="employeeList" type="java.util.List<top.fallenangel.spring.mvc.entity.Employee>"--%>
 <%--@elvariable id="employee" type="top.fallenangel.spring.mvc.entity.Employee"--%>
-<%--@elvariable id="page" type="java.lang.Integer"--%>
-<%--@elvariable id="pages" type="java.lang.Integer"--%>
-<%--@elvariable id="curPage" type="java.lang.Integer"--%>
+<%--@elvariable id="pager" type="top.fallenangel.spring.mvc.util.Pager"--%>
 <%--@elvariable id="depts" type="java.util.List<top.fallenangel.spring.mvc.entity.Dept>"--%>
 <%--@elvariable id="areas" type="java.util.List<top.fallenangel.spring.mvc.entity.Area>"--%>
-<%--@elvariable id="employeeVO" type="top.fallenangel.spring.mvc.entity.EmployeeVO"--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
@@ -18,26 +15,8 @@
     <head>
         <title>员工列表</title>
     </head>
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/list_table.css">
     <style type="text/css">
-        tbody td, th {
-            border-color: blueviolet;
-            border-width: 3px;
-            border-collapse: collapse;
-            border-style: solid;
-            width: 100px;
-            height: 30px;
-        }
-
-        table {
-            text-align: center;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
-
-        caption h2 {
-            font-weight: normal;
-        }
-
         .page-num {
             display: inline;
         }
@@ -46,8 +25,10 @@
             width: 120px;
         }
     </style>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
     <body>
         <a href="${pageContext.request.contextPath}">首页</a>
+        <%--<img src="${pageContext.request.contextPath}/img/avatar.jpg" alt="头像">--%>
         <table>
             <caption><h2>员工表</h2></caption>
             <thead>
@@ -62,22 +43,18 @@
             </thead>
             <tr>
                 <td colspan="6">
-                    <form:form action="list?page=${curPage}" modelAttribute="employeeVO" cssStyle="display: inline">
+                    <form:form action="list?page=${pager.page}&pageSize=${pager.pageSize}" modelAttribute="employee"
+                               cssStyle="display: inline">
                         <form:input path="empName" placeholder="员工姓名" cssClass="input-box"/>
-                        <form:select path="deptId" cssClass="input-box">
+                        <form:select path="dept.deptId" cssClass="input-box">
                             <form:option value="-1" label="请选择员工部门"/>
                             <form:options items="${depts}" itemValue="deptId" itemLabel="deptName"/>
                         </form:select>
-                        <form:select path="areaId" cssClass="input-box">
+                        <form:select path="dept.area.areaId" cssClass="input-box">
                             <form:option value="-1" label="请选择部门位置"/>
                             <form:options items="${areas}" itemValue="areaId" itemLabel="areaName"/>
                         </form:select>
-                        <label>
-                            <input type="submit" value="搜索">
-                        </label>
-                        <label>
-                            <input type="reset" value="重置">
-                        </label>
+                        <form:button type="submit">搜索</form:button>
                     </form:form>
                 </td>
             </tr>
@@ -119,30 +96,53 @@
                 <td colspan="6">
                     <ul style="list-style-type: none; margin: 0 auto">
                         <li class="page-num">
-                            <button onclick="pageChange(${curPage}, -1)"
-                                    <c:if test="${curPage == 1 || pages == 0}">
-                                        disabled="disabled"
-                                    </c:if>>
-                                &laquo;
+                            <button onclick="pageChange(${1})"
+                            ${pager.hasPrev ? "" : "disabled='disabled'"}>
+                                首页
                             </button>
                         </li>
-                        <c:forEach begin="1" end="${pages}" var="page">
-                            <li class="page-num">
-                                <button onclick="pageChange(${page})"
-                                        <c:if test="${page == curPage}">
-                                            style="color: #095f8a; font-weight: bold"
-                                        </c:if>>
-                                    &nbsp;${page}&nbsp;
-                                </button>
-                            </li>
-                        </c:forEach>
                         <li class="page-num">
-                            <button onclick="pageChange(${curPage}, 1)"
-                                    <c:if test="${curPage == pages}">
-                                        disabled="disabled"
-                                    </c:if>>
-                                &raquo;
+                            <button onclick="pageChange(${pager.page}, -1)"
+                            ${pager.hasPrev ? "" : "disabled='disabled'"}>
+                                上一页
                             </button>
+                        </li>
+                        <li class="page-num">
+                            <label>
+                                <select onchange="pageChange(Number(this.value))">
+                                    <c:forEach begin="1" end="${pager.pages}" var="pageInList">
+                                        <option value="${pageInList}" ${pageInList == pager.page ? "selected='selected'" : ""}>${pageInList}</option>
+                                    </c:forEach>
+                                </select>
+                            </label>
+                        </li>
+                        <li class="page-num">
+                            <button onclick="pageChange(${pager.page}, 1)"
+                            ${pager.hasNext ? "" : "disabled='disabled'"}>
+                                下一页
+                            </button>
+                        </li>
+                        <li class="page-num">
+                            <button onclick="pageChange(${pager.pages})"
+                            ${pager.hasNext ? "" : "disabled='disabled'"}>
+                                尾页
+                            </button>
+                        </li>
+                        <li class="page-num">
+                            每页
+                            <label>
+                                <select id="page-size-select" onchange="pageChange(${pager.page})">
+                                    <option value="5" ${pager.pageSize == 5 ? "selected='selected'" : ""}>5</option>
+                                    <option value="10" ${pager.pageSize == 10 ? "selected='selected'" : ""}>10</option>
+                                    <option value="15" ${pager.pageSize == 15 ? "selected='selected'" : ""}>15</option>
+                                    <option value="20" ${pager.pageSize == 20 ? "selected='selected'" : ""}>20</option>
+                                    <option value="25" ${pager.pageSize == 25 ? "selected='selected'" : ""}>25</option>
+                                </select>
+                            </label>
+                            条
+                        </li>
+                        <li class="page-num">
+                            共<span style="color: #095f8a; font-weight: bold">${pager.totalRecord}</span>条
                         </li>
                     </ul>
                 </td>
@@ -150,9 +150,9 @@
         </table>
     </body>
     <script type="text/javascript">
-        document.querySelector("#add-btn").onclick = function () {
+        $("#add-btn").click(function () {
             location.href = "${pageContext.request.contextPath}/employee/edit"
-        }
+        })
 
         document.querySelector("#delete-selection-btn").onclick = function () {
             let selectedSelections = document.querySelectorAll("td input[type='checkbox']")
@@ -236,9 +236,9 @@
          */
         function pageChange(page, offset = 0) {
             let finalPage = page + offset
-            let searchForm = document.querySelector("#employeeVO");
+            let searchForm = document.querySelector("#employee")
 
-            searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + finalPage
+            searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + finalPage + "&pageSize=" + $("#page-size-select").val()
             searchForm.submit()
         }
     </script>

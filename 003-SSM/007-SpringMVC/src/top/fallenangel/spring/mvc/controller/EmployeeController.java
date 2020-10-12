@@ -2,13 +2,11 @@ package top.fallenangel.spring.mvc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import top.fallenangel.spring.mvc.entity.Area;
-import top.fallenangel.spring.mvc.entity.Dept;
 import top.fallenangel.spring.mvc.entity.Employee;
-import top.fallenangel.spring.mvc.entity.EmployeeVO;
 import top.fallenangel.spring.mvc.model.service.IAreaService;
 import top.fallenangel.spring.mvc.model.service.IDeptService;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
+import top.fallenangel.spring.mvc.util.Pager;
 
 import java.util.List;
 import java.util.Map;
@@ -27,36 +25,11 @@ public class EmployeeController {
     }
 
     @RequestMapping("list")
-    public List<Employee> list(Map<String, Object> params, Integer page, EmployeeVO employeeVO) {
-        if (null == page) {
-            page = 1;
-        }
-        int pageSize = 3;
-        int pages = employeeService.count(employeeVO) / pageSize + (employeeService.count(employeeVO) % pageSize == 0 ? 0 : 1);
-        if (page > pages) {
-            page = pages;
-        }
-        int pageStart = page == 0 ? 0 : (page - 1) * pageSize;
+    public List<Employee> list(Map<String, Object> params, Pager pager, Employee employee) {
+        params.put("depts", deptService.list());
+        params.put("areas", areaService.list());
 
-        List<Dept> depts = deptService.list();
-        List<Area> areas = areaService.list();
-
-        employeeVO.setPageStart(pageStart);
-        employeeVO.setPageSize(pageSize);
-        if (employeeVO.getDeptId() == null) {
-            employeeVO.setDeptId(-1);
-        }
-        if (employeeVO.getAreaId() == null) {
-            employeeVO.setAreaId(-1);
-        }
-
-        params.put("depts", depts);
-        params.put("areas", areas);
-        params.put("employeeVO", employeeVO);
-        params.put("pages", pages);
-        params.put("curPage", page);
-
-        return employeeService.list(employeeVO);
+        return employeeService.list(employee, pager);
     }
 
     @RequestMapping("edit")

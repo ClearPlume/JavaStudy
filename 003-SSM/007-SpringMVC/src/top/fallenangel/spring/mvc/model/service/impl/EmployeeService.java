@@ -1,10 +1,10 @@
 package top.fallenangel.spring.mvc.model.service.impl;
 
 import org.springframework.stereotype.Service;
-import top.fallenangel.spring.mvc.entity.EmployeeVO;
 import top.fallenangel.spring.mvc.entity.Employee;
 import top.fallenangel.spring.mvc.model.dao.IEmployeeDao;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
+import top.fallenangel.spring.mvc.util.Pager;
 
 import java.util.List;
 
@@ -17,8 +17,9 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public List<Employee> list(EmployeeVO employeeVO) {
-        return employeeDao.selectAll(employeeVO);
+    public List<Employee> list(Employee employee, Pager pager) {
+        pager.setTotalRecord(employeeDao.count(employee));
+        return employeeDao.selectAll(employee, pager);
     }
 
     @Override
@@ -42,7 +43,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     @Override
-    public Integer count(EmployeeVO employeeVO) {
-        return employeeDao.count(employeeVO);
+    public Integer count(Employee employee) {
+        return employeeDao.count(employee);
     }
 }

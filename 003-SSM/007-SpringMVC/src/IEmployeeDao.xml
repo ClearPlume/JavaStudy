@@ -12,6 +12,19 @@
     <sql id="Base_Column_List">
         emp_id, dept_id, emp_name
     </sql>
+    <sql id="SelectCondition">
+        <where>
+            <if test="employee.empName != null and employee.empName != ''">
+                e.emp_name like concat('%', #{employee.empName}, '%')
+            </if>
+            <if test="employee.dept != null and employee.dept.deptId != null and employee.dept.deptId != -1">
+                and e.dept_id = #{employee.dept.deptId}
+            </if>
+            <if test="employee.dept != null and employee.dept.area != null and employee.dept.area.areaId != null and employee.dept.area.areaId != -1">
+                and d.area_id = #{employee.dept.area.areaId}
+            </if>
+        </where>
+    </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select *
         from t_employee e
@@ -24,36 +37,16 @@
         from t_employee e
         left join t_dept d on e.dept_id = d.dept_id
         left join t_area a on d.area_id = a.area_id
-        <where>
-            <if test="empName != null and empName != ''">
-                e.emp_name like concat('%', #{empName}, '%')
-            </if>
-            <if test="deptId != null and deptId != -1">
-                and e.dept_id = #{deptId}
-            </if>
-            <if test="areaId != null and areaId != -1">
-                and d.area_id = #{areaId}
-            </if>
-        </where>
+        <include refid="SelectCondition"/>
         order by e.emp_id
-        limit #{pageStart}, #{pageSize}
+        limit #{pager.pageStart}, #{pager.pageSize}
     </select>
     <select id="count" resultType="java.lang.Integer">
         select count(*)
         from t_employee e
         left join t_dept d on e.dept_id = d.dept_id
         left join t_area a on d.area_id = a.area_id
-        <where>
-            <if test="empName != null and empName != ''">
-                e.emp_name = #{empName}
-            </if>
-            <if test="deptId != null and deptId != -1">
-                and e.dept_id = #{deptId}
-            </if>
-            <if test="areaId != null and areaId != -1">
-                and d.area_id = #{areaId}
-            </if>
-        </where>
+        <include refid="SelectCondition"/>
     </select>
     <delete id="deleteAll">
         delete

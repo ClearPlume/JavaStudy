@@ -12,6 +12,14 @@
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
 
+    <!--静态资源处理-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>/img/*</url-pattern>
+    </servlet-mapping>
+
     <!--SpringMVC-->
     <servlet>
         <servlet-name>dispatcher</servlet-name>

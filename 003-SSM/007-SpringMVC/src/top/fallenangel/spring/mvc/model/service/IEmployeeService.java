@@ -1,14 +1,14 @@
 package top.fallenangel.spring.mvc.model.service;
 
-import top.fallenangel.spring.mvc.entity.EmployeeVO;
 import top.fallenangel.spring.mvc.entity.Employee;
+import top.fallenangel.spring.mvc.util.Pager;
 
 import java.util.List;
 
 public interface IEmployeeService {
     Employee get(Integer empId);
 
-    List<Employee> list(EmployeeVO employeeVO);
+    List<Employee> list(Employee employee, Pager pager);
 
     void save(Employee employee);
 
@@ -16,5 +16,5 @@ public interface IEmployeeService {
 
     void modify(Employee employee);
 
-    Integer count(EmployeeVO employeeVO);
+    Integer count(Employee employee);
 }
