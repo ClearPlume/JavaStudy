@@ -10,7 +10,7 @@ public class IndexController {
     @RequestMapping("index")
     public ModelAndView index() {
         ModelAndView view = new ModelAndView();
-        view.setView(new InternalResourceView("/index.jsp"));
+        view.setView(new InternalResourceView("/welcome.jsp"));
         return view;
     }
 }

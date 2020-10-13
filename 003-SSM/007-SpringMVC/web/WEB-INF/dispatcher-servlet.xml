@@ -12,4 +12,19 @@
 
     <!--对模型视图名称的映射解析-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/pages/" p:suffix=".jsp"/>
+
+    <!--过滤器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/"/>
+            <mvc:exclude-mapping path="/index"/>
+            <mvc:exclude-mapping path="/user/registerPage"/>
+            <mvc:exclude-mapping path="/user/checkUserExists"/>
+            <mvc:exclude-mapping path="/user/register"/>
+            <mvc:exclude-mapping path="/user/loginPage"/>
+            <mvc:exclude-mapping path="/user/login"/>
+            <bean class="top.fallenangel.spring.mvc.util.filter.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
