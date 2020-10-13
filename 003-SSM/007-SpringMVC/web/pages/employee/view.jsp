@@ -46,6 +46,11 @@
             </tr>
             <tr>
                 <td colspan="2">
+                    <img src="/upload/img/${employee.empAvatar}" alt="员工头像">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
                     <button id="back-btn">返回</button>
                 </td>
             </tr>

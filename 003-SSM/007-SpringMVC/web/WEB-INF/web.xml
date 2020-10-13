@@ -12,6 +12,12 @@
         <param-value>/WEB-INF/applicationContext.xml</param-value>
     </context-param>
 
+    <!--图片上传路径-->
+    <context-param>
+        <param-name>imgPath</param-name>
+        <param-value>/upload/img</param-value>
+    </context-param>
+
     <!--静态资源处理-->
     <servlet-mapping>
         <servlet-name>default</servlet-name>

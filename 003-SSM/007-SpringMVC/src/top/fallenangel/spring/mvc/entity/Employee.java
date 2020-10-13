@@ -1,5 +1,7 @@
 package top.fallenangel.spring.mvc.entity;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.Serializable;
 
 /**
@@ -22,6 +24,13 @@ public class Employee implements Serializable {
      * 员工部门
      */
     private Dept dept;
+
+    /**
+     * 员工头像路径
+     */
+    private String empAvatar;
+
+    private MultipartFile empAvatarFile;
 
     private static final long serialVersionUID = 1L;
 
@@ -47,5 +56,21 @@ public class Employee implements Serializable {
 
     public void setEmpName(String empName) {
         this.empName = empName;
+    }
+
+    public String getEmpAvatar() {
+        return empAvatar;
+    }
+
+    public void setEmpAvatar(String empAvatar) {
+        this.empAvatar = empAvatar;
+    }
+
+    public MultipartFile getEmpAvatarFile() {
+        return empAvatarFile;
+    }
+
+    public void setEmpAvatarFile(MultipartFile empAvatarFile) {
+        this.empAvatarFile = empAvatarFile;
     }
 }

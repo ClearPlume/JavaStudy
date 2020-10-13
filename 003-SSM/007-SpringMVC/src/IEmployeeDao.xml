@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMap" type="top.fallenangel.spring.mvc.entity.Employee">
         <id column="emp_id" jdbcType="INTEGER" property="empId"/>
         <result column="emp_name" jdbcType="VARCHAR" property="empName"/>
+        <result column="emp_avatar" jdbcType="VARCHAR" property="empAvatar"/>
         <result column="dept_id" jdbcType="INTEGER" property="dept.deptId"/>
         <result column="dept_name" jdbcType="VARCHAR" property="dept.deptName"/>
         <result column="area_id" jdbcType="INTEGER" property="dept.area.areaId"/>
@@ -33,7 +34,7 @@
         where emp_id = #{empId,jdbcType=INTEGER}
     </select>
     <select id="selectAll" resultMap="BaseResultMap">
-        select e.emp_id, e.emp_name, d.dept_name, a.area_name
+        select e.emp_id, e.emp_name, e.emp_avatar, d.dept_name, a.area_name
         from t_employee e
         left join t_dept d on e.dept_id = d.dept_id
         left join t_area a on d.area_id = a.area_id
@@ -55,8 +56,8 @@
     </delete>
     <insert id="insert" keyColumn="emp_id" keyProperty="empId"
             parameterType="top.fallenangel.spring.mvc.entity.Employee" useGeneratedKeys="true">
-        insert into t_employee (dept_id, emp_name)
-        values (#{dept.deptId,jdbcType=INTEGER}, #{empName,jdbcType=VARCHAR})
+        insert into t_employee (dept_id, emp_name, emp_avatar)
+        values (#{dept.deptId,jdbcType=INTEGER}, #{empName,jdbcType=VARCHAR}, #{empAvatar})
     </insert>
     <insert id="insertSelective" keyColumn="emp_id" keyProperty="empId"
             parameterType="top.fallenangel.spring.mvc.entity.Employee" useGeneratedKeys="true">
@@ -68,6 +69,9 @@
             <if test="empName != null">
                 emp_name,
             </if>
+            <if test="empAvatar != null">
+                emp_avatar,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="dept.deptId != null">
@@ -75,6 +79,9 @@
             </if>
             <if test="empName != null">
                 #{empName,jdbcType=VARCHAR},
+            </if>
+            <if test="empAvatar != null">
+                #{empAvatar}
             </if>
         </trim>
     </insert>
@@ -87,13 +94,17 @@
             <if test="empName != null">
                 emp_name = #{empName,jdbcType=VARCHAR},
             </if>
+            <if test="empAvatar != null">
+                emp_avatar = #{empAvatar},
+            </if>
         </set>
         where emp_id = #{empId,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="top.fallenangel.spring.mvc.entity.Employee">
         update t_employee
-        set dept_id  = #{dept.deptId,jdbcType=INTEGER},
-            emp_name = #{empName,jdbcType=VARCHAR}
+        set dept_id    = #{dept.deptId,jdbcType=INTEGER},
+            emp_name   = #{empName,jdbcType=VARCHAR},
+            emp_avatar = #{empAvatar}
         where emp_id = #{empId,jdbcType=INTEGER}
     </update>
 </mapper>
