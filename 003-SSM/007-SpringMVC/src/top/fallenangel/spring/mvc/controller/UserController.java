@@ -59,6 +59,7 @@ public class UserController {
     @RequestMapping("logout")
     public String logout(HttpSession session) {
         session.removeAttribute(LOGIN_USER);
+        session.invalidate();
         return "redirect:/index";
     }
 }

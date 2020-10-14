@@ -27,6 +27,7 @@
             <mvc:exclude-mapping path="/user/register"/>
             <mvc:exclude-mapping path="/user/loginPage"/>
             <mvc:exclude-mapping path="/user/login"/>
+            <mvc:exclude-mapping path="/user/logout"/>
             <bean class="top.fallenangel.spring.mvc.util.filter.LoginInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>

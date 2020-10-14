@@ -12,7 +12,14 @@
 <html>
     <head>
         <title>${empty employee ? "新增" : "编辑"}员工</title>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+        <script src="${pageContext.request.contextPath}/js/jquery-1.8.3.js"></script>
+        <script src="${pageContext.request.contextPath}/js/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+        <script src="${pageContext.request.contextPath}/js/jQuery-File-Upload/js/jquery.iframe-transport.js"></script>
+        <script src="${pageContext.request.contextPath}/js/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+        <script src="${pageContext.request.contextPath}/js/jQuery-File-Upload/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/js/jQuery-File-Upload/css/bootstrap.min.css">
+        <link rel="stylesheet"
+              href="${pageContext.request.contextPath}/js/jQuery-File-Upload/css/jquery.fileupload.css">
         <style type="text/css">
             .input-box {
                 width: 175px;
@@ -32,9 +39,14 @@
                 <form:options items="${depts}" itemValue="deptId" itemLabel="deptName"/>
             </form:select>
             <br/>
-            <input type="file" name="empAvatarFile"/>
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>选择头像...</span>
+                <input id="avatarUpload" type="file" name="file">
+            </span>
             <br/>
-            <img src="/upload/img/${employee.empAvatar}" alt="员工头像"/>
+            <form:hidden path="empAvatar"/>
+            <img id="avatarImg" src="/upload/img/${employee.empAvatar}" alt="员工头像"/>
             <br/>
             <from:button id="back-btn" type="button">返回</from:button>
             <form:button>${empty employee.empId ? "添加" : "修改"}</form:button>
@@ -43,6 +55,20 @@
         <script type="text/javascript">
             $("#back-btn").click(function () {
                 history.back()
+            })
+
+            $("#avatarUpload").fileupload({
+                "url": "${pageContext.request.contextPath}/uploadFile?empId=" + ${employee.empId},
+                "dataType": "json",
+                "done": function (e, data) {
+                    let result = data.result;
+                    if (result.success) {
+                        $("#avatarImg").attr("src", result.path + "/" + result.fileName)
+                        $("#empAvatar").val(result.fileName)
+                    } else {
+                        alert("图片上传失败")
+                    }
+                }
             })
         </script>
     </body>
