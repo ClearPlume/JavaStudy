@@ -26,6 +26,8 @@
             <a href="${pageContext.request.contextPath}/dept/list">部门管理</a>
             <br/>
             <a href="${pageContext.request.contextPath}/area/list">区域管理</a>
+            <br/>
+            <a href="${pageContext.request.contextPath}/netDisk/list">网盘</a>
         </c:if>
 
         <script type="text/javascript">
