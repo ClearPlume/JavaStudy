@@ -9,7 +9,7 @@ import top.fallenangel.spring.mvc.entity.Employee;
 import top.fallenangel.spring.mvc.model.service.IAreaService;
 import top.fallenangel.spring.mvc.model.service.IDeptService;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
-import top.fallenangel.spring.mvc.util.filter.Util;
+import top.fallenangel.spring.mvc.util.Util;
 
 import java.util.Map;
 
@@ -51,12 +51,14 @@ public class EmployeeController {
 
     @RequestMapping("save")
     public String save(Employee employee) {
-        employee.setEmpAvatar(Util.upload(employee.getEmpAvatarFile()));
-
         if (employee.getEmpId() == null) {
+            employee.setEmpAvatar(Util.upload(employee.getEmpAvatarFile()));
             employeeService.save(employee);
         } else {
+            String oldEmpAvatar = employeeService.get(employee.getEmpId()).getEmpAvatar();
+            employee.setEmpAvatar(Util.upload(employee.getEmpAvatarFile()));
             employeeService.modify(employee);
+            Util.delete(oldEmpAvatar);
         }
         return "redirect:/employee/list";
     }
