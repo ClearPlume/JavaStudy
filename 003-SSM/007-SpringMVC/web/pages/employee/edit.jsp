@@ -34,7 +34,7 @@
             <br/>
             <input type="file" name="empAvatarFile"/>
             <br/>
-            <img src="${initParam.imgPath}/${employee.empAvatar}" alt="员工头像"/>
+            <img src="/upload/img/${employee.empAvatar}" alt="员工头像"/>
             <br/>
             <from:button id="back-btn" type="button">返回</from:button>
             <form:button>${empty employee.empId ? "添加" : "修改"}</form:button>
