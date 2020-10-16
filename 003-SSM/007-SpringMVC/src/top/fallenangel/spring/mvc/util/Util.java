@@ -37,14 +37,14 @@ public class Util {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static UploadResult uploadFile(MultipartFile file) {
+    public static UploadResult uploadFile(MultipartFile file, String path) {
         UploadResult result = new UploadResult();
 
         if (file != null && file.getSize() > 0) {
             String originalAvatarName = file.getOriginalFilename();
             assert originalAvatarName != null;
-            result.setFileName(Util.uuid() + originalAvatarName.substring(originalAvatarName.lastIndexOf('.')));
-            result.setPath("/upload/img");
+            result.setFileName(uuid() + originalAvatarName.substring(originalAvatarName.lastIndexOf('.')));
+            result.setPath(Config.uploadRoot + path);
 
             try {
                 file.transferTo(new File(Config.uploadImgPath + File.separatorChar + result.getFileName()));

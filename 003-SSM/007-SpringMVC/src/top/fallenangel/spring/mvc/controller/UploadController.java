@@ -17,12 +17,12 @@ public class UploadController {
         this.employeeService = employeeService;
     }
 
-    @RequestMapping("uploadFile")
+    @RequestMapping("uploadImage")
     @ResponseBody
-    public UploadResult uploadFile(MultipartFile file, int empId) {
+    public UploadResult uploadImage(MultipartFile image, int empId) {
         Employee employee = employeeService.get(empId);
         String oldFileName = employee.getEmpAvatar();
-        UploadResult uploadResult = Util.uploadFile(file);
+        UploadResult uploadResult = Util.uploadFile(image, "/img");
         if (uploadResult.isSuccess()) {
             employee.setEmpAvatar(uploadResult.getFileName());
             employeeService.modify(employee);

@@ -42,7 +42,7 @@
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>选择头像...</span>
-                <input id="avatarUpload" type="file" name="file">
+                <input id="avatarUpload" type="file" name="image">
             </span>
             <br/>
             <form:hidden path="empAvatar"/>
@@ -58,7 +58,7 @@
             })
 
             $("#avatarUpload").fileupload({
-                "url": "${pageContext.request.contextPath}/uploadFile?empId=" + ${employee.empId},
+                "url": "${pageContext.request.contextPath}/uploadImage?empId=" + ${employee.empId},
                 "dataType": "json",
                 "done": function (e, data) {
                     let result = data.result;
@@ -66,7 +66,7 @@
                         $("#avatarImg").attr("src", result.path + "/" + result.fileName)
                         $("#empAvatar").val(result.fileName)
                     } else {
-                        alert("图片上传失败")
+                        alert("头像上传失败")
                     }
                 }
             })
