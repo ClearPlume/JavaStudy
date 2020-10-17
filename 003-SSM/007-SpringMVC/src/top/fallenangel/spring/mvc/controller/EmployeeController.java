@@ -3,13 +3,18 @@ package top.fallenangel.spring.mvc.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import top.fallenangel.spring.mvc.entity.Dept;
 import top.fallenangel.spring.mvc.entity.Employee;
 import top.fallenangel.spring.mvc.model.service.IAreaService;
 import top.fallenangel.spring.mvc.model.service.IDeptService;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
 
+import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -35,7 +40,7 @@ public class EmployeeController {
     }
 
     @RequestMapping("edit")
-    public Employee edit(Integer empId, Map<String, Object> param) {
+    public Employee edit(Integer empId) {
         Employee employee;
 
         if (empId == null) {
@@ -43,13 +48,23 @@ public class EmployeeController {
         } else {
             employee = employeeService.get(empId);
         }
-        param.put("depts", deptService.list());
-
         return employee;
     }
 
     @RequestMapping("save")
-    public String save(Employee employee) {
+    public String save(@Valid Employee employee, Errors errors) {
+        Integer deptId = employee.getDept().getDeptId();
+
+        if (deptId == null || deptId <= 0 && deptId != -1 || deptId > deptService.count()) {
+            errors.rejectValue("dept.deptId", "", "必须选择部门！");
+        } else if (deptId == -1) {
+            errors.rejectValue("dept.deptId", "", "请选择部门");
+        }
+
+        if (errors.hasErrors()) {
+            return "employee/edit";
+        }
+
         if (employee.getEmpId() == null) {
             employeeService.save(employee);
         } else {

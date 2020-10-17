@@ -31,6 +31,7 @@
             <form:hidden path="empId"/>
             <br/>
             <form:input path="empName" cssClass="input-box" placeholder="员工姓名"/>
+            <form:errors path="empName" cssStyle="color: red"/>
             <br/>
             <form:select path="dept.deptId" cssClass="input-box">
                 <c:if test="${employee.empId == null}">
@@ -38,33 +39,47 @@
                 </c:if>
                 <form:options items="${depts}" itemValue="deptId" itemLabel="deptName"/>
             </form:select>
+            <form:errors path="dept.deptId" cssStyle="color: red"/>
             <br/>
-            <span class="btn btn-success fileinput-button">
+            <c:if test="${not empty employee.empId}">
+                <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
                 <span>选择头像...</span>
                 <input id="avatarUpload" type="file" name="image">
-            </span>
-            <br/>
-            <form:hidden path="empAvatar"/>
-            <img id="avatarImg" src="/upload/img/${employee.empAvatar}" alt="员工头像"/>
-            <br/>
-            <from:button id="back-btn" type="button">返回</from:button>
+                </span>
+                <br/>
+                <form:hidden path="empAvatar"/>
+                <img id="avatarImg" src="/upload/img/${employee.empAvatar}" alt="员工头像"/>
+                <br/>
+            </c:if>
+            <button id="back-btn" type="button">返回</button>
             <form:button>${empty employee.empId ? "添加" : "修改"}</form:button>
         </form:form>
 
         <script type="text/javascript">
+            $.post(
+                "${pageContext.request.contextPath}/dept/depts",
+                function (data) {
+                    for (let dept of data) {
+                        $("select[class='input-box']").append("<option value='" + dept.deptId + "'>" + dept.deptName + "</option>")
+                    }
+                }
+            )
+
             $("#back-btn").click(function () {
-                history.back()
+                location.href = "${pageContext.request.contextPath}/employee/list"
             })
 
+            let empAvatar = $("#empAvatar")
+
             $("#avatarUpload").fileupload({
-                "url": "${pageContext.request.contextPath}/uploadImage?empId=" + ${employee.empId},
+                "url": "${pageContext.request.contextPath}/uploadImage?empId=${employee.empAvatar}",
                 "dataType": "json",
                 "done": function (e, data) {
                     let result = data.result;
                     if (result.success) {
-                        $("#avatarImg").attr("src", result.path + "/" + result.fileName)
-                        $("#empAvatar").val(result.fileName)
+                        $("#avatarImg").attr("src", result.path + "/" + result.fileRealName)
+                        $("#empAvatar").val(result.fileRealName)
                     } else {
                         alert("头像上传失败")
                     }

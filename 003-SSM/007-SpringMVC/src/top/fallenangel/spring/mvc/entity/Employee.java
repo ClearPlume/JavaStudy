@@ -1,5 +1,6 @@
 package top.fallenangel.spring.mvc.entity;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Employee implements Serializable {
     /**
      * 员工姓名
      */
+    @NotBlank(message = "请输入员工姓名")
     private String empName;
 
     /**

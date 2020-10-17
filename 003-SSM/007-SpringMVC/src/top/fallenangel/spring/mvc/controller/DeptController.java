@@ -2,6 +2,7 @@ package top.fallenangel.spring.mvc.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import top.fallenangel.spring.mvc.entity.Dept;
 import top.fallenangel.spring.mvc.model.service.IAreaService;
 import top.fallenangel.spring.mvc.model.service.IDeptService;
@@ -53,5 +54,11 @@ public class DeptController {
     public String delete(Integer[] deptId) {
         deptService.delete(deptId);
         return "redirect:/dept/list";
+    }
+
+    @RequestMapping("depts")
+    @ResponseBody
+    public List<Dept> depts() {
+        return deptService.list();
     }
 }
