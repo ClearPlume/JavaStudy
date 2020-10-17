@@ -3,7 +3,8 @@ package top.fallenangel.spring.mvc.entity;
 public class UploadResult {
     private boolean success;
     private String path;
-    private String fileName;
+    private String fileShowName;
+    private String fileRealName;
     private long fileSize;
     private String msg;
 
@@ -23,12 +24,20 @@ public class UploadResult {
         this.path = path;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFileShowName() {
+        return fileShowName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFileShowName(String fileShowName) {
+        this.fileShowName = fileShowName;
+    }
+
+    public String getFileRealName() {
+        return fileRealName;
+    }
+
+    public void setFileRealName(String fileRealName) {
+        this.fileRealName = fileRealName;
     }
 
     public long getFileSize() {

@@ -3,6 +3,7 @@ package top.fallenangel.spring.mvc.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import top.fallenangel.spring.mvc.entity.File;
 import top.fallenangel.spring.mvc.entity.Folder;
 import top.fallenangel.spring.mvc.model.service.INetDiskService;
 import top.fallenangel.spring.mvc.util.Util;
@@ -51,5 +52,27 @@ public class NetDiskController {
         result.put("folderName", folder.getFolderName());
         result.put("folderId", folder.getFolderId());
         return result;
+    }
+
+    @RequestMapping("fileList")
+    public Map<String, Object> fileList(int folderId, ArrayList<File> files) {
+        files.addAll(netDiskService.listFile(folderId));
+
+        Map<String, Object> param = new HashMap<>();
+        param.put("folderId", folderId);
+        return param;
+    }
+
+    @RequestMapping("deleteFolder")
+    public String deleteFolder(int folderId) {
+        netDiskService.deleteFolder(folderId);
+        return "redirect:/netDisk/list";
+    }
+
+    @RequestMapping("deleteFile")
+    public String deleteFile(String fileRealName) {
+        int fileFolderId = netDiskService.getFile(fileRealName).getFileFolderId();
+        netDiskService.deleteFile(fileRealName);
+        return "redirect:/netDisk/fileList?folderId=" + fileFolderId;
     }
 }

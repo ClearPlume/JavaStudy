@@ -44,15 +44,17 @@
         <br/>
         <button id="new-folder-btn" type="button">新建文件夹</button>
         <br/>
-        <c:forEach items="${folderList}" var="folder">
-            <div class="folder-div">
-                <input type="hidden" value="${folder.folderId}"/>
-                <br/>
-                <img class="folder-img" src="${pageContext.request.contextPath}/img/folder.png" alt="文件夹图标"/>
-                <br/>
-                <span class="folder-name-span">${folder.folderName}</span>
-            </div>
-        </c:forEach>
+        <div id="folders">
+            <c:forEach items="${folderList}" var="folder">
+                <div class="folder-div">
+                    <input type="hidden" value="${folder.folderId}"/>
+                    <br/>
+                    <img class="folder-img" src="${pageContext.request.contextPath}/img/folder.png" alt="文件夹图标"/>
+                    <br/>
+                    <span class="folder-name-span">${folder.folderName}</span>
+                </div>
+            </c:forEach>
+        </div>
 
         <script type="text/javascript">
             let newFolderBtn = $("#new-folder-btn");
@@ -64,11 +66,10 @@
                     function (data) {
                         let folderId = data.folderId
                         let folderName = data.folderName
+                        let foldersDiv = $("#folders")
 
-                        let lastFolderDiv = newFolderBtn.nextAll(".folder-div").last()
-                        lastFolderDiv.after("<div class='folder-div'><input type='hidden' value='" + folderId + "'/><br/><img class='folder-img' src='${pageContext.request.contextPath}/img/folder.png' alt='文件夹图标'/><br/><input class='folder-name-input' value='" + folderName + "' onkeypress='keyPressedOnFolderNameInput(this, event)' onblur='commitFolderNameChange(this)'/></div>")
-
-                        let folderNameInput = newFolderBtn.nextAll(".folder-div").last().children("input")
+                        foldersDiv.append("<div class='folder-div'><input type='hidden' value='" + folderId + "'/><br/><img class='folder-img' src='${pageContext.request.contextPath}/img/folder.png' alt='文件夹图标' onclick='openFolder()' onmousedown='deleteFolder(event)'/><br/><input class='folder-name-input' value='" + folderName + "' onkeypress='keyPressedOnFolderNameInput(this, event)' onblur='commitFolderNameChange(this)'/></div>")
+                        let folderNameInput = foldersDiv.find("input[class='folder-name-input']:last")
                         folderNameInput.focus()
                     }, "json"
                 )
@@ -91,9 +92,39 @@
                 folderDiv.children("input[class='folder-name-input']").focus()
             }
 
-            $(".folder-img").click(function () {
-                alert($(this).parent().children(":last").text())
-            })
+            let folders = $(".folder-img")
+
+            folders.click(openFolder)
+
+            function openFolder() {
+                let folder
+
+                if (this === window) {
+                    folder = $(".folder-img:last")
+                } else {
+                    folder = $(this)
+                }
+
+                let folderId = folder.prevAll("input").val()
+                location.href = "${pageContext.request.contextPath}/netDisk/fileList?folderId=" + folderId
+            }
+
+            folders.mousedown(event, deleteFolder)
+
+            function deleteFolder(event) {
+                if (event.which === 2) {
+                    let folder
+
+                    if (this === window) {
+                        folder = $(".folder-img:last")
+                    } else {
+                        folder = $(this)
+                    }
+
+                    let folderId = folder.prevAll("input").val()
+                    location.href = "${pageContext.request.contextPath}/netDisk/deleteFolder?folderId=" + folderId
+                }
+            }
 
             function keyPressedOnFolderNameInput(input, event) {
                 if (event.key.toLowerCase() === "enter") {

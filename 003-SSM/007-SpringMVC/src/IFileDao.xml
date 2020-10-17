@@ -4,11 +4,12 @@
     <resultMap id="BaseResultMap" type="top.fallenangel.spring.mvc.entity.File">
         <id column="file_id" jdbcType="INTEGER" property="fileId"/>
         <result column="file_folder_id" jdbcType="INTEGER" property="fileFolderId"/>
-        <result column="file_name" jdbcType="VARCHAR" property="fileName"/>
+        <result column="file_show_name" jdbcType="VARCHAR" property="fileShowName"/>
+        <result column="file_real_name" jdbcType="VARCHAR" property="fileRealName"/>
         <result column="file_create_date" jdbcType="TIMESTAMP" property="fileCreateDate"/>
     </resultMap>
     <sql id="Base_Column_List">
-        file_id, file_folder_id, file_name, file_create_date
+        file_id, file_folder_id, file_show_name, file_real_name, file_create_date
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -22,15 +23,32 @@
         from t_file
         where file_folder_id = #{folderId}
     </select>
+    <select id="selectByFileRealName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_file
+        where file_real_name = #{fileRealName}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_file
         where file_id = #{fileId,jdbcType=INTEGER}
     </delete>
+    <delete id="deleteAllByFolderId">
+        delete
+        from t_file
+        where file_folder_id = #{folderId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByFileRealName">
+        delete
+        from t_file
+        where file_real_name = #{fileRealName}
+    </delete>
     <insert id="insert" keyColumn="file_id" keyProperty="fileId" parameterType="top.fallenangel.spring.mvc.entity.File"
             useGeneratedKeys="true">
-        insert into t_file (file_folder_id, file_name, file_create_date)
-        values (#{fileFolderId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, #{fileCreateDate,jdbcType=TIMESTAMP})
+        insert into t_file (file_folder_id, file_show_name, file_real_name, file_create_date)
+        values (#{fileFolderId,jdbcType=INTEGER}, #{fileShowName,jdbcType=VARCHAR}, #{fileRealName,jdbcType=VARCHAR},
+                #{fileCreateDate,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" keyColumn="file_id" keyProperty="fileId"
             parameterType="top.fallenangel.spring.mvc.entity.File" useGeneratedKeys="true">
@@ -39,8 +57,11 @@
             <if test="fileFolderId != null">
                 file_folder_id,
             </if>
-            <if test="fileName != null">
-                file_name,
+            <if test="fileShowName != null">
+                file_show_name,
+            </if>
+            <if test="fileRealName != null">
+                file_real_name,
             </if>
             <if test="fileCreateDate != null">
                 file_create_date,
@@ -50,8 +71,11 @@
             <if test="fileFolderId != null">
                 #{fileFolderId,jdbcType=INTEGER},
             </if>
-            <if test="fileName != null">
-                #{fileName,jdbcType=VARCHAR},
+            <if test="fileShowName != null">
+                #{fileShowName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileRealName != null">
+                #{fileRealName,jdbcType=VARCHAR},
             </if>
             <if test="fileCreateDate != null">
                 #{fileCreateDate,jdbcType=TIMESTAMP},
@@ -64,8 +88,11 @@
             <if test="fileFolderId != null">
                 file_folder_id = #{fileFolderId,jdbcType=INTEGER},
             </if>
-            <if test="fileName != null">
-                file_name = #{fileName,jdbcType=VARCHAR},
+            <if test="fileShowName != null">
+                file_show_name = #{fileShowName,jdbcType=VARCHAR},
+            </if>
+            <if test="fileRealName != null">
+                file_real_name = #{fileRealName,jdbcType=VARCHAR},
             </if>
             <if test="fileCreateDate != null">
                 file_create_date = #{fileCreateDate,jdbcType=TIMESTAMP},
@@ -76,7 +103,8 @@
     <update id="updateByPrimaryKey" parameterType="top.fallenangel.spring.mvc.entity.File">
         update t_file
         set file_folder_id   = #{fileFolderId,jdbcType=INTEGER},
-            file_name        = #{fileName,jdbcType=VARCHAR},
+            file_show_name   = #{fileShowName,jdbcType=VARCHAR},
+            file_real_name   = #{fileRealName,jdbcType=VARCHAR},
             file_create_date = #{fileCreateDate,jdbcType=TIMESTAMP}
         where file_id = #{fileId,jdbcType=INTEGER}
     </update>

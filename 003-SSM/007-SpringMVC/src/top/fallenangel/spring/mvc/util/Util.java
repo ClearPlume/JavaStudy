@@ -37,17 +37,18 @@ public class Util {
         return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static UploadResult uploadFile(MultipartFile file, String path) {
+    public static UploadResult uploadFile(MultipartFile file, String savePath) {
         UploadResult result = new UploadResult();
 
         if (file != null && file.getSize() > 0) {
-            String originalAvatarName = file.getOriginalFilename();
-            assert originalAvatarName != null;
-            result.setFileName(uuid() + originalAvatarName.substring(originalAvatarName.lastIndexOf('.')));
-            result.setPath(Config.uploadRoot + path);
+            String originalFileName = file.getOriginalFilename();
+            result.setFileShowName(originalFileName);
+            assert originalFileName != null;
+            result.setFileRealName(uuid() + originalFileName.substring(originalFileName.lastIndexOf('.')));
+            result.setPath(Config.uploadWebRoot + savePath);
 
             try {
-                file.transferTo(new File(Config.uploadImgPath + File.separatorChar + result.getFileName()));
+                file.transferTo(new File(Config.uploadRootPath + File.separatorChar + savePath + File.separatorChar + result.getFileRealName()));
                 result.setSuccess(true);
                 result.setMsg("文件上传成功");
                 result.setFileSize(file.getSize());
@@ -63,8 +64,8 @@ public class Util {
         return result;
     }
 
-    public static void deleteFile(String fileName) {
-        File file = new File(Config.uploadImgPath + File.separatorChar + fileName);
+    public static void deleteFile(String fileName, String savePath) {
+        File file = new File(Config.uploadRootPath + File.separatorChar + savePath + File.separatorChar + fileName);
         if (file.exists()) {
             debug("旧文件删除" + (file.delete() ? "成功" : "失败"));
         }
@@ -84,5 +85,63 @@ public class Util {
 
     public static Integer getLoginUserIdFromSession() {
         return getLoginUserFromSession().getUserId();
+    }
+
+    /**
+     * 从文件名取得其后缀
+     *
+     * @param fileName 文件名
+     * @return 后缀
+     */
+    public static String extension(String fileName) {
+        String type = isEmpty(fileName) ? "unknown" : fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+        String extension;
+
+        switch (type) {
+            case ".jpg":
+            case ".jpeg":
+            case ".png":
+            case ".gif":
+            case ".bmp":
+            case ".psd":
+                extension = "pic";
+                break;
+            case ".mp4":
+            case ".avi":
+            case ".rmvb":
+            case ".mpeg":
+            case ".mov":
+            case ".3gp":
+            case ".wmv":
+                extension = "video";
+                break;
+            case ".zip":
+            case ".rar":
+            case ".7z":
+                extension = "compress";
+                break;
+            case ".txt":
+                extension = "txt";
+                break;
+            case ".doc":
+            case ".docx":
+                extension = "word";
+                break;
+            case ".xls":
+            case ".xlsx":
+                extension = "excel";
+                break;
+            case ".ppt":
+            case ".pptx":
+                extension = "ppt";
+                break;
+            case ".pdf":
+                extension = "pdf";
+                break;
+            default:
+                extension = "unknown";
+        }
+
+        return extension;
     }
 }

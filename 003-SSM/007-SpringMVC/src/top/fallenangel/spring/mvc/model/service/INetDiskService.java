@@ -12,7 +12,17 @@ public interface INetDiskService {
 
     Folder getFolder(int folderID);
 
+    File getFile(int fileId);
+
+    File getFile(String fileRealName);
+
     void modifyFolderName(Folder folder);
 
     void newFolder(Folder folder);
+
+    void newFile(File newFile);
+
+    void deleteFolder(int folderId);
+
+    void deleteFile(String fileRealName);
 }

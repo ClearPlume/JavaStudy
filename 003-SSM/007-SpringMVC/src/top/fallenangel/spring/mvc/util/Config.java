@@ -4,12 +4,12 @@ import java.util.ResourceBundle;
 
 public class Config {
     private static final ResourceBundle config;
-    public static String uploadImgPath;
-    public static String uploadRoot;
+    public static String uploadRootPath;
+    public static String uploadWebRoot;
 
     static {
         config = ResourceBundle.getBundle("config");
-        uploadImgPath = config.getString("upload_img_path");
-        uploadRoot = config.getString("upload_root");
+        uploadRootPath = config.getString("upload_root_path");
+        uploadWebRoot = config.getString("upload_web_root");
     }
 }

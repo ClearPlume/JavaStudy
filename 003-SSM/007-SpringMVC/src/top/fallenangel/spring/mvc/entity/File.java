@@ -19,9 +19,14 @@ public class File implements Serializable {
     private Integer fileFolderId;
 
     /**
-     * 文件名
+     * 显示文件名
      */
-    private String fileName;
+    private String fileShowName;
+
+    /**
+     * 保存文件名
+     */
+    private String fileRealName;
 
     /**
      * 文件创建时间
@@ -46,12 +51,20 @@ public class File implements Serializable {
         this.fileFolderId = fileFolderId;
     }
 
-    public String getFileName() {
-        return fileName;
+    public String getFileShowName() {
+        return fileShowName;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setFileShowName(String fileShowName) {
+        this.fileShowName = fileShowName;
+    }
+
+    public String getFileRealName() {
+        return fileRealName;
+    }
+
+    public void setFileRealName(String fileRealName) {
+        this.fileRealName = fileRealName;
     }
 
     public Date getFileCreateDate() {
@@ -67,7 +80,7 @@ public class File implements Serializable {
         return "File{" +
                 "fileId=" + fileId +
                 ", fileFolderId=" + fileFolderId +
-                ", fileName='" + fileName + '\'' +
+                ", fileName='" + fileShowName + '\'' +
                 ", fileCreateDate=" + fileCreateDate +
                 '}';
     }
