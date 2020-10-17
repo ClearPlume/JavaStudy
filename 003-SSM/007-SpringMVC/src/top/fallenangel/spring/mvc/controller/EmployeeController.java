@@ -6,15 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import top.fallenangel.spring.mvc.entity.Dept;
 import top.fallenangel.spring.mvc.entity.Employee;
 import top.fallenangel.spring.mvc.model.service.IAreaService;
 import top.fallenangel.spring.mvc.model.service.IDeptService;
 import top.fallenangel.spring.mvc.model.service.IEmployeeService;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Map;
 
 @Controller
