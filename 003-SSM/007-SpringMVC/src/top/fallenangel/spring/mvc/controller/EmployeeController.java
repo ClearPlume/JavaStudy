@@ -28,7 +28,7 @@ public class EmployeeController {
     }
 
     @RequestMapping("list")
-    public PageInfo<Employee> list(Map<String, Object> params, Employee employee, @RequestParam(name = "page", defaultValue = "1") Integer page, @RequestParam(name = "pageSize", defaultValue = "5") Integer pageSize) {
+    public PageInfo<Employee> list(Map<String, Object> params, Employee employee, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "5") Integer pageSize) {
         params.put("depts", deptService.list());
         params.put("areas", areaService.list());
 
