@@ -26,6 +26,11 @@ public class DeptService implements IDeptService {
     }
 
     @Override
+    public boolean exists(int deptId) {
+        return deptDao.selectByPrimaryKey(deptId) != null;
+    }
+
+    @Override
     public Dept get(int deptId) {
         return deptDao.selectByPrimaryKey(deptId);
     }

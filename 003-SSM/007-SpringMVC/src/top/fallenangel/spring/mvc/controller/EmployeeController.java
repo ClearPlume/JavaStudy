@@ -52,7 +52,7 @@ public class EmployeeController {
     public String save(@Valid Employee employee, Errors errors) {
         Integer deptId = employee.getDept().getDeptId();
 
-        if (deptId == null || deptId <= 0 && deptId != -1 || deptId > deptService.count()) {
+        if (deptId == null || !deptService.exists(deptId)) {
             errors.rejectValue("dept.deptId", "", "必须选择部门！");
         } else if (deptId == -1) {
             errors.rejectValue("dept.deptId", "", "请选择部门");

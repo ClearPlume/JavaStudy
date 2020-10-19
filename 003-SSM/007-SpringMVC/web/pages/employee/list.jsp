@@ -104,7 +104,7 @@
                     <div class="m-style pagination-div"></div>
                     每页
                     <label>
-                        <select id="page-size-select" onchange="pageChange(1, 0)">
+                        <select id="page-size-select" onchange="pageSizeChange(this.value)">
                             <option value="5" ${pageInfo.pageSize == 5 ? "selected='selected'" : ""}>5</option>
                             <option value="10" ${pageInfo.pageSize == 10 ? "selected='selected'" : ""}>10</option>
                             <option value="15" ${pageInfo.pageSize == 15 ? "selected='selected'" : ""}>15</option>
@@ -202,8 +202,8 @@
                 }
             })
 
-            function pageChange(page, offset) {
-                searchForm.action = "${pageContext.request.contextPath}/employee/list?page=" + (page + offset) + "&pageSize=" + $("#page-size-select").val()
+            function pageSizeChange(pageSize) {
+                searchForm.action = "${pageContext.request.contextPath}/employee/list?pageSize=" + pageSize
                 searchForm.submit()
             }
         </script>
