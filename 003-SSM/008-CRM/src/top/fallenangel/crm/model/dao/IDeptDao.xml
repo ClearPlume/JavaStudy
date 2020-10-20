@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.IDeptDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Dept">
+        <id column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <result column="dept_code" jdbcType="VARCHAR" property="deptCode"/>
+        <result column="dept_status" jdbcType="INTEGER" property="deptStatus"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        dept_id, dept_name, dept_code, dept_status, parent_id
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dept
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from t_dept;
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_dept
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="dept_id" keyProperty="deptId" parameterType="top.fallenangel.crm.model.entity.Dept"
+            useGeneratedKeys="true">
+        insert into t_dept (dept_name, dept_code, dept_status,
+                            parent_id)
+        values (#{deptName,jdbcType=VARCHAR}, #{deptCode,jdbcType=VARCHAR}, #{deptStatus,jdbcType=INTEGER},
+                #{parentId,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="dept_id" keyProperty="deptId"
+            parameterType="top.fallenangel.crm.model.entity.Dept" useGeneratedKeys="true">
+        insert into t_dept
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deptName != null">
+                dept_name,
+            </if>
+            <if test="deptCode != null">
+                dept_code,
+            </if>
+            <if test="deptStatus != null">
+                dept_status,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deptName != null">
+                #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="deptCode != null">
+                #{deptCode,jdbcType=VARCHAR},
+            </if>
+            <if test="deptStatus != null">
+                #{deptStatus,jdbcType=INTEGER},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Dept">
+        update t_dept
+        <set>
+            <if test="deptName != null">
+                dept_name = #{deptName,jdbcType=VARCHAR},
+            </if>
+            <if test="deptCode != null">
+                dept_code = #{deptCode,jdbcType=VARCHAR},
+            </if>
+            <if test="deptStatus != null">
+                dept_status = #{deptStatus,jdbcType=INTEGER},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=INTEGER},
+            </if>
+        </set>
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Dept">
+        update t_dept
+        set dept_name   = #{deptName,jdbcType=VARCHAR},
+            dept_code   = #{deptCode,jdbcType=VARCHAR},
+            dept_status = #{deptStatus,jdbcType=INTEGER},
+            parent_id   = #{parentId,jdbcType=INTEGER}
+        where dept_id = #{deptId,jdbcType=INTEGER}
+    </update>
+</mapper>
