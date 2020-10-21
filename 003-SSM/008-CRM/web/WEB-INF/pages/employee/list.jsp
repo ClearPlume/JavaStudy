@@ -275,7 +275,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <form id="batch-form" action="${pageContext.request.contextPath}/employee/" method="post">
+                    <form id="batch-form" action="${pageContext.request.contextPath}/employee/lock" method="post">
                         <c:forEach items="${pageInfo.list}" var="employee" varStatus="vs">
                             <tr class="active">
                                 <td><label>
