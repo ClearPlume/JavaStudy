@@ -14,9 +14,9 @@ public class Employee implements Serializable {
     private Integer employeeId;
 
     /**
-     * 员工所在部门
+     * 员工所在部门id
      */
-    private Dept dept;
+    private Integer deptId;
 
     /**
      * 员工工号，用户名
@@ -72,7 +72,7 @@ public class Employee implements Serializable {
     /**
      * 家庭住址
      */
-    private String employeeAdress;
+    private String employeeAddress;
 
     /**
      * 员工失效日期
@@ -132,12 +132,12 @@ public class Employee implements Serializable {
         this.employeeId = employeeId;
     }
 
-    public Dept getDept() {
-        return dept;
+    public Integer getDeptId() {
+        return deptId;
     }
 
-    public void setDept(Dept dept) {
-        this.dept = dept;
+    public void setDeptId(Integer deptId) {
+        this.deptId = deptId;
     }
 
     public String getEmployeeNo() {
@@ -220,12 +220,12 @@ public class Employee implements Serializable {
         this.employeeJob = employeeJob;
     }
 
-    public String getEmployeeAdress() {
-        return employeeAdress;
+    public String getEmployeeAddress() {
+        return employeeAddress;
     }
 
-    public void setEmployeeAdress(String employeeAdress) {
-        this.employeeAdress = employeeAdress;
+    public void setEmployeeAddress(String employeeAddress) {
+        this.employeeAddress = employeeAddress;
     }
 
     public Date getEmployeeExpireTime() {

@@ -1,6 +1,5 @@
 package top.fallenangel.crm.model.dao;
 
-import org.apache.ibatis.annotations.Param;
 import top.fallenangel.crm.model.entity.Employee;
 
 import java.util.List;

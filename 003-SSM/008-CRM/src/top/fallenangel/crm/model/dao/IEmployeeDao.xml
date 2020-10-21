@@ -3,11 +3,7 @@
 <mapper namespace="top.fallenangel.crm.model.dao.IEmployeeDao">
     <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Employee">
         <id column="employee_id" jdbcType="INTEGER" property="employeeId"/>
-        <result column="dept_id" jdbcType="INTEGER" property="dept.deptId"/>
-        <result column="dept_name" jdbcType="VARCHAR" property="dept.deptName"/>
-        <result column="dept_code" jdbcType="VARCHAR" property="dept.deptCode"/>
-        <result column="dept_status" jdbcType="INTEGER" property="dept.deptStatus"/>
-        <result column="parent_id" jdbcType="INTEGER" property="dept.parentId"/>
+        <result column="dept_id" jdbcType="INTEGER" property="deptId"/>
         <result column="employee_no" jdbcType="VARCHAR" property="employeeNo"/>
         <result column="employee_pwd" jdbcType="VARCHAR" property="employeePwd"/>
         <result column="employee_name" jdbcType="VARCHAR" property="employeeName"/>
@@ -18,8 +14,8 @@
         <result column="employee_mail" jdbcType="VARCHAR" property="employeeMail"/>
         <result column="employee_birthday" jdbcType="DATE" property="employeeBirthday"/>
         <result column="employee_job" jdbcType="VARCHAR" property="employeeJob"/>
-        <result column="employee_adress" jdbcType="VARCHAR" property="employeeAdress"/>
-        <result column="employee_expire_time" jdbcType="DATE" property="employeeExpireTime"/>
+        <result column="employee_address" jdbcType="VARCHAR" property="employeeAddress"/>
+        <result column="employee_expire_time" jdbcType="TIMESTAMP" property="employeeExpireTime"/>
         <result column="employee_status" jdbcType="INTEGER" property="employeeStatus"/>
         <result column="employee_allowed_ips" jdbcType="VARCHAR" property="employeeAllowedIps"/>
         <result column="create_by" jdbcType="INTEGER" property="createBy"/>
@@ -30,9 +26,9 @@
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        employee_id, dept_id, employee_no, employee_pwd, employee_name, employee_sex, employee_age,
+        employee_id, dept_id, employee_no, employee_name, employee_sex, employee_age,
     employee_phone, employee_card_no, employee_mail, employee_birthday, employee_job, 
-    employee_adress, employee_expire_time, employee_status, employee_allowed_ips, create_by, 
+    employee_address, employee_expire_time, employee_status, employee_allowed_ips, create_by, 
     create_time, update_by, update_time
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -44,9 +40,7 @@
     <select id="selectAll" resultMap="BaseResultMap">
         select e.employee_id,
         e.dept_id,
-        d.dept_name,
         e.employee_no,
-        e.employee_pwd,
         e.employee_name,
         e.employee_sex,
         e.employee_age,
@@ -55,7 +49,7 @@
         e.employee_mail,
         e.employee_birthday,
         e.employee_job,
-        e.employee_adress,
+        e.employee_address,
         e.employee_expire_time,
         e.employee_status,
         e.employee_allowed_ips,
@@ -66,15 +60,14 @@
         ec.employee_name updater_name,
         e.update_time
         from t_employee e
-        left join t_dept d on e.dept_id = d.dept_id
         left join t_employee ec on e.create_by = ec.employee_id
         left join t_employee eu on e.update_by = eu.employee_id
         <where>
             <if test="employeeName != null and employeeName != ''">
                 e.employee_name like concat('%', #{employeeName}, '%')
             </if>
-            <if test="dept != null and dept.deptId != null">
-                and e.dept_id = #{dept.deptId}
+            <if test="deptId != null">
+                and e.dept_id = #{deptId}
             </if>
             <if test="employeeStatus != null">
                 and e.employee_status = #{employeeStatus}
@@ -97,15 +90,15 @@
         insert into t_employee (dept_id, employee_no, employee_pwd,
                                 employee_name, employee_sex, employee_age,
                                 employee_phone, employee_card_no, employee_mail,
-                                employee_birthday, employee_job, employee_adress,
+                                employee_birthday, employee_job, employee_address,
                                 employee_expire_time, employee_status, employee_allowed_ips,
                                 create_by, create_time, update_by,
                                 update_time)
         values (#{deptId,jdbcType=INTEGER}, #{employeeNo,jdbcType=VARCHAR}, #{employeePwd,jdbcType=VARCHAR},
                 #{employeeName,jdbcType=VARCHAR}, #{employeeSex,jdbcType=VARCHAR}, #{employeeAge,jdbcType=INTEGER},
                 #{employeePhone,jdbcType=VARCHAR}, #{employeeCardNo,jdbcType=VARCHAR}, #{employeeMail,jdbcType=VARCHAR},
-                #{employeeBirthday,jdbcType=DATE}, #{employeeJob,jdbcType=VARCHAR}, #{employeeAdress,jdbcType=VARCHAR},
-                #{employeeExpireTime,jdbcType=DATE}, #{employeeStatus,jdbcType=INTEGER},
+                #{employeeBirthday,jdbcType=DATE}, #{employeeJob,jdbcType=VARCHAR}, #{employeeAddress,jdbcType=VARCHAR},
+                #{employeeExpireTime,jdbcType=TIMESTAMP}, #{employeeStatus,jdbcType=INTEGER},
                 #{employeeAllowedIps,jdbcType=VARCHAR},
                 #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER},
                 #{updateTime,jdbcType=TIMESTAMP})
@@ -147,8 +140,8 @@
             <if test="employeeJob != null">
                 employee_job,
             </if>
-            <if test="employeeAdress != null">
-                employee_adress,
+            <if test="employeeAddress != null">
+                employee_address,
             </if>
             <if test="employeeExpireTime != null">
                 employee_expire_time,
@@ -206,11 +199,11 @@
             <if test="employeeJob != null">
                 #{employeeJob,jdbcType=VARCHAR},
             </if>
-            <if test="employeeAdress != null">
-                #{employeeAdress,jdbcType=VARCHAR},
+            <if test="employeeAddress != null">
+                #{employeeAddress,jdbcType=VARCHAR},
             </if>
             <if test="employeeExpireTime != null">
-                #{employeeExpireTime,jdbcType=DATE},
+                #{employeeExpireTime,jdbcType=TIMESTAMP},
             </if>
             <if test="employeeStatus != null">
                 #{employeeStatus,jdbcType=INTEGER},
@@ -268,11 +261,11 @@
             <if test="employeeJob != null">
                 employee_job = #{employeeJob,jdbcType=VARCHAR},
             </if>
-            <if test="employeeAdress != null">
-                employee_adress = #{employeeAdress,jdbcType=VARCHAR},
+            <if test="employeeAddress != null">
+                employee_address = #{employeeAddress,jdbcType=VARCHAR},
             </if>
             <if test="employeeExpireTime != null">
-                employee_expire_time = #{employeeExpireTime,jdbcType=DATE},
+                employee_expire_time = #{employeeExpireTime,jdbcType=TIMESTAMP},
             </if>
             <if test="employeeStatus != null">
                 employee_status = #{employeeStatus,jdbcType=INTEGER},
@@ -299,7 +292,6 @@
         update t_employee
         set dept_id              = #{deptId,jdbcType=INTEGER},
             employee_no          = #{employeeNo,jdbcType=VARCHAR},
-            employee_pwd         = #{employeePwd,jdbcType=VARCHAR},
             employee_name        = #{employeeName,jdbcType=VARCHAR},
             employee_sex         = #{employeeSex,jdbcType=VARCHAR},
             employee_age         = #{employeeAge,jdbcType=INTEGER},
@@ -308,8 +300,8 @@
             employee_mail        = #{employeeMail,jdbcType=VARCHAR},
             employee_birthday    = #{employeeBirthday,jdbcType=DATE},
             employee_job         = #{employeeJob,jdbcType=VARCHAR},
-            employee_adress      = #{employeeAdress,jdbcType=VARCHAR},
-            employee_expire_time = #{employeeExpireTime,jdbcType=DATE},
+            employee_address      = #{employeeAddress,jdbcType=VARCHAR},
+            employee_expire_time = #{employeeExpireTime,jdbcType=TIMESTAMP},
             employee_status      = #{employeeStatus,jdbcType=INTEGER},
             employee_allowed_ips = #{employeeAllowedIps,jdbcType=VARCHAR},
             create_by            = #{createBy,jdbcType=INTEGER},

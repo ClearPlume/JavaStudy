@@ -5,7 +5,8 @@
 --%>
 <%--@elvariable id="pageInfo" type="com.github.pagehelper.PageInfo<top.fallenangel.crm.model.entity.Employee>"--%>
 <%--@elvariable id="employee" type="top.fallenangel.crm.model.entity.Employee"--%>
-<%--@elvariable id="deptList" type="java.util.List<top.fallenangel.crm.model.entity.Dept>"--%>
+<%--@elvariable id="DEPTS_IN_APPLICATION" type="java.util.Map<java.lang.String, top.fallenangel.crm.model.entity.Dept>"--%>
+<%--@elvariable id="deptEntry" type="java.util.Map.Entry<java.lang.String, top.fallenangel.crm.model.entity.Dept>"--%>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -22,6 +23,7 @@
               rel="stylesheet"/>
         <link href="${pageContext.request.contextPath}/js/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"
               type="text/css" rel="stylesheet"/>
+
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.1-min.js"></script>
         <script type="text/javascript"
                 src="${pageContext.request.contextPath}/js/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
@@ -123,7 +125,6 @@
                 </div>
             </div>
         </div>
-
         <div>
             <div style="position: relative; left: 30px; top: -10px;">
                 <div class="page-header">
@@ -131,7 +132,6 @@
                 </div>
             </div>
         </div>
-
         <div class="btn-toolbar" role="toolbar" style="position: relative; height: 80px; left: 30px; top: -10px;">
             <form:form modelAttribute="employee" cssClass="form-inline" role="form"
                        action="${pageContext.request.contextPath}/employee/list">
@@ -145,9 +145,10 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">部门名称</div>
-                        <form:select path="dept.deptId" cssClass="form-control">
+                        <form:select path="deptId" cssClass="form-control" cssStyle="width: 170px">
                             <form:option value="" label="请选择部门"/>
-                            <form:options items="${deptList}" itemValue="deptId" itemLabel="deptName"/>
+                            <form:options items="${DEPTS_IN_APPLICATION.entrySet()}" itemValue="value.deptId"
+                                          itemLabel="value.deptName"/>
                         </form:select>
                     </div>
                 </div>
@@ -155,17 +156,18 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">锁定状态</div>
-                        <form:select path="employeeStatus" cssClass="form-control">
-                            <form:option value="" label="请选择"/>
-                            <form:option value="0" label="禁用"/>
-                            <form:option value="1" label="启用"/>
+                        <form:select path="employeeStatus" cssClass="form-control lock-status-select"
+                                     cssStyle="width: 170px">
+                            <form:option value="" label="请选择" cssStyle="color: rgb(85, 85, 85)"/>
+                            <form:option value="1" label="启用" cssStyle="color: green"/>
+                            <form:option value="0" label="禁用" cssStyle="color: red"/>
                         </form:select>
                     </div>
                 </div>
                 <br/>
                 <br/>
                 <div class="form-group">
-                    <div class="input-group">
+                    <div class="input-group" style="width: 251px;">
                         <div class="input-group-addon">失效时间</div>
                         <label for="startTime"></label>
                         <input class="form-control" type="text" id="startTime" name="startTime"
@@ -177,7 +179,7 @@
                 </div>
                 &nbsp;~&nbsp;
                 <div class="form-group">
-                    <div class="input-group">
+                    <div class="input-group" style="width: 170px">
                         <label for="endTime"></label>
                         <input class="form-control" type="text" id="endTime" name="endTime"
                                value="${u:dateFormat(employee.endTime, "yyyy-MM-dd HH:mm:ss")}"/>
@@ -194,10 +196,11 @@
         <div class="btn-toolbar" role="toolbar"
              style="background-color: #F7F7F7; height: 50px; position: relative;left: 30px; width: 110%; top: 20px;">
             <div class="btn-group" style="position: relative; top: 18%;">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createUserModal"><span
-                        class="glyphicon glyphicon-plus"></span>创建
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEmployeeModal">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;创建
                 </button>
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span>删除</button>
+                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span>&nbsp;删除
+                </button>
             </div>
         </div>
 
@@ -233,7 +236,7 @@
                             <td>${vs.count}</td>
                             <td><a href="../settings/qx/user/detail.html">${employee.employeeNo}</a></td>
                             <td>${employee.employeeName}</td>
-                            <td>${employee.dept.deptName}</td>
+                            <td>${DEPTS_IN_APPLICATION[employee.deptId].deptName}</td>
                             <td>${employee.employeeMail}</td>
                             <td><fmt:formatDate value="${employee.employeeExpireTime}"
                                                 pattern="yyyy-MM-dd HH:mm:ss"/></td>
@@ -251,7 +254,7 @@
             </table>
         </div>
 
-        <div id="pagination" style="height: 50px; position: relative;top: 30px; left: 30px;"></div>
+        <div id="pagination" style="position: relative;top: 30px; left: 30px;"></div>
 
         <script>
             $("#pagination").bs_pagination({
@@ -273,7 +276,7 @@
             let datetimepickerSettings = {
                 language: "zh-CN",
                 autoclose: true,
-                format: 'yyyy-mm-dd hh:ii:ss',
+                format: 'yyyy-mm-dd hh:ii:00',
                 todayBtn: true
             }
 
@@ -283,6 +286,22 @@
 
             $(".glyphicon-remove").click(function () {
                 $(this).parent().prev().val("")
+            })
+
+            $(".lock-status-select").change(function () {
+                let color
+
+                switch (this.value) {
+                    case "0":
+                        color = "red"
+                        break
+                    case "1":
+                        color = "green"
+                        break
+                    default:
+                        color = "rgb(85, 85, 85)"
+                }
+                $(this).css("color", color)
             })
         </script>
     </body>
