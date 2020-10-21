@@ -22,4 +22,15 @@ public class EmployeeController {
         PageHelper.startPage(page, pageSize);
         return PageInfo.of(employeeService.list(employee));
     }
+
+    @RequestMapping("detail")
+    public Employee detail(int employeeId) {
+        return employeeService.get(employeeId);
+    }
+
+    @RequestMapping("update")
+    public String update(Employee employee) {
+        employeeService.update(employee);
+        return "redirect:/employee/list";
+    }
 }

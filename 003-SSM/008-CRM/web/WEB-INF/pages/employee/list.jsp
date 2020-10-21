@@ -234,7 +234,9 @@
                                 <input type="checkbox"/>
                             </label></td>
                             <td>${vs.count}</td>
-                            <td><a href="../settings/qx/user/detail.html">${employee.employeeNo}</a></td>
+                            <td>
+                                <a href="${pageContext.request.contextPath}/employee/detail?employeeId=${employee.employeeId}">${employee.employeeNo}</a>
+                            </td>
                             <td>${employee.employeeName}</td>
                             <td>${DEPTS_IN_APPLICATION[employee.deptId].deptName}</td>
                             <td>${employee.employeeMail}</td>

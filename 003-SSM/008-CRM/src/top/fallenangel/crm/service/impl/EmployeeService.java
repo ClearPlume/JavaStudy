@@ -19,4 +19,14 @@ public class EmployeeService implements IEmployeeService {
     public List<Employee> list(Employee employee) {
         return employeeDao.selectAll(employee);
     }
+
+    @Override
+    public Employee get(int employeeId) {
+        return employeeDao.selectByPrimaryKey(employeeId);
+    }
+
+    @Override
+    public void update(Employee employee) {
+        employeeDao.updateByPrimaryKeySelective(employee);
+    }
 }
