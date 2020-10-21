@@ -10,4 +10,10 @@ public interface IEmployeeService {
     Employee get(int employeeId);
 
     void update(Employee employee);
+
+    void save(Employee employee);
+
+    void lock(int[] employeeId);
+
+    void unlock(int[] employeeId);
 }

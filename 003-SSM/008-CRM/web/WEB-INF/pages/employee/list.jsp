@@ -35,93 +35,136 @@
                 src="${pageContext.request.contextPath}/js/jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
         <script type="text/javascript"
                 src="${pageContext.request.contextPath}/js/jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/bs_alert.js"></script>
 
         <style type="text/css">
+            .required {
+                font-size: 15px;
+                color: red;
+            }
+
             .glyphicon-remove {
                 cursor: pointer;
             }
         </style>
     </head>
     <body>
-        <!-- 创建用户的模态窗口 -->
-        <div class="modal fade" id="createUserModal" role="dialog">
-            <div class="modal-dialog" role="document" style="width: 90%;">
+        <div id="alertMsgBox"></div>
+        <div class="modal fade" id="addEmployeeModal" role="dialog">
+            <div class="modal-dialog" role="document" style="width: 75%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">
                             <span aria-hidden="true">×</span>
                         </button>
-                        <h4 class="modal-title" id="myModalLabel">新增用户</h4>
+                        <h4 class="modal-title">新增员工</h4>
                     </div>
-                    <div class="modal-body">
-
-                        <form class="form-horizontal" role="form">
-
+                    <form action="${pageContext.request.contextPath}/employee/save" class="form-horizontal"
+                          method="post" role="form">
+                        <div class="modal-body">
                             <div class="form-group">
-                                <label for="create-loginActNo" class="col-sm-2 control-label">登录帐号<span
-                                        style="font-size: 15px; color: red;">*</span></label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-loginActNo">
+                                <label class="col-sm-2 control-label">登录帐号<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="text" name="employeeNo" class="form-control"/>
+                                    </label>
                                 </div>
-                                <label for="create-username" class="col-sm-2 control-label">用户姓名</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-username">
+                                <label class="col-sm-2 control-label">员工姓名<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="text" name="employeeName" class="form-control"/>
+                                    </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="create-loginPwd" class="col-sm-2 control-label">登录密码<span
-                                        style="font-size: 15px; color: red;">*</span></label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="password" class="form-control" id="create-loginPwd">
+                                <label class="col-sm-2 control-label">登录密码<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="password" name="employeePwd" class="form-control pwd"/>
+                                    </label>
                                 </div>
-                                <label for="create-confirmPwd" class="col-sm-2 control-label">确认密码<span
-                                        style="font-size: 15px; color: red;">*</span></label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="password" class="form-control" id="create-confirmPwd">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="create-email" class="col-sm-2 control-label">邮箱</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-email">
-                                </div>
-                                <label for="create-expireTime" class="col-sm-2 control-label">失效时间</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-expireTime">
+                                <label class="col-sm-2 control-label">确认密码<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="password" class="form-control pwd"/>
+                                    </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="create-lockStatus" class="col-sm-2 control-label">锁定状态</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <select class="form-control" id="create-lockStatus">
-                                        <option></option>
-                                        <option>启用</option>
-                                        <option>锁定</option>
-                                    </select>
+                                <label class="col-sm-2 control-label">员工性别<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <select name="employeeSex" class="form-control" style="width: 210px">
+                                            <option value="">请选择</option>
+                                            <option>男</option>
+                                            <option>女</option>
+                                        </select>
+                                    </label>
                                 </div>
-                                <label for="create-dept" class="col-sm-2 control-label">部门</label>
-                                <span style="font-size: 15px; color: red;">*</span>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <select class="form-control" id="create-dept">
-                                        <option></option>
-                                        <option>市场部</option>
-                                        <option>策划部</option>
-                                    </select>
+                                <label class="col-sm-2 control-label">手机号<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="text" name="employeePhone" class="form-control"/>
+                                    </label>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="create-allowIps" class="col-sm-2 control-label">允许访问的IP</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-allowIps" style="width: 280%"
-                                           placeholder="多个用逗号隔开">
+                                <label class="col-sm-2 control-label">邮箱<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="text" name="employeeMail" class="form-control"/>
+                                    </label>
+                                </div>
+                                <label class="col-sm-2 control-label">失效时间<span class="required">*</span></label>
+                                <div class="col-sm-10 input-group" style="width: 210px; left: 15px">
+                                    <label for="employeeExpireTime"></label>
+                                    <input type="text" id="employeeExpireTime" name="employeeExpireTime"
+                                           class="form-control"/>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                     </span>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
-                    </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">锁定状态<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <select name="employeeStatus" class="form-control lock-status-select"
+                                                style="width: 210px">
+                                            <option value="" style="color: rgb(85, 85, 85)">请选择</option>
+                                            <option value="1" style="color: green">启用</option>
+                                            <option value="0" style="color: red">禁用</option>
+                                        </select>
+                                    </label>
+                                </div>
+                                <label class="col-sm-2 control-label">所在部门<span class="required">*</span></label>
+                                <div class="col-sm-10 input-group" style="width: 270px; left: 15px">
+                                    <label>
+                                        <select name="deptId" class="form-control" style="width: 210px">
+                                            <option value="">请选择部门</option>
+                                            <c:forEach items="${DEPTS_IN_APPLICATION.entrySet()}" var="deptEntry">
+                                                <option value="${deptEntry.value.deptId}">${deptEntry.value.deptName}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">允许访问的IP<span class="required"
+                                                                                   style="opacity: 0">*</span></label>
+                                <div class="col-sm-10" style="width: 300px;">
+                                    <label>
+                                        <input type="text" class="form-control" name="employeeAllowedIps"
+                                               style="width: 284%" placeholder="多个用逗号隔开"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">添加</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -199,7 +242,11 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addEmployeeModal">
                     <span class="glyphicon glyphicon-plus"></span>&nbsp;创建
                 </button>
-                <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span>&nbsp;删除
+                <button type="button" class="btn btn-warning" id="lock-batch-btn"><span
+                        class="glyphicon glyphicon-lock"></span>&nbsp;锁定
+                </button>
+                <button type="button" class="btn btn-success" id="unlock-batch-btn"><span
+                        class="glyphicon glyphicon-ok"></span>&nbsp;解锁
                 </button>
             </div>
         </div>
@@ -210,13 +257,13 @@
                     <tr style="color: #B3B3B3;">
                         <td>
                             <label>
-                                <input type="checkbox"/>
+                                <input type="checkbox" id="select-all-checkbox"/>
                             </label>
                         </td>
                         <td>序号</td>
                         <td>登录帐号</td>
-                        <td>用户姓名</td>
-                        <td>部门名称</td>
+                        <td>员工姓名</td>
+                        <td>所在部门</td>
                         <td>邮箱</td>
                         <td>失效时间</td>
                         <td>允许访问IP</td>
@@ -228,30 +275,33 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${pageInfo.list}" var="employee" varStatus="vs">
-                        <tr class="active">
-                            <td><label>
-                                <input type="checkbox"/>
-                            </label></td>
-                            <td>${vs.count}</td>
-                            <td>
-                                <a href="${pageContext.request.contextPath}/employee/detail?employeeId=${employee.employeeId}">${employee.employeeNo}</a>
-                            </td>
-                            <td>${employee.employeeName}</td>
-                            <td>${DEPTS_IN_APPLICATION[employee.deptId].deptName}</td>
-                            <td>${employee.employeeMail}</td>
-                            <td><fmt:formatDate value="${employee.employeeExpireTime}"
-                                                pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                            <td>${employee.employeeAllowedIps}</td>
-                            <td>${employee.employeeStatus == 0 ? "<span style='color: red'>禁用</span>" : "<span style='color: green'>启用</span>"}</td>
-                            <td>${employee.creator}</td>
-                            <td><fmt:formatDate value="${employee.createTime}"
-                                                pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                            <td>${employee.updater}</td>
-                            <td><fmt:formatDate value="${employee.updateTime}"
-                                                pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                        </tr>
-                    </c:forEach>
+                    <form id="batch-form" action="${pageContext.request.contextPath}/employee/" method="post">
+                        <c:forEach items="${pageInfo.list}" var="employee" varStatus="vs">
+                            <tr class="active">
+                                <td><label>
+                                    <input name="employeeId" type="checkbox" value="${employee.employeeId}"
+                                           class="employee-list-checkbox"/>
+                                </label></td>
+                                <td>${vs.count}</td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/employee/detail?employeeId=${employee.employeeId}">${employee.employeeNo}</a>
+                                </td>
+                                <td>${employee.employeeName}</td>
+                                <td>${DEPTS_IN_APPLICATION[employee.deptId].deptName}</td>
+                                <td>${employee.employeeMail}</td>
+                                <td><fmt:formatDate value="${employee.employeeExpireTime}"
+                                                    pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                                <td>${employee.employeeAllowedIps}</td>
+                                <td>${employee.employeeStatus == 0 ? "<span style='color: red'>禁用</span>" : "<span style='color: green'>启用</span>"}</td>
+                                <td>${employee.creator}</td>
+                                <td><fmt:formatDate value="${employee.createTime}"
+                                                    pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                                <td>${employee.updater}</td>
+                                <td><fmt:formatDate value="${employee.updateTime}"
+                                                    pattern="yyyy-MM-dd HH:mm:ss"/></td>
+                            </tr>
+                        </c:forEach>
+                    </form>
                 </tbody>
             </table>
         </div>
@@ -273,7 +323,9 @@
                     searchForm.action = searchForm.action + "?page=" + data.currentPage + "&pageSize=" + data.rowsPerPage
                     searchForm.submit()
                 }
-            });
+            })
+
+            $("#alertMsgBox").bs_alert()
 
             let datetimepickerSettings = {
                 language: "zh-CN",
@@ -285,6 +337,8 @@
             $("#startTime").datetimepicker(datetimepickerSettings)
 
             $("#endTime").datetimepicker(datetimepickerSettings)
+
+            $("#employeeExpireTime").datetimepicker(datetimepickerSettings)
 
             $(".glyphicon-remove").click(function () {
                 $(this).parent().prev().val("")
@@ -304,6 +358,40 @@
                         color = "rgb(85, 85, 85)"
                 }
                 $(this).css("color", color)
+            })
+
+            let selectAllCheckbox = $("#select-all-checkbox")
+            let employeeListCheckboxes = $(".employee-list-checkbox")
+
+            selectAllCheckbox.change(function () {
+                employeeListCheckboxes.each(function () {
+                    this.checked = selectAllCheckbox[0].checked
+                })
+            })
+
+            employeeListCheckboxes.change(function () {
+                selectAllCheckbox[0].checked = employeeListCheckboxes.length === $(".employee-list-checkbox:checked").length
+            })
+
+            let batchForm = $("#batch-form")[0]
+
+            $("#lock-batch-btn").click(function () {
+                let selectedEmployeeCheckbox = $(".employee-list-checkbox:checked")
+                if (selectedEmployeeCheckbox.length === 0) {
+                    bs_alert("请至少选择一个员工进行锁定！", "警告")
+                } else {
+                    batchForm.action = batchForm.action + "lock"
+                    batchForm.submit()
+                }
+            })
+            $("#unlock-batch-btn").click(function () {
+                let selectedEmployeeCheckbox = $(".employee-list-checkbox:checked")
+                if (selectedEmployeeCheckbox.length === 0) {
+                    bs_alert("请至少选择一个要解锁的员工", "提示", 25)
+                } else {
+                    batchForm.action = batchForm.action + "unlock"
+                    batchForm.submit()
+                }
             })
         </script>
     </body>

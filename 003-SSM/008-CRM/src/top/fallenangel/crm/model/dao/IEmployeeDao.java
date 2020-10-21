@@ -7,6 +7,10 @@ import java.util.List;
 public interface IEmployeeDao {
     int deleteByPrimaryKey(Integer employeeId);
 
+    void lockAllByPrimaryKey(int[] employeeId);
+
+    void unlockAllByPrimaryKey(int[] employeeId);
+
     int insert(Employee record);
 
     int insertSelective(Employee record);

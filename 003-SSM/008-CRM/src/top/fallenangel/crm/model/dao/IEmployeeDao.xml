@@ -79,12 +79,25 @@
                 and e.employee_expire_time &lt;= #{endTime}
             </if>
         </where>
+        order by e.employee_id desc
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_employee
         where employee_id = #{employeeId,jdbcType=INTEGER}
     </delete>
+    <update id="lockAllByPrimaryKey">
+        update t_employee set employee_status = 0 where employee_id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
+    <update id="unlockAllByPrimaryKey">
+        update t_employee set employee_status = 1 where employee_id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </update>
     <insert id="insert" keyColumn="employee_id" keyProperty="employeeId"
             parameterType="top.fallenangel.crm.model.entity.Employee" useGeneratedKeys="true">
         insert into t_employee (dept_id, employee_no, employee_pwd,
@@ -300,7 +313,7 @@
             employee_mail        = #{employeeMail,jdbcType=VARCHAR},
             employee_birthday    = #{employeeBirthday,jdbcType=DATE},
             employee_job         = #{employeeJob,jdbcType=VARCHAR},
-            employee_address      = #{employeeAddress,jdbcType=VARCHAR},
+            employee_address     = #{employeeAddress,jdbcType=VARCHAR},
             employee_expire_time = #{employeeExpireTime,jdbcType=TIMESTAMP},
             employee_status      = #{employeeStatus,jdbcType=INTEGER},
             employee_allowed_ips = #{employeeAllowedIps,jdbcType=VARCHAR},

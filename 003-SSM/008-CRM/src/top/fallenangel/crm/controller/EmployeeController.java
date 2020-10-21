@@ -33,4 +33,22 @@ public class EmployeeController {
         employeeService.update(employee);
         return "redirect:/employee/list";
     }
+
+    @RequestMapping("save")
+    public String save(Employee employee) {
+        employeeService.save(employee);
+        return "redirect:/employee/list";
+    }
+
+    @RequestMapping("lock")
+    public String lock(int[] employeeId) {
+        employeeService.lock(employeeId);
+        return "redirect:/employee/list";
+    }
+
+    @RequestMapping("unlock")
+    public String unlock(int[] employeeId) {
+        employeeService.unlock(employeeId);
+        return "redirect:/employee/list";
+    }
 }
