@@ -5,8 +5,11 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import top.fallenangel.crm.model.entity.AjaxResult;
 import top.fallenangel.crm.model.entity.Employee;
 import top.fallenangel.crm.service.IEmployeeService;
+import top.fallenangel.crm.util.Util;
 
 @Controller
 @RequestMapping("employee")
@@ -50,5 +53,24 @@ public class EmployeeController {
     public String unlock(int[] employeeId) {
         employeeService.unlock(employeeId);
         return "redirect:/employee/list";
+    }
+
+    @RequestMapping("modifyPwd")
+    @ResponseBody
+    public AjaxResult modifyPwd(String oldPwd, String newPwd) {
+        oldPwd = Util.md5(oldPwd);
+        newPwd = Util.md5(newPwd);
+        AjaxResult result = new AjaxResult();
+        int employeeId = Util.getEmployeeIdFromSession();
+        boolean pwdCorrect = employeeService.checkPwd(employeeId, oldPwd);
+
+        if (pwdCorrect) {
+            result.setSuccess(true);
+            employeeService.updatePwd(employeeId, newPwd);
+        } else {
+            result.setSuccess(false);
+            result.setMsg("密码修改失败，检查旧密码！");
+        }
+        return result;
     }
 }

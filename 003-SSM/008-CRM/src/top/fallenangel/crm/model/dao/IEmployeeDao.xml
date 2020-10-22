@@ -81,6 +81,43 @@
         </where>
         order by e.employee_id desc
     </select>
+    <select id="login" resultMap="BaseResultMap">
+        select e.employee_id,
+               e.dept_id,
+               e.employee_no,
+               e.employee_name,
+               e.employee_sex,
+               e.employee_age,
+               e.employee_phone,
+               e.employee_card_no,
+               e.employee_mail,
+               e.employee_birthday,
+               e.employee_job,
+               e.employee_address,
+               e.employee_expire_time,
+               e.employee_status,
+               e.employee_allowed_ips,
+               e.create_by,
+               ec.employee_name creator_name,
+               e.create_time,
+               e.update_by,
+               ec.employee_name updater_name,
+               e.update_time
+        from t_employee e
+                 left join t_employee ec on e.create_by = ec.employee_id
+                 left join t_employee eu on e.update_by = eu.employee_id
+        where e.employee_no = #{employeeNo}
+          and e.employee_pwd = #{employeePwd}
+          and e.employee_status != 0
+          and e.employee_expire_time &gt;= #{updateTime}
+          and e.employee_allowed_ips like concat('%', #{employeeAllowedIps}, '%')
+    </select>
+    <select id="checkPwd" resultType="java.lang.Integer">
+        select count(1)
+        from t_employee
+        where employee_id = #{employeeId}
+          and employee_pwd = #{pwd}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_employee
@@ -322,5 +359,10 @@
             update_by            = #{updateBy,jdbcType=INTEGER},
             update_time          = #{updateTime,jdbcType=TIMESTAMP}
         where employee_id = #{employeeId,jdbcType=INTEGER}
+    </update>
+    <update id="updatePwd">
+        update t_employee
+        set employee_pwd = #{pwd}
+        where employee_id = #{employeeId}
     </update>
 </mapper>

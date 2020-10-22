@@ -122,6 +122,11 @@ public class Employee implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+    /**
+     * 传递错误信息
+     */
+    private String msg;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getEmployeeId() {
@@ -314,5 +319,13 @@ public class Employee implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
     }
 }

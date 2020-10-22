@@ -3,17 +3,30 @@
   User: FallenAngel
   Time: 2020-10-17 下午 7:50
 --%>
+<%--@elvariable id="LOGIN_EMPLOYEE" type="top.fallenangel.crm.model.entity.Employee"--%>
+<%--@elvariable id="DEPTS_IN_APPLICATION" type="java.util.Map<java.lang.String, top.fallenangel.crm.model.entity.Dept>"--%>
 <%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
     <head>
         <meta charset="UTF-8">
         <title>欢迎</title>
         <link href="${pageContext.request.contextPath}/js/jquery/bootstrap_3.3.0/css/bootstrap.min.css"
               type="text/css" rel="stylesheet"/>
+        <style type="text/css">
+            .required {
+                font-size: 15px;
+                color: red;
+            }
+        </style>
+
         <script type="text/javascript"
                 src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.1-min.js"></script>
         <script type="text/javascript"
                 src="${pageContext.request.contextPath}/js/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript"
+                src="${pageContext.request.contextPath}/js/bs_alert.js"></script>
+
         <script type="text/javascript">
             //页面加载完毕
             $(function () {
@@ -55,12 +68,13 @@
                     </div>
                     <div class="modal-body">
                         <div style="position: relative; left: 40px;">
-                            姓名：<b>张三</b><br><br>
-                            登录帐号：<b>zhangSan</b><br><br>
-                            组织机构：<b>1005，市场部，二级部门</b><br><br>
-                            邮箱：<b>zhangsan@bjpowernode.com</b><br><br>
-                            失效时间：<b>2017-02-14 10:10:10</b><br><br>
-                            允许访问IP：<b>127.0.0.1,192.168.100.2</b>
+                            姓名：<b>${LOGIN_EMPLOYEE.employeeName}</b><br><br>
+                            登录帐号：<b>${LOGIN_EMPLOYEE.employeeNo}</b><br><br>
+                            组织机构：<b>${DEPTS_IN_APPLICATION[LOGIN_EMPLOYEE.deptId].deptName}</b><br><br>
+                            邮箱：<b>${LOGIN_EMPLOYEE.employeeMail}</b><br><br>
+                            失效时间：<b><fmt:formatDate value="${LOGIN_EMPLOYEE.employeeExpireTime}"
+                                                    pattern="yyyy-MM-dd HH:mm:ss"/></b><br><br>
+                            允许访问IP：<b>${LOGIN_EMPLOYEE.employeeAllowedIps}</b>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -71,8 +85,8 @@
         </div>
 
         <!-- 修改密码的模态窗口 -->
-        <div class="modal fade" id="editPwdModal" role="dialog">
-            <div class="modal-dialog" role="document" style="width: 70%;">
+        <div class="modal fade" id="editPwd" role="dialog">
+            <div class="modal-dialog" role="document" style="width: 40%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">
@@ -83,39 +97,40 @@
                     <div class="modal-body">
                         <form class="form-horizontal" role="form">
                             <div class="form-group">
-                                <label for="oldPwd" class="col-sm-2 control-label">原密码</label>
+                                <label for="oldPwd" class="col-sm-2 control-label">原密码<span
+                                        class="required">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="oldPwd" style="width: 200%;">
+                                    <input type="password" class="form-control" id="oldPwd" style="width: 200%;">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="newPwd" class="col-sm-2 control-label">新密码</label>
+                                <label for="newPwd" class="col-sm-2 control-label">新密码<span
+                                        class="required">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="newPwd" style="width: 200%;">
+                                    <input type="password" class="form-control" id="newPwd" style="width: 200%;">
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label for="confirmPwd" class="col-sm-2 control-label">确认密码</label>
+                                <label for="confirmPwd" class="col-sm-2 control-label">确认密码<span
+                                        class="required">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="confirmPwd" style="width: 200%;">
+                                    <input type="password" class="form-control" id="confirmPwd" style="width: 200%;">
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal"
-                                onclick="window.location.href='../login.html';">更新
-                        </button>
+                        <button type="button" class="btn btn-primary" id="update-pwd-btn">更新</button>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 退出系统的模态窗口 -->
-        <div class="modal fade" id="exitModal" role="dialog">
+        <div class="modal fade" id="logout" role="dialog">
             <div class="modal-dialog" role="document" style="width: 30%;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -130,7 +145,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal"
-                                onclick="window.location.href='../login.html';">确定
+                                onclick="location.href = '${pageContext.request.contextPath}/logout'">确定
                         </button>
                     </div>
                 </div>
@@ -145,17 +160,19 @@
             <div style="position: absolute; top: 15px; right: 15px;">
                 <ul>
                     <li class="dropdown user-dropdown">
-                        <a href="javascript:void(0)" style="text-decoration: none; color: white;"
+                        <a id="information-dropdown-a" href="javascript:void(0)"
+                           style="text-decoration: none; color: white;"
                            class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="glyphicon glyphicon-user"></span> zhangSan <span class="caret"></span>
+                            <span class="glyphicon glyphicon-user"></span>&nbsp;${LOGIN_EMPLOYEE.employeeName}(${LOGIN_EMPLOYEE.employeeNo})&nbsp;<span
+                                class="caret"></span>
                         </a>
-                        <ul class="dropdown-menu">
+                        <ul id="information-dropdown-menu" class="dropdown-menu dropdown-menu-right">
                             <li><a href="javascript:void(0)" data-toggle="modal" data-target="#myInformation"><span
-                                    class="glyphicon glyphicon-file"></span> 我的资料</a></li>
-                            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#editPwdModal"><span
-                                    class="glyphicon glyphicon-edit"></span> 修改密码</a></li>
-                            <li><a href="javascript:void(0);" data-toggle="modal" data-target="#exitModal"><span
-                                    class="glyphicon glyphicon-off"></span> 退出</a></li>
+                                    class="glyphicon glyphicon-file"></span>&nbsp;我的资料</a></li>
+                            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#editPwd"><span
+                                    class="glyphicon glyphicon-edit"></span>&nbsp;修改密码</a></li>
+                            <li><a href="javascript:void(0)" data-toggle="modal" data-target="#logout"><span
+                                    class="glyphicon glyphicon-off"></span>&nbsp;退出</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -219,5 +236,50 @@
              style="height: 1px; width: 100%; position: absolute;bottom: 30px; background-color: #B3B3B3;"></div>
         <!-- 底部 -->
         <div id="down" style="height: 30px; width: 100%; position: absolute;bottom: 0;"></div>
+
+        <div id="alertMsg"></div>
+
+        <script type="text/javascript">
+            $("#alertMsg").bs_alert()
+
+            let hoveredElement
+
+            $(document).mouseover(event, function (event) {
+                hoveredElement = event.target
+            })
+
+            $("#information-dropdown-a").blur(function () {
+                let informationMenu = $("#information-dropdown-menu")
+
+                if ($(hoveredElement).parents("ul[id='information-dropdown-menu']")[0] !== informationMenu[0]) {
+                    informationMenu.parent().removeClass("open")
+                }
+            })
+
+            $("#update-pwd-btn").click(function () {
+                let editPwd = $("#editPwd")
+                let oldPwd = $("#oldPwd")
+                let newPwd = $("#newPwd")
+                let confirmPwd = $("#confirmPwd")
+                $.post(
+                    "${pageContext.request.contextPath}/employee/modifyPwd",
+                    {
+                        oldPwd: oldPwd.val(),
+                        newPwd: newPwd.val()
+                    },
+                    function (data) {
+                        oldPwd.val("")
+                        newPwd.val("")
+                        confirmPwd.val("")
+                        if (data.success) {
+                            bs_alert("密码修改成功！", "提示", 15)
+                            editPwd.children(".modal-backdrop").click()
+                        } else {
+                            bs_alert(data.msg, "提示", 20)
+                        }
+                    }, "json"
+                )
+            })
+        </script>
     </body>
 </html>

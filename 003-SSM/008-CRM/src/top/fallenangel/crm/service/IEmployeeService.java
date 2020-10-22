@@ -9,6 +9,10 @@ public interface IEmployeeService {
 
     Employee get(int employeeId);
 
+    Employee login(Employee employee);
+
+    boolean checkPwd(int employeeId, String pwd);
+
     void update(Employee employee);
 
     void save(Employee employee);
@@ -16,4 +20,6 @@ public interface IEmployeeService {
     void lock(int[] employeeId);
 
     void unlock(int[] employeeId);
+
+    void updatePwd(int employeeId, String pwd);
 }
