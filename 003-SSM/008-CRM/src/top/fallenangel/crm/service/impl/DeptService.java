@@ -4,19 +4,19 @@ import org.springframework.stereotype.Service;
 import top.fallenangel.crm.model.dao.IDeptDao;
 import top.fallenangel.crm.model.entity.Dept;
 import top.fallenangel.crm.service.IDeptService;
-
-import java.util.List;
+import top.fallenangel.crm.template.ITemplateDao;
+import top.fallenangel.crm.template.impl.TemplateService;
 
 @Service
-public class DeptService implements IDeptService {
-    private final IDeptDao deptDao;
+public class DeptService extends TemplateService<Dept> implements IDeptService {
+    private final IDeptDao<Dept> deptDao;
 
-    public DeptService(IDeptDao deptDao) {
+    public DeptService(IDeptDao<Dept> deptDao) {
         this.deptDao = deptDao;
     }
 
     @Override
-    public List<Dept> list() {
-        return deptDao.selectAll();
+    public ITemplateDao<Dept> getDao() {
+        return deptDao;
     }
 }
