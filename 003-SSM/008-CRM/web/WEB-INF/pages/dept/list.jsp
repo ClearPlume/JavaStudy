@@ -3,8 +3,8 @@
   User: FallenAngel
   Time: 2020-10-19 上午 9:14
 --%>
-<%--@elvariable id="deptList" type="java.util.List<top.fallenangel.crm.model.entity.Dept>"--%>
-<%--@elvariable id="dept" type="top.fallenangel.crm.model.entity.Dept"--%>
+<%--@elvariable id="DEPTS_IN_APPLICATION" type="java.util.LinkedHashMap<java.lang.Integer, top.fallenangel.crm.model.entity.Dept>"--%>
+<%--@elvariable id="deptEntry" type="java.util.Map.Entry<java.lang.Integer, top.fallenangel.crm.model.entity.Dept>"--%>
 <%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -177,16 +177,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach items="${deptList}" var="dept">
+                        <c:forEach items="${DEPTS_IN_APPLICATION.entrySet()}" var="deptEntry">
                             <tr class="active">
                                 <td>
                                     <label>
-                                        <input type="checkbox" value="${dept.deptId}"/>
+                                        <input type="checkbox" value="${deptEntry.key}"/>
                                     </label>
                                 </td>
-                                <td>${dept.deptName}</td>
-                                <td>${dept.deptCode}</td>
-                                <td>${dept.deptStatusStr}</td>
+                                <td>${deptEntry.value.deptName}</td>
+                                <td>${deptEntry.value.deptCode}</td>
+                                <td>${deptEntry.value.deptStatusStr}</td>
                             </tr>
                         </c:forEach>
                     </tbody>
