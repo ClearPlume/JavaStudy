@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.IDictionaryDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Dictionary">
+        <id column="dictionary_id" jdbcType="INTEGER" property="dictionaryId"/>
+        <result column="dictionary_type_id" jdbcType="INTEGER" property="dictionaryType.dictionaryTypeId"/>
+        <result column="dictionary_type_name" jdbcType="VARCHAR" property="dictionaryType.dictionaryTypeName"/>
+        <result column="dictionary_type_code" jdbcType="VARCHAR" property="dictionaryType.dictionaryTypeCode"/>
+        <result column="dictionary_type_status" jdbcType="VARCHAR" property="dictionaryType.dictionaryTypeStatus"/>
+        <result column="dictionary_value" jdbcType="VARCHAR" property="dictionaryValue"/>
+        <result column="dictionary_order" jdbcType="INTEGER" property="dictionaryOrder"/>
+        <result column="dictionary_status" jdbcType="BIT" property="dictionaryStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        dictionary_id, dictionary_type_id, dictionary_value, dictionary_order, dictionary_status
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dictionary
+        where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select t.dictionary_id,
+               dt.dictionary_type_id,
+               dt.dictionary_type_name,
+               dt.dictionary_type_code,
+               dt.dictionary_type_status,
+               t.dictionary_value,
+               t.dictionary_order,
+               t.dictionary_status
+        from t_dictionary t
+                 right join t_dictionary_type dt on t.dictionary_type_id = dt.dictionary_type_id
+        order by t.dictionary_order
+    </select>
+    <select id="selectAllByDictionaryTypeId" resultMap="BaseResultMap">
+        select t.dictionary_id,
+               t.dictionary_type_id,
+               dt.dictionary_type_id,
+               dt.dictionary_type_name,
+               dt.dictionary_type_code,
+               dt.dictionary_type_status,
+               t.dictionary_value,
+               t.dictionary_order,
+               t.dictionary_status
+        from t_dictionary t
+                 left join t_dictionary_type dt on t.dictionary_type_id = dt.dictionary_type_id
+        where t.dictionary_type_id = #{dictionaryTypeId}
+        order by t.dictionary_order
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_dictionary
+        where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="dictionary_id" keyProperty="dictionaryId"
+            parameterType="top.fallenangel.crm.model.entity.Dictionary" useGeneratedKeys="true">
+        insert into t_dictionary (dictionary_type_id, dictionary_value,
+                                  dictionary_order, dictionary_status)
+        values (#{dictionaryType.dictionaryTypeId,jdbcType=INTEGER}, #{dictionaryValue,jdbcType=VARCHAR},
+                #{dictionaryOrder,jdbcType=INTEGER}, #{dictionaryStatus,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" keyColumn="dictionary_id" keyProperty="dictionaryId"
+            parameterType="top.fallenangel.crm.model.entity.Dictionary" useGeneratedKeys="true">
+        insert into t_dictionary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dictionaryType.dictionaryTypeId != null">
+                dictionary_type_id,
+            </if>
+            <if test="dictionaryValue != null">
+                dictionary_value,
+            </if>
+            <if test="dictionaryOrder != null">
+                dictionary_order,
+            </if>
+            <if test="dictionaryStatus != null">
+                dictionary_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dictionaryType.dictionaryTypeId != null">
+                #{dictionaryType.dictionaryTypeId,jdbcType=INTEGER},
+            </if>
+            <if test="dictionaryValue != null">
+                #{dictionaryValue,jdbcType=VARCHAR},
+            </if>
+            <if test="dictionaryOrder != null">
+                #{dictionaryOrder,jdbcType=INTEGER},
+            </if>
+            <if test="dictionaryStatus != null">
+                #{dictionaryStatus,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Dictionary">
+        update t_dictionary
+        <set>
+            <if test="dictionaryValue != null">
+                dictionary_value = #{dictionaryValue,jdbcType=VARCHAR},
+            </if>
+            <if test="dictionaryOrder != null">
+                dictionary_order = #{dictionaryOrder,jdbcType=INTEGER},
+            </if>
+            <if test="dictionaryStatus != null">
+                dictionary_status = #{dictionaryStatus,jdbcType=BIT},
+            </if>
+        </set>
+        where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Dictionary">
+        update t_dictionary
+        set dictionary_value  = #{dictionaryValue,jdbcType=VARCHAR},
+            dictionary_order  = #{dictionaryOrder,jdbcType=INTEGER},
+            dictionary_status = #{dictionaryStatus,jdbcType=BIT}
+        where dictionary_id = #{dictionaryId,jdbcType=INTEGER}
+    </update>
+</mapper>

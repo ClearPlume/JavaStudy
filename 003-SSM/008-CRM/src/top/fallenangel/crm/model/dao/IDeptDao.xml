@@ -21,10 +21,13 @@
         select *
         from t_dept;
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey">
         delete
         from t_dept
-        where dept_id = #{deptId,jdbcType=INTEGER}
+        where dept_id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
     </delete>
     <insert id="insert" keyColumn="dept_id" keyProperty="deptId" parameterType="top.fallenangel.crm.model.entity.Dept"
             useGeneratedKeys="true">

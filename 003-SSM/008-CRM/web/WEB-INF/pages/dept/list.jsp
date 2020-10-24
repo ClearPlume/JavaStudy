@@ -158,39 +158,46 @@
                     <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDeptModal"><span
                             class="glyphicon glyphicon-edit"></span> 编辑
                     </button>
-                    <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除
+                    <button id="delete-btn" type="button" class="btn btn-danger"><span
+                            class="glyphicon glyphicon-minus"></span> 删除
+                    </button>
+                    <button type="button" class="btn btn-warning"
+                            onclick="location.href='${pageContext.request.contextPath}/dept/updateCache'">
+                        <span class="glyphicon glyphicon-refresh"></span> 更新缓存
                     </button>
                 </div>
             </div>
             <div style="position: relative; left: 30px; top: -10px;">
-                <table class="table table-hover">
-                    <thead>
-                        <tr style="color: #B3B3B3;">
-                            <td>
-                                <label>
-                                    <input type="checkbox"/>
-                                </label>
-                            </td>
-                            <td>名称</td>
-                            <td>编号</td>
-                            <td>状态</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach items="${DEPTS_IN_APPLICATION.entrySet()}" var="deptEntry">
-                            <tr class="active">
+                <form id="delete-form" action="${pageContext.request.contextPath}/dept/delete" method="post">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr style="color: #B3B3B3;">
                                 <td>
                                     <label>
-                                        <input type="checkbox" value="${deptEntry.key}"/>
+                                        <input type="checkbox"/>
                                     </label>
                                 </td>
-                                <td>${deptEntry.value.deptName}</td>
-                                <td>${deptEntry.value.deptCode}</td>
-                                <td>${deptEntry.value.deptStatusStr}</td>
+                                <td>名称</td>
+                                <td>编号</td>
+                                <td>状态</td>
                             </tr>
-                        </c:forEach>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <c:forEach items="${DEPTS_IN_APPLICATION.entrySet()}" var="deptEntry">
+                                <tr class="active">
+                                    <td>
+                                        <label>
+                                            <input name="id" type="checkbox" value="${deptEntry.key}"/>
+                                        </label>
+                                    </td>
+                                    <td>${deptEntry.value.deptName}</td>
+                                    <td>${deptEntry.value.deptCode}</td>
+                                    <td>${deptEntry.value.deptStatusStr}</td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </form>
             </div>
 
             <div style="height: 50px; position: relative;top: 0; left:30px;">
@@ -223,5 +230,11 @@
                 </div>
             </div>
         </div>
+
+        <script type="text/javascript">
+            $("#delete-btn").click(function () {
+                $("#delete-form").submit()
+            })
+        </script>
     </body>
 </html>

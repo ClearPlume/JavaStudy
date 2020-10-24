@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.IDictionaryTypeDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.DictionaryType">
+        <id column="dictionary_type_id" jdbcType="INTEGER" property="dictionaryTypeId"/>
+        <result column="dictionary_type_name" jdbcType="VARCHAR" property="dictionaryTypeName"/>
+        <result column="dictionary_type_code" jdbcType="VARCHAR" property="dictionaryTypeCode"/>
+        <result column="dictionary_type_status" jdbcType="BIT" property="dictionaryTypeStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        dictionary_type_id, dictionary_type_name, dictionary_type_code, dictionary_type_status
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_dictionary_type
+        where dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select *
+        from t_dictionary_type;
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_dictionary_type
+        where dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="dictionary_type_id" keyProperty="dictionaryTypeId"
+            parameterType="top.fallenangel.crm.model.entity.DictionaryType" useGeneratedKeys="true">
+        insert into t_dictionary_type (dictionary_type_name, dictionary_type_code,
+                                       dictionary_type_status)
+        values (#{dictionaryTypeName,jdbcType=VARCHAR}, #{dictionaryTypeCode,jdbcType=VARCHAR},
+                #{dictionaryTypeStatus,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" keyColumn="dictionary_type_id" keyProperty="dictionaryTypeId"
+            parameterType="top.fallenangel.crm.model.entity.DictionaryType" useGeneratedKeys="true">
+        insert into t_dictionary_type
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dictionaryTypeName != null">
+                dictionary_type_name,
+            </if>
+            <if test="dictionaryTypeCode != null">
+                dictionary_type_code,
+            </if>
+            <if test="dictionaryTypeStatus != null">
+                dictionary_type_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dictionaryTypeName != null">
+                #{dictionaryTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="dictionaryTypeCode != null">
+                #{dictionaryTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dictionaryTypeStatus != null">
+                #{dictionaryTypeStatus,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.DictionaryType">
+        update t_dictionary_type
+        <set>
+            <if test="dictionaryTypeName != null">
+                dictionary_type_name = #{dictionaryTypeName,jdbcType=VARCHAR},
+            </if>
+            <if test="dictionaryTypeCode != null">
+                dictionary_type_code = #{dictionaryTypeCode,jdbcType=VARCHAR},
+            </if>
+            <if test="dictionaryTypeStatus != null">
+                dictionary_type_status = #{dictionaryTypeStatus,jdbcType=BIT},
+            </if>
+        </set>
+        where dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.DictionaryType">
+        update t_dictionary_type
+        set dictionary_type_name   = #{dictionaryTypeName,jdbcType=VARCHAR},
+            dictionary_type_code   = #{dictionaryTypeCode,jdbcType=VARCHAR},
+            dictionary_type_status = #{dictionaryTypeStatus,jdbcType=BIT}
+        where dictionary_type_id = #{dictionaryTypeId,jdbcType=INTEGER}
+    </update>
+</mapper>

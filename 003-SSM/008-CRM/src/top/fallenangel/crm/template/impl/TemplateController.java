@@ -7,9 +7,27 @@ import java.util.List;
 public abstract class TemplateController<T> {
     public abstract ITemplateService<T> getService();
 
-    void edit(Integer id) {}
+    public abstract T getInstance();
 
-    String save(T entity) {
+    public abstract Integer getInstanceId(T entity);
+
+    public T edit(Integer id) {
+        T t;
+
+        if (id == null) {
+            t = getInstance();
+        } else {
+            t = getService().get(id);
+        }
+        return t;
+    }
+
+    public String save(T entity) {
+        if (getInstanceId(entity) == null) {
+            getService().save(entity);
+        } else {
+            getService().update(entity);
+        }
         return "redirect:list";
     }
 
@@ -20,5 +38,9 @@ public abstract class TemplateController<T> {
 
     public List<T> list() {
         return getService().list();
+    }
+
+    public T view(Integer id) {
+        return getService().get(id);
     }
 }

@@ -3,12 +3,19 @@ package top.fallenangel.crm.util;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import top.fallenangel.crm.model.entity.Dept;
+import top.fallenangel.crm.model.entity.Dictionary;
+import top.fallenangel.crm.model.entity.DictionaryType;
 import top.fallenangel.crm.model.entity.Employee;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Util {
     public static String dateFormat(Date date, String pattern) {
@@ -41,5 +48,63 @@ public class Util {
 
     public static Integer getEmployeeIdFromSession() {
         return getEmployeeFromSession().getEmployeeId();
+    }
+
+    public static ServletContext getServletContext() {
+        return getRequest().getServletContext();
+    }
+
+    public static Map<DictionaryType, Map<Integer, Dictionary>> getDictionariesFromApplication() {
+        //noinspection unchecked
+        return (Map<DictionaryType, Map<Integer, Dictionary>>) getServletContext().getAttribute(Constants.DICTIONARIES_IN_APPLICATION);
+    }
+
+    public static DictionaryType getDictionaryTypeFromApplication(int type) {
+        Map<DictionaryType, Map<Integer, Dictionary>> dictionaries = getDictionariesFromApplication();
+        DictionaryType dt = new DictionaryType();
+
+        for (DictionaryType dictionaryType : dictionaries.keySet()) {
+            if (dictionaryType.getDictionaryTypeId() == type) {
+                dt = dictionaryType;
+                break;
+            }
+        }
+        return dt;
+    }
+
+    public static Map<Integer, Dictionary> getDictionariesFromApplicationByType(int dictionaryTypeId) {
+        Map<DictionaryType, Map<Integer, Dictionary>> dictionaries = getDictionariesFromApplication();
+        @SuppressWarnings("unchecked") final Map<Integer, Dictionary>[] dictionaryMap = new Map[]{new LinkedHashMap<>()};
+
+        AtomicBoolean found = new AtomicBoolean(false);
+        dictionaries.forEach((dt, d) -> {
+            if (!found.get()) {
+                if (dt.getDictionaryTypeId() == dictionaryTypeId) {
+                    dictionaryMap[0] = dictionaries.get(dt);
+                    found.set(true);
+                }
+            }
+        });
+        return dictionaryMap[0];
+    }
+
+    public static Dictionary getDictionaryFromApplicationById(int id) {
+        Map<DictionaryType, Map<Integer, Dictionary>> dictionaries = getDictionariesFromApplication();
+        Dictionary dictionary = new Dictionary();
+
+        for (DictionaryType dictionaryType : dictionaries.keySet()) {
+            Map<Integer, Dictionary> dictionaryMap = getDictionariesFromApplicationByType(dictionaryType.getDictionaryTypeId());
+
+            if (dictionaryMap.containsKey(id)) {
+                dictionary = dictionaryMap.get(id);
+                break;
+            }
+        }
+        return dictionary;
+    }
+
+    public static Map<Integer, Dept> getDeptsFromApplication() {
+        //noinspection unchecked
+        return (Map<Integer, Dept>) getServletContext().getAttribute(Constants.DEPTS_IN_APPLICATION);
     }
 }

@@ -6,6 +6,10 @@ import top.fallenangel.crm.model.entity.Dept;
 import top.fallenangel.crm.service.IDeptService;
 import top.fallenangel.crm.template.ITemplateService;
 import top.fallenangel.crm.template.impl.TemplateController;
+import top.fallenangel.crm.util.ApplicationCacheListener;
+import top.fallenangel.crm.util.Util;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("dept")
@@ -21,6 +25,34 @@ public class DeptController extends TemplateController<Dept> {
         return deptService;
     }
 
+    @Override
+    public Dept getInstance() {
+        return new Dept();
+    }
+
+    @Override
+    public Integer getInstanceId(Dept entity) {
+        return entity.getDeptId();
+    }
+
     @RequestMapping("list")
-    public void list(Object flag) { }
+    public void listEntry() { }
+
+    @RequestMapping("updateCache")
+    public String updateCache() {
+        ApplicationCacheListener.loadDeptsIntoApplication(Util.getServletContext());
+        return "redirect:/dept/list";
+    }
+
+    @Override
+    @RequestMapping("delete")
+    public String delete(Integer[] id) {
+        deptService.delete(id);
+        Map<Integer, Dept> deptMap = Util.getDeptsFromApplication();
+
+        for (Integer i : id) {
+            deptMap.remove(i);
+        }
+        return "redirect:/dept/list";
+    }
 }
