@@ -109,8 +109,8 @@
         where e.employee_no = #{employeeNo}
           and e.employee_pwd = #{employeePwd}
           and e.employee_status != 0
-          and e.employee_expire_time &gt;= #{updateTime}
-          and e.employee_allowed_ips like concat('%', #{employeeAllowedIps}, '%')
+          and e.employee_expire_time &gt;= now()
+          and (e.employee_allowed_ips like concat('%', #{employeeAllowedIps}, '%') or e.employee_allowed_ips is null or e.employee_allowed_ips = '')
     </select>
     <select id="checkPwd" resultType="java.lang.Integer">
         select count(1)
