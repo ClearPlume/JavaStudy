@@ -13,14 +13,21 @@
         <title>部门</title>
         <link href="${pageContext.request.contextPath}/js/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css"
               rel="stylesheet"/>
+
+        <style type="text/css">
+            a:hover {
+                text-decoration: none;
+            }
+        </style>
+
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery/jquery-1.11.1-min.js"></script>
         <script type="text/javascript"
                 src="${pageContext.request.contextPath}/js/jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/bs_alert.js"></script>
     </head>
     <body>
-        <!-- 创建部门的模态窗口 -->
         <div class="modal fade" id="createDeptModal" role="dialog">
-            <div class="modal-dialog" role="document" style="width: 80%;">
+            <div class="modal-dialog" role="document" style="width: 35%;">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">
@@ -29,118 +36,49 @@
                         <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-plus"></span> 新增部门
                         </h4>
                     </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" role="form">
+                    <form action="${pageContext.request.contextPath}/dept/save" class="form-horizontal" role="form"
+                          method="post">
+                        <div class="modal-body">
                             <div class="form-group">
-                                <label for="create-code" class="col-sm-2 control-label">编号<span
+                                <label for="deptName" class="col-sm-2 control-label">名称<span
                                         style="font-size: 15px; color: red;">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-code" style="width: 200%;"
-                                           placeholder="编号不能为空，具有唯一性">
+                                    <input type="text" class="form-control" id="deptName" name="deptName"
+                                           style="width: 150%;">
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="create-name" class="col-sm-2 control-label">名称</label>
+                                <label for="deptCode" class="col-sm-2 control-label">编号<span
+                                        style="font-size: 15px; color: red;">*</span></label>
                                 <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-name" style="width: 200%;">
+                                    <input type="text" class="form-control" id="deptCode" name="deptCode"
+                                           style="width: 150%;">
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="create-manager" class="col-sm-2 control-label">负责人</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-manager" style="width: 200%;">
+                                <label class="col-sm-2 control-label">状态<span
+                                        style="font-size: 15px; color: red;">*</span>
+                                </label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <select name="deptStatus" class="form-control lock-status-select"
+                                                style="width: 405px">
+                                            <option value="" style="color: rgb(85, 85, 85)">请选择</option>
+                                            <option value="1" style="color: green">启用</option>
+                                            <option value="0" style="color: red">禁用</option>
+                                        </select>
+                                    </label>
                                 </div>
                             </div>
-
-                            <div class="form-group">
-                                <label for="create-phone" class="col-sm-2 control-label">电话</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-phone" style="width: 200%;">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="create-describe" class="col-sm-2 control-label">描述</label>
-                                <div class="col-sm-10" style="width: 55%;">
-                                    <textarea class="form-control" rows="3" id="create-describe"></textarea>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-
-        <!-- 修改部门的模态窗口 -->
-        <div class="modal fade" id="editDeptModal" role="dialog">
-            <div class="modal-dialog" role="document" style="width: 80%;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                        <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-edit"></span> 编辑部门
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal" role="form">
-                            <div class="form-group">
-                                <label for="create-code" class="col-sm-2 control-label">编号<span
-                                        style="font-size: 15px; color: red;">*</span></label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-code" style="width: 200%;"
-                                           placeholder="不能为空，具有唯一性" value="1110">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="create-name" class="col-sm-2 control-label">名称</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-name" style="width: 200%;"
-                                           value="财务部">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="create-manager" class="col-sm-2 control-label">负责人</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-manager" style="width: 200%;"
-                                           value="张飞">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="create-phone" class="col-sm-2 control-label">电话</label>
-                                <div class="col-sm-10" style="width: 300px;">
-                                    <input type="text" class="form-control" id="create-phone" style="width: 200%;"
-                                           value="010-84846004">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="create-describe" class="col-sm-2 control-label">描述</label>
-                                <div class="col-sm-10" style="width: 55%;">
-                                    <textarea class="form-control" rows="3"
-                                              id="create-describe">description info</textarea>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">更新</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div style="width: 95%">
             <div>
                 <div style="position: relative; left: 30px; top: -10px;">
@@ -154,9 +92,6 @@
                 <div class="btn-group" style="position: relative; top: 18%;">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createDeptModal">
                         <span class="glyphicon glyphicon-plus"></span> 创建
-                    </button>
-                    <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editDeptModal"><span
-                            class="glyphicon glyphicon-edit"></span> 编辑
                     </button>
                     <button id="delete-btn" type="button" class="btn btn-danger"><span
                             class="glyphicon glyphicon-minus"></span> 删除
@@ -190,7 +125,11 @@
                                             <input name="id" type="checkbox" value="${deptEntry.key}"/>
                                         </label>
                                     </td>
-                                    <td>${deptEntry.value.deptName}</td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/dept/edit?id=${deptEntry.key}">
+                                                ${deptEntry.value.deptName}
+                                        </a>
+                                    </td>
                                     <td>${deptEntry.value.deptCode}</td>
                                     <td>${deptEntry.value.deptStatusStr}</td>
                                 </tr>
@@ -199,41 +138,33 @@
                     </table>
                 </form>
             </div>
-
-            <div style="height: 50px; position: relative;top: 0; left:30px;">
-                <div>
-                    <button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-                </div>
-                <div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-                    <button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                            10
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">20</a></li>
-                            <li><a href="#">30</a></li>
-                        </ul>
-                    </div>
-                    <button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-                </div>
-                <div style="position: relative;top: -88px; left: 285px;">
-                    <nav>
-                        <ul class="pagination">
-                            <li class="disabled"><a href="#">首页</a></li>
-                            <li class="disabled"><a href="#">上一页</a></li>
-                            <li><a href="#">下一页</a></li>
-                            <li class="disabled"><a href="#">末页</a></li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
         </div>
 
         <script type="text/javascript">
             $("#delete-btn").click(function () {
-                $("#delete-form").submit()
+                if ($("[name='id']:checked").length) {
+                    bs_confirm("确认删除数据？这将无法撤回！", "警告", 25, function () {
+                        $("#delete-form").submit()
+                    })
+                } else {
+                    bs_alert("请选择要删除的部门", "提示", 25)
+                }
+            })
+
+            $(".lock-status-select").change(function () {
+                let color
+
+                switch (this.value) {
+                    case "0":
+                        color = "red"
+                        break
+                    case "1":
+                        color = "green"
+                        break
+                    default:
+                        color = "rgb(85, 85, 85)"
+                }
+                $(this).css("color", color)
             })
         </script>
     </body>

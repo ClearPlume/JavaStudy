@@ -55,4 +55,24 @@ public class DeptController extends TemplateController<Dept> {
         }
         return "redirect:/dept/list";
     }
+
+    @Override
+    @RequestMapping("edit")
+    public Dept edit(Integer id) {
+        return super.edit(id);
+    }
+
+    @Override
+    @RequestMapping("save")
+    public String save(Dept entity) {
+        Map<Integer, Dept> deptMap = Util.getDeptsFromApplication();
+        if (entity.getDeptId() == null) {
+            deptService.save(entity);
+            deptMap.put(entity.getDeptId(), entity);
+        } else {
+            deptService.update(entity);
+            deptMap.replace(entity.getDeptId(), entity);
+        }
+        return "redirect:/dept/list";
+    }
 }
