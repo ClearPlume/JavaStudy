@@ -1,9 +1,12 @@
 package top.fallenangel.crm.controller;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import top.fallenangel.crm.model.entity.Dictionary;
+import top.fallenangel.crm.model.entity.DictionaryType;
 import top.fallenangel.crm.service.IDictionaryService;
+import top.fallenangel.crm.service.IDictionaryTypeService;
 import top.fallenangel.crm.template.ITemplateService;
 import top.fallenangel.crm.template.impl.TemplateController;
 import top.fallenangel.crm.util.ApplicationCacheListener;
@@ -16,9 +19,11 @@ import java.util.Map;
 @RequestMapping("dictionary")
 public class DictionaryController extends TemplateController<Dictionary> {
     private final IDictionaryService dictionaryService;
+    private final IDictionaryTypeService dictionaryTypeService;
 
-    public DictionaryController(IDictionaryService dictionaryService) {
+    public DictionaryController(IDictionaryService dictionaryService, IDictionaryTypeService dictionaryTypeService) {
         this.dictionaryService = dictionaryService;
+        this.dictionaryTypeService = dictionaryTypeService;
     }
 
     @Override
@@ -37,7 +42,9 @@ public class DictionaryController extends TemplateController<Dictionary> {
     }
 
     @RequestMapping("list")
-    public List<Dictionary> list(int dictionaryTypeId) {
+    public List<Dictionary> list(int dictionaryTypeId, DictionaryType dictionaryType) {
+        DictionaryType type = dictionaryTypeService.get(dictionaryTypeId);
+        BeanUtils.copyProperties(type, dictionaryType);
         return dictionaryService.list(dictionaryTypeId);
     }
 
@@ -75,6 +82,7 @@ public class DictionaryController extends TemplateController<Dictionary> {
             dictionaryService.update(entity);
             dictionaryMap.replace(entity.getDictionaryId(), dictionaryService.get(entity.getDictionaryId()));
         }
+        ApplicationCacheListener.loadDictionariesMapIntoApplication(Util.getServletContext());
         //noinspection SpringMVCViewInspection
         return "redirect:/dictionary/list?dictionaryTypeId=" + entity.getDictionaryType().getDictionaryTypeId();
     }

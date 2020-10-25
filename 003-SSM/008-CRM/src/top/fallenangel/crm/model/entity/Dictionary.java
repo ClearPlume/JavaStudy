@@ -1,5 +1,7 @@
 package top.fallenangel.crm.model.entity;
 
+import top.fallenangel.crm.template.impl.BaseEntity;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  *
  * @author 坠天使
  */
-public class Dictionary implements Serializable {
+public class Dictionary extends BaseEntity implements Serializable {
     private Integer dictionaryId;
 
     /**
@@ -40,7 +42,7 @@ public class Dictionary implements Serializable {
                 ", dictionaryValue='" + dictionaryValue + '\'' +
                 ", dictionaryOrder=" + dictionaryOrder +
                 ", dictionaryStatus=" + dictionaryStatus +
-                '}';
+                '}' + super.toString();
     }
 
     @Override

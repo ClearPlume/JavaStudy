@@ -4,7 +4,7 @@ import top.fallenangel.crm.template.ITemplateService;
 
 import java.util.List;
 
-public abstract class TemplateController<T> {
+public abstract class TemplateController<T extends BaseEntity> {
     public abstract ITemplateService<T> getService();
 
     public abstract T getInstance();

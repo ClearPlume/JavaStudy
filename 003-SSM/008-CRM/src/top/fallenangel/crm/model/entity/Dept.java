@@ -1,5 +1,7 @@
 package top.fallenangel.crm.model.entity;
 
+import top.fallenangel.crm.template.impl.BaseEntity;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  *
  * @author 坠天使
  */
-public class Dept implements Serializable {
+public class Dept extends BaseEntity implements Serializable {
     private Integer deptId;
 
     /**
@@ -81,5 +83,17 @@ public class Dept implements Serializable {
 
     public void setParentId(Integer parentId) {
         this.parentId = parentId;
+    }
+
+    @Override
+    public String toString() {
+        return "Dept{" +
+                "deptId=" + deptId +
+                ", deptName='" + deptName + '\'' +
+                ", deptCode='" + deptCode + '\'' +
+                ", deptStatus=" + deptStatus +
+                ", deptStatusStr='" + deptStatusStr + '\'' +
+                ", parentId=" + parentId +
+                '}' + super.toString();
     }
 }

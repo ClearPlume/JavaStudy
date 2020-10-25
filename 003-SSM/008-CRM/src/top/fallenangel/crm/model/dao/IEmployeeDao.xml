@@ -3,7 +3,7 @@
 <mapper namespace="top.fallenangel.crm.model.dao.IEmployeeDao">
     <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Employee">
         <id column="employee_id" jdbcType="INTEGER" property="employeeId"/>
-        <result column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="dept_id" jdbcType="INTEGER" property="dept.deptId"/>
         <result column="employee_no" jdbcType="VARCHAR" property="employeeNo"/>
         <result column="employee_pwd" jdbcType="VARCHAR" property="employeePwd"/>
         <result column="employee_name" jdbcType="VARCHAR" property="employeeName"/>
@@ -18,11 +18,11 @@
         <result column="employee_expire_time" jdbcType="TIMESTAMP" property="employeeExpireTime"/>
         <result column="employee_status" jdbcType="INTEGER" property="employeeStatus"/>
         <result column="employee_allowed_ips" jdbcType="VARCHAR" property="employeeAllowedIps"/>
-        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
-        <result column="creator_name" jdbcType="VARCHAR" property="creator"/>
+        <result column="create_by" jdbcType="INTEGER" property="creator.employeeId"/>
+        <result column="creator_name" jdbcType="VARCHAR" property="creator.employeeName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
-        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
-        <result column="updater_name" jdbcType="VARCHAR" property="updater"/>
+        <result column="update_by" jdbcType="INTEGER" property="updater.employeeId"/>
+        <result column="updater_name" jdbcType="VARCHAR" property="updater.employeeName"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
     <sql id="Base_Column_List">
@@ -66,8 +66,8 @@
             <if test="employeeName != null and employeeName != ''">
                 e.employee_name like concat('%', #{employeeName}, '%')
             </if>
-            <if test="deptId != null">
-                and e.dept_id = #{deptId}
+            <if test="dept != null and dept.deptId != null">
+                and e.dept_id = #{dept.deptId}
             </if>
             <if test="employeeStatus != null">
                 and e.employee_status = #{employeeStatus}
@@ -110,7 +110,8 @@
           and e.employee_pwd = #{employeePwd}
           and e.employee_status != 0
           and e.employee_expire_time &gt;= now()
-          and (e.employee_allowed_ips like concat('%', #{employeeAllowedIps}, '%') or e.employee_allowed_ips is null or e.employee_allowed_ips = '')
+          and (e.employee_allowed_ips like concat('%', #{employeeAllowedIps}, '%') or e.employee_allowed_ips is null or
+               e.employee_allowed_ips = '')
     </select>
     <select id="checkPwd" resultType="java.lang.Integer">
         select count(1)
@@ -118,10 +119,13 @@
         where employee_id = #{employeeId}
           and employee_pwd = #{pwd}
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <delete id="deleteByPrimaryKey">
         delete
         from t_employee
-        where employee_id = #{employeeId,jdbcType=INTEGER}
+        where employee_id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
     </delete>
     <update id="lockAllByPrimaryKey">
         update t_employee set employee_status = 0 where employee_id in
@@ -144,20 +148,20 @@
                                 employee_expire_time, employee_status, employee_allowed_ips,
                                 create_by, create_time, update_by,
                                 update_time)
-        values (#{deptId,jdbcType=INTEGER}, #{employeeNo,jdbcType=VARCHAR}, #{employeePwd,jdbcType=VARCHAR},
+        values (#{dept.deptId,jdbcType=INTEGER}, #{employeeNo,jdbcType=VARCHAR}, #{employeePwd,jdbcType=VARCHAR},
                 #{employeeName,jdbcType=VARCHAR}, #{employeeSex,jdbcType=VARCHAR}, #{employeeAge,jdbcType=INTEGER},
                 #{employeePhone,jdbcType=VARCHAR}, #{employeeCardNo,jdbcType=VARCHAR}, #{employeeMail,jdbcType=VARCHAR},
                 #{employeeBirthday,jdbcType=DATE}, #{employeeJob,jdbcType=VARCHAR}, #{employeeAddress,jdbcType=VARCHAR},
                 #{employeeExpireTime,jdbcType=TIMESTAMP}, #{employeeStatus,jdbcType=INTEGER},
                 #{employeeAllowedIps,jdbcType=VARCHAR},
-                #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER},
+                #{creator.employeeId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updater.employeeId,jdbcType=INTEGER},
                 #{updateTime,jdbcType=TIMESTAMP})
     </insert>
     <insert id="insertSelective" keyColumn="employee_id" keyProperty="employeeId"
             parameterType="top.fallenangel.crm.model.entity.Employee" useGeneratedKeys="true">
         insert into t_employee
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="deptId != null">
+            <if test="dept != null and dept.deptId != null">
                 dept_id,
             </if>
             <if test="employeeNo != null">
@@ -202,13 +206,13 @@
             <if test="employeeAllowedIps != null">
                 employee_allowed_ips,
             </if>
-            <if test="createBy != null">
+            <if test="creator != null and creator.employeeId != null">
                 create_by,
             </if>
             <if test="createTime != null">
                 create_time,
             </if>
-            <if test="updateBy != null">
+            <if test="updater != null and updater.employeeId != null">
                 update_by,
             </if>
             <if test="updateTime != null">
@@ -216,8 +220,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="deptId != null">
-                #{deptId,jdbcType=INTEGER},
+            <if test="dept != null and dept.deptId != null">
+                #{dept.deptId,jdbcType=INTEGER},
             </if>
             <if test="employeeNo != null">
                 #{employeeNo,jdbcType=VARCHAR},
@@ -261,14 +265,14 @@
             <if test="employeeAllowedIps != null">
                 #{employeeAllowedIps,jdbcType=VARCHAR},
             </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=INTEGER},
+            <if test="creator != null and creator.employeeId != null">
+                #{creator.employeeId,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="updateBy != null">
-                #{updateBy,jdbcType=INTEGER},
+            <if test="creator != null and creator.employeeId != null">
+                #{creator.employeeId,jdbcType=INTEGER},
             </if>
             <if test="updateTime != null">
                 #{updateTime,jdbcType=TIMESTAMP},
@@ -278,8 +282,8 @@
     <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Employee">
         update t_employee
         <set>
-            <if test="deptId != null">
-                dept_id = #{deptId,jdbcType=INTEGER},
+            <if test="dept.deptId != null">
+                dept_id = #{dept.deptId,jdbcType=INTEGER},
             </if>
             <if test="employeeNo != null">
                 employee_no = #{employeeNo,jdbcType=VARCHAR},
@@ -323,14 +327,14 @@
             <if test="employeeAllowedIps != null">
                 employee_allowed_ips = #{employeeAllowedIps,jdbcType=VARCHAR},
             </if>
-            <if test="createBy != null">
-                create_by = #{createBy,jdbcType=INTEGER},
+            <if test="creator != null and creator.employeeId != null">
+                create_by = #{creator.employeeId,jdbcType=INTEGER},
             </if>
             <if test="createTime != null">
                 create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
-            <if test="updateBy != null">
-                update_by = #{updateBy,jdbcType=INTEGER},
+            <if test="updater != null and updater.employeeId != null">
+                update_by = #{updater.employeeId,jdbcType=INTEGER},
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -340,7 +344,7 @@
     </update>
     <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Employee">
         update t_employee
-        set dept_id              = #{deptId,jdbcType=INTEGER},
+        set dept_id              = #{dept.deptId,jdbcType=INTEGER},
             employee_no          = #{employeeNo,jdbcType=VARCHAR},
             employee_name        = #{employeeName,jdbcType=VARCHAR},
             employee_sex         = #{employeeSex,jdbcType=VARCHAR},
@@ -354,9 +358,9 @@
             employee_expire_time = #{employeeExpireTime,jdbcType=TIMESTAMP},
             employee_status      = #{employeeStatus,jdbcType=INTEGER},
             employee_allowed_ips = #{employeeAllowedIps,jdbcType=VARCHAR},
-            create_by            = #{createBy,jdbcType=INTEGER},
+            create_by            = #{creator.employeeId,jdbcType=INTEGER},
             create_time          = #{createTime,jdbcType=TIMESTAMP},
-            update_by            = #{updateBy,jdbcType=INTEGER},
+            update_by            = #{updater.employeeId,jdbcType=INTEGER},
             update_time          = #{updateTime,jdbcType=TIMESTAMP}
         where employee_id = #{employeeId,jdbcType=INTEGER}
     </update>

@@ -86,7 +86,7 @@
                                 </div>
                                 <label class="col-sm-2 control-label">所在部门<span class="required">*</span></label>
                                 <div class="col-sm-10 input-group" style="width: 270px; left: 15px">
-                                    <form:select path="deptId" cssClass="form-control">
+                                    <form:select path="dept.deptId" cssClass="form-control">
                                         <form:option value="" label="请选择部门"/>
                                         <form:options items="${DEPTS_IN_APPLICATION.entrySet()}"
                                                       itemValue="value.deptId"
@@ -163,7 +163,7 @@
                         <div style="position: relative; left: 40px; height: 30px; top: 100px;">
                             <div style="width: 300px; color: gray;">允许访问IP</div>
                             <div style="width: 500px;position: relative; left: 200px; top: -20px;">
-                                <b>${employee.employeeAllowedIps}</b>
+                                <b>${empty employee.employeeAllowedIps ? "不限制IP" : "employee.employeeAllowedIps"}</b>
                             </div>
                             <div style="height: 1px; width: 600px; background: #D5D5D5; position: relative; top: -20px;"></div>
                         </div>
@@ -184,7 +184,7 @@
                         <div style="position: relative; left: 40px; height: 30px; top: 140px;">
                             <div style="width: 300px; color: gray;">部门名称</div>
                             <div style="width: 500px;position: relative; left: 200px; top: -20px;">
-                                <b>${DEPTS_IN_APPLICATION[employee.deptId].deptName}</b>
+                                <b>${DEPTS_IN_APPLICATION[employee.dept.deptId].deptName}</b>
                             </div>
                             <div style="height: 1px; width: 600px; background: #D5D5D5; position: relative; top: -20px;"></div>
                             <button style="position: relative; left: 76%; top: -40px;" type="button"

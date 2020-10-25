@@ -1,6 +1,7 @@
 package top.fallenangel.crm.model.entity;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import top.fallenangel.crm.template.impl.BaseEntity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -10,13 +11,13 @@ import java.util.Date;
  *
  * @author 坠天使
  */
-public class Employee implements Serializable {
+public class Employee extends BaseEntity implements Serializable {
     private Integer employeeId;
 
     /**
-     * 员工所在部门id
+     * 员工所在部门
      */
-    private Integer deptId;
+    private Dept dept;
 
     /**
      * 员工工号，用户名
@@ -97,32 +98,6 @@ public class Employee implements Serializable {
     private String employeeAllowedIps;
 
     /**
-     * 创建人
-     */
-    private Integer createBy;
-
-    private String creator;
-
-    /**
-     * 创建时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-
-    /**
-     * 修改人
-     */
-    private Integer updateBy;
-
-    private String updater;
-
-    /**
-     * 修改时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
-
-    /**
      * 传递错误信息
      */
     private String msg;
@@ -137,12 +112,12 @@ public class Employee implements Serializable {
         this.employeeId = employeeId;
     }
 
-    public Integer getDeptId() {
-        return deptId;
+    public Dept getDept() {
+        return dept;
     }
 
-    public void setDeptId(Integer deptId) {
-        this.deptId = deptId;
+    public void setDept(Dept dept) {
+        this.dept = dept;
     }
 
     public String getEmployeeNo() {
@@ -273,59 +248,36 @@ public class Employee implements Serializable {
         this.employeeAllowedIps = employeeAllowedIps;
     }
 
-    public Integer getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(Integer createBy) {
-        this.createBy = createBy;
-    }
-
-    public String getCreator() {
-        return creator;
-    }
-
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(Integer updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(String updater) {
-        this.updater = updater;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public String getMsg() {
         return msg;
     }
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "employeeId=" + employeeId +
+                ", dept=" + dept +
+                ", employeeNo='" + employeeNo + '\'' +
+                ", employeePwd='" + employeePwd + '\'' +
+                ", employeeName='" + employeeName + '\'' +
+                ", employeeSex='" + employeeSex + '\'' +
+                ", employeeAge=" + employeeAge +
+                ", employeePhone='" + employeePhone + '\'' +
+                ", employeeCardNo='" + employeeCardNo + '\'' +
+                ", employeeMail='" + employeeMail + '\'' +
+                ", employeeBirthday=" + employeeBirthday +
+                ", employeeJob='" + employeeJob + '\'' +
+                ", employeeAddress='" + employeeAddress + '\'' +
+                ", employeeExpireTime=" + employeeExpireTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", employeeStatus=" + employeeStatus +
+                ", employeeAllowedIps='" + employeeAllowedIps + '\'' +
+                ", msg='" + msg + '\'' +
+                '}' + super.toString();
     }
 }

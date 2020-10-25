@@ -5,6 +5,7 @@
 --%>
 <%--@elvariable id="dictionaryList" type="java.util.List<top.fallenangel.crm.model.entity.Dictionary>"--%>
 <%--@elvariable id="dictionary" type="top.fallenangel.crm.model.entity.Dictionary"--%>
+<%--@elvariable id="dictionaryType" type="top.fallenangel.crm.model.entity.DictionaryType"--%>
 <%@ page contentType="text/html;charset=UTF-8" isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
@@ -33,7 +34,7 @@
         <div>
             <div style="position: relative; left: 30px; top: -10px;">
                 <div class="page-header">
-                    <h3>字典值列表(${dictionaryList.get(0).dictionaryType.dictionaryTypeName})</h3>
+                    <h3>字典值列表(${dictionaryType.dictionaryTypeName})</h3>
                 </div>
             </div>
         </div>
@@ -41,7 +42,7 @@
              style="background-color: #F7F7F7; height: 50px; position: relative;left: 30px;">
             <div class="btn-group" style="position: relative; top: 18%;">
                 <button type="button" class="btn btn-primary"
-                        onclick="location.href='${pageContext.request.contextPath}/dictionary/edit?type=${dictionaryList.get(0).dictionaryType.dictionaryTypeId}&order=${dictionaryList.size() + 1}'"><span
+                        onclick="location.href='${pageContext.request.contextPath}/dictionary/edit?type=${dictionaryType.dictionaryTypeId}&order=${dictionaryList.size() + 1}'"><span
                         class="glyphicon glyphicon-plus"></span> 创建
                 </button>
                 <button type="button" class="btn btn-default"
@@ -49,7 +50,7 @@
                         class="glyphicon glyphicon-edit"></span> 返回
                 </button>
                 <button type="button" class="btn btn-warning"
-                        onclick="location.href='${pageContext.request.contextPath}/dictionary/updateCache?dictionaryTypeId=${dictionaryList.get(0).dictionaryType.dictionaryTypeId}'">
+                        onclick="location.href='${pageContext.request.contextPath}/dictionary/updateCache?dictionaryTypeId=${dictionaryType.dictionaryTypeId}'">
                     <span class="glyphicon glyphicon-refresh"></span> 更新缓存
                 </button>
             </div>

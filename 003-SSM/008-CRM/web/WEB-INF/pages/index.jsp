@@ -70,7 +70,7 @@
                         <div style="position: relative; left: 40px;">
                             姓名：<b>${LOGIN_EMPLOYEE.employeeName}</b><br><br>
                             登录帐号：<b>${LOGIN_EMPLOYEE.employeeNo}</b><br><br>
-                            组织机构：<b>${DEPTS_IN_APPLICATION[LOGIN_EMPLOYEE.deptId].deptName}</b><br><br>
+                            组织机构：<b>${DEPTS_IN_APPLICATION[LOGIN_EMPLOYEE.dept.deptId].deptName}</b><br><br>
                             邮箱：<b>${LOGIN_EMPLOYEE.employeeMail}</b><br><br>
                             失效时间：<b><fmt:formatDate value="${LOGIN_EMPLOYEE.employeeExpireTime}"
                                                     pattern="yyyy-MM-dd HH:mm:ss"/></b><br><br>
@@ -196,7 +196,8 @@
                     <li class="liClass"><a href="${pageContext.request.contextPath}/dictionaryType/list"
                                            target="workareaFrame"><span
                             class="glyphicon glyphicon-book"></span> 数据字典</a></li>
-                    <li class="liClass"><a href="workbench/activity/index.html" target="workareaFrame"><span
+                    <li class="liClass"><a href="${pageContext.request.contextPath}/activity/list"
+                                           target="workareaFrame"><span
                             class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
                     <li class="liClass"><a href="workbench/clue/index.html" target="workareaFrame"><span
                             class="glyphicon glyphicon-search"></span> 线索（潜在客户）</a></li>
@@ -214,7 +215,8 @@
                                     class="glyphicon glyphicon-chevron-right"></span> 市场活动统计图表</a></li>
                             <li class="liClass"><a href="workbench/chart/clue/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
                                     class="glyphicon glyphicon-chevron-right"></span> 线索统计图表</a></li>
-                            <li class="liClass"><a href="workbench/chart/customerAndContacts/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
+                            <li class="liClass"><a href="workbench/chart/customerAndContacts/index.html"
+                                                   target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
                                     class="glyphicon glyphicon-chevron-right"></span> 客户和联系人统计图表</a></li>
                             <li class="liClass"><a href="workbench/chart/transaction/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
                                     class="glyphicon glyphicon-chevron-right"></span> 交易统计图表</a></li>

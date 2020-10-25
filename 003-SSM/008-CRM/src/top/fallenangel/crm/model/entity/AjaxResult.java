@@ -19,4 +19,12 @@ public class AjaxResult {
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
+    @Override
+    public String toString() {
+        return "AjaxResult{" +
+                "success=" + success +
+                ", msg='" + msg + '\'' +
+                '}';
+    }
 }

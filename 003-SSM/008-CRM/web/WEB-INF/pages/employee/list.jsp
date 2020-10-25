@@ -140,7 +140,7 @@
                                 <label class="col-sm-2 control-label">所在部门<span class="required">*</span></label>
                                 <div class="col-sm-10 input-group" style="width: 270px; left: 15px">
                                     <label>
-                                        <select name="deptId" class="form-control" style="width: 210px">
+                                        <select name="dept.deptId" class="form-control" style="width: 210px">
                                             <option value="">请选择部门</option>
                                             <c:forEach items="${DEPTS_IN_APPLICATION.entrySet()}" var="deptEntry">
                                                 <option value="${deptEntry.value.deptId}">${deptEntry.value.deptName}</option>
@@ -188,7 +188,7 @@
                 <div class="form-group">
                     <div class="input-group">
                         <div class="input-group-addon">部门名称</div>
-                        <form:select path="deptId" cssClass="form-control" cssStyle="width: 170px">
+                        <form:select path="dept.deptId" cssClass="form-control" cssStyle="width: 170px">
                             <form:option value="" label="请选择部门"/>
                             <form:options items="${DEPTS_IN_APPLICATION.entrySet()}" itemValue="value.deptId"
                                           itemLabel="value.deptName"/>
@@ -287,16 +287,16 @@
                                     <a href="${pageContext.request.contextPath}/employee/detail?employeeId=${employee.employeeId}">${employee.employeeNo}</a>
                                 </td>
                                 <td>${employee.employeeName}</td>
-                                <td>${DEPTS_IN_APPLICATION[employee.deptId].deptName}</td>
+                                <td>${DEPTS_IN_APPLICATION[employee.dept.deptId].deptName}</td>
                                 <td>${employee.employeeMail}</td>
                                 <td><fmt:formatDate value="${employee.employeeExpireTime}"
                                                     pattern="yyyy-MM-dd HH:mm:ss"/></td>
                                 <td>${employee.employeeAllowedIps}</td>
                                 <td>${employee.employeeStatus == 0 ? "<span style='color: red'>禁用</span>" : "<span style='color: green'>启用</span>"}</td>
-                                <td>${employee.creator}</td>
+                                <td>${employee.creator.employeeName}</td>
                                 <td><fmt:formatDate value="${employee.createTime}"
                                                     pattern="yyyy-MM-dd HH:mm:ss"/></td>
-                                <td>${employee.updater}</td>
+                                <td>${employee.updater.employeeName}</td>
                                 <td><fmt:formatDate value="${employee.updateTime}"
                                                     pattern="yyyy-MM-dd HH:mm:ss"/></td>
                             </tr>
@@ -324,8 +324,6 @@
                     searchForm.submit()
                 }
             })
-
-            $("#alertMsgBox").bs_alert()
 
             let datetimepickerSettings = {
                 language: "zh-CN",

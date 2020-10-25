@@ -1,8 +1,10 @@
 package top.fallenangel.crm.template;
 
+import top.fallenangel.crm.template.impl.BaseEntity;
+
 import java.util.List;
 
-public interface ITemplateDao<T> {
+public interface ITemplateDao<T extends BaseEntity> {
     int insert(T record);
 
     int insertSelective(T record);

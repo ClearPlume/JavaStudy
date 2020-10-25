@@ -1,5 +1,7 @@
 package top.fallenangel.crm.model.entity;
 
+import top.fallenangel.crm.template.impl.BaseEntity;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,7 @@ import java.io.Serializable;
  *
  * @author 坠天使
  */
-public class DictionaryType implements Serializable {
+public class DictionaryType extends BaseEntity implements Serializable {
     private Integer dictionaryTypeId;
 
     /**
@@ -34,7 +36,7 @@ public class DictionaryType implements Serializable {
                 ", dictionaryTypeName='" + dictionaryTypeName + '\'' +
                 ", dictionaryTypeCode='" + dictionaryTypeCode + '\'' +
                 ", dictionaryTypeStatus=" + dictionaryTypeStatus +
-                '}';
+                '}' + super.toString();
     }
 
     @Override

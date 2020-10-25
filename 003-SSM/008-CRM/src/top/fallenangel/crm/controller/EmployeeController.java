@@ -9,15 +9,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import top.fallenangel.crm.model.entity.AjaxResult;
 import top.fallenangel.crm.model.entity.Employee;
 import top.fallenangel.crm.service.IEmployeeService;
+import top.fallenangel.crm.template.ITemplateService;
+import top.fallenangel.crm.template.impl.TemplateController;
 import top.fallenangel.crm.util.Util;
 
 @Controller
 @RequestMapping("employee")
-public class EmployeeController {
+public class EmployeeController extends TemplateController<Employee> {
     private final IEmployeeService employeeService;
 
     public EmployeeController(IEmployeeService employeeService) {
         this.employeeService = employeeService;
+    }
+
+    @Override
+    public ITemplateService<Employee> getService() {
+        return employeeService;
+    }
+
+    @Override
+    public Employee getInstance() {
+        return new Employee();
+    }
+
+    @Override
+    public Integer getInstanceId(Employee entity) {
+        return entity.getEmployeeId();
     }
 
     @RequestMapping("list")
@@ -28,7 +45,7 @@ public class EmployeeController {
 
     @RequestMapping("detail")
     public Employee detail(int employeeId) {
-        return employeeService.get(employeeId);
+        return super.view(employeeId);
     }
 
     @RequestMapping("update")
@@ -37,10 +54,10 @@ public class EmployeeController {
         return "redirect:/employee/list";
     }
 
+    @Override
     @RequestMapping("save")
     public String save(Employee employee) {
-        employeeService.save(employee);
-        return "redirect:/employee/list";
+        return super.save(employee);
     }
 
     @RequestMapping("lock")
@@ -55,8 +72,8 @@ public class EmployeeController {
         return "redirect:/employee/list";
     }
 
-    @RequestMapping("modifyPwd")
     @ResponseBody
+    @RequestMapping("modifyPwd")
     public AjaxResult modifyPwd(String oldPwd, String newPwd) {
         oldPwd = Util.md5(oldPwd);
         newPwd = Util.md5(newPwd);
