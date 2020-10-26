@@ -65,10 +65,4 @@ public class MarketActivityController extends TemplateController<MarketActivity>
         }
         return viewName;
     }
-
-    @Override
-    @RequestMapping("delete")
-    public String delete(Integer[] id) {
-        return super.delete(id);
-    }
 }

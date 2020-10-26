@@ -68,7 +68,6 @@
                     </form>
                 </div>
             </div>
-            <%--修改备注模态结束--%>
         </div>
         <%--修改市场活动模态框--%>
         <div class="modal fade" id="editActivityModal" role="dialog">
@@ -150,7 +149,6 @@
                     </form:form>
                 </div>
             </div>
-            <%--修改市场活动模态框结束--%>
         </div>
         <%--返回按钮--%>
         <div style="position: relative; top: 35px; left: 10px;">
@@ -169,8 +167,8 @@
                 <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editActivityModal"><span
                         class="glyphicon glyphicon-edit"></span> 编辑
                 </button>
-                <button onclick="deleteActivity(${marketActivity.activityId})" type="button"
-                        class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除
+                <button onclick="newClue(${marketActivity.activityId})" type="button"
+                        class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> 新增线索
                 </button>
             </div>
         </div>
@@ -358,10 +356,8 @@
                 )
             }
 
-            function deleteActivity(activityId) {
-                bs_confirm("确认删除数据？这将无法撤回！", "警告", 25, function () {
-                    location.href = "${pageContext.request.contextPath}/activity/delete?id=" + activityId
-                })
+            function newClue(activityId) {
+                bs_alert("新增线索，市场活动的id是：" + activityId)
             }
         </script>
     </body>

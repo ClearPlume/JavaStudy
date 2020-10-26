@@ -186,10 +186,6 @@
                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                 data-target="#createActivityModal"><span class="glyphicon glyphicon-plus"></span> 创建
                         </button>
-                        <button id="delete-btn" type="button" class="btn btn-danger"><span
-                                class="glyphicon glyphicon-minus"></span>
-                            删除
-                        </button>
                     </div>
                 </div>
                 <%--市场活动列表--%>
@@ -209,29 +205,26 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <form id="delete-form" action="${pageContext.request.contextPath}/activity/delete"
-                                  method="post">
-                                <c:forEach items="${pageInfo.list}" var="marketActivity">
-                                    <tr class="active">
-                                        <td>
-                                            <label>
-                                                <input name="id" type="checkbox" value="${marketActivity.activityId}"/>
-                                            </label>
-                                        </td>
-                                        <td>
-                                            <a style="text-decoration: none; cursor: pointer;"
-                                               onclick="location.href='${pageContext.request.contextPath}/activity/edit?id=${marketActivity.activityId}'">
-                                                    ${marketActivity.activityName}
-                                            </a>
-                                        </td>
-                                        <td>${marketActivity.activityPlace}</td>
-                                        <td>${marketActivity.activityPerson}</td>
-                                        <td>${marketActivity.creator.employeeName}(${marketActivity.creator.employeeNo})</td>
-                                        <td>${u:dateFormat(marketActivity.activityEndTime, "yyyy-MM-dd HH:mm:ss")}</td>
-                                        <td>${u:dateFormat(marketActivity.activityStartTime, "yyyy-MM-dd HH:mm:ss")}</td>
-                                    </tr>
-                                </c:forEach>
-                            </form>
+                            <c:forEach items="${pageInfo.list}" var="marketActivity">
+                                <tr class="active">
+                                    <td>
+                                        <label>
+                                            <input name="id" type="checkbox" value="${marketActivity.activityId}"/>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <a style="text-decoration: none; cursor: pointer;"
+                                           onclick="location.href='${pageContext.request.contextPath}/activity/edit?id=${marketActivity.activityId}'">
+                                                ${marketActivity.activityName}
+                                        </a>
+                                    </td>
+                                    <td>${marketActivity.activityPlace}</td>
+                                    <td>${marketActivity.activityPerson}</td>
+                                    <td>${marketActivity.creator.employeeName}(${marketActivity.creator.employeeNo})</td>
+                                    <td>${u:dateFormat(marketActivity.activityStartTime, "yyyy-MM-dd HH:mm:ss")}</td>
+                                    <td>${u:dateFormat(marketActivity.activityEndTime, "yyyy-MM-dd HH:mm:ss")}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -267,16 +260,6 @@
 
             $(".glyphicon-remove").click(function () {
                 $(this).parent().prev().val("")
-            })
-
-            $("#delete-btn").click(function () {
-                if ($("[name='id']:checked").length) {
-                    bs_confirm("确认删除数据？这将无法撤回！", "警告", 25, function () {
-                        $("#delete-form").submit()
-                    })
-                } else {
-                    bs_alert("请选择要删除的活动条目", "提示", 25)
-                }
             })
         </script>
     </body>
