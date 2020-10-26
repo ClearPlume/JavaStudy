@@ -193,9 +193,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr style="color: #B3B3B3;">
-                                <td><label>
-                                    <input type="checkbox"/>
-                                </label></td>
+                                <td></td>
                                 <td>名称</td>
                                 <td>举办地点</td>
                                 <td>参与对象</td>
@@ -207,11 +205,7 @@
                         <tbody>
                             <c:forEach items="${pageInfo.list}" var="marketActivity">
                                 <tr class="active">
-                                    <td>
-                                        <label>
-                                            <input name="id" type="checkbox" value="${marketActivity.activityId}"/>
-                                        </label>
-                                    </td>
+                                    <td></td>
                                     <td>
                                         <a style="text-decoration: none; cursor: pointer;"
                                            onclick="location.href='${pageContext.request.contextPath}/activity/edit?id=${marketActivity.activityId}'">

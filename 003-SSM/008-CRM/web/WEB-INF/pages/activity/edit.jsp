@@ -152,8 +152,9 @@
         </div>
         <%--返回按钮--%>
         <div style="position: relative; top: 35px; left: 10px;">
-            <a href="${pageContext.request.contextPath}/activity/list"><span class="glyphicon glyphicon-arrow-left"
-                                                                             style="font-size: 20px; color: #DDDDDD"></span></a>
+            <a href="${pageContext.request.contextPath}/activity/list">
+                <span class="glyphicon glyphicon-arrow-left" style="font-size: 20px; color: darkcyan"></span>
+            </a>
         </div>
         <%--页面主标题--%>
         <div style="position: relative; left: 40px; top: -30px;">
