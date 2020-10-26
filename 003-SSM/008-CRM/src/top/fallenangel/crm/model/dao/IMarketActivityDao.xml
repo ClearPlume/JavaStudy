@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.IMarketActivityDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.MarketActivity">
+        <id column="activity_id" jdbcType="INTEGER" property="activityId"/>
+        <result column="activity_name" jdbcType="VARCHAR" property="activityName"/>
+        <result column="activity_content" jdbcType="VARCHAR" property="activityContent"/>
+        <result column="activity_person" jdbcType="VARCHAR" property="activityPerson"/>
+        <result column="activity_place" jdbcType="VARCHAR" property="activityPlace"/>
+        <result column="activity_start_time" jdbcType="TIMESTAMP" property="activityStartTime"/>
+        <result column="activity_end_time" jdbcType="TIMESTAMP" property="activityEndTime"/>
+        <result column="activity_cost" jdbcType="DOUBLE" property="activityCost"/>
+        <result column="create_by" jdbcType="INTEGER" property="creator.employeeId"/>
+        <result column="creator_name" jdbcType="VARCHAR" property="creator.employeeName"/>
+        <result column="creator_no" jdbcType="VARCHAR" property="creator.employeeNo"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updater.employeeId"/>
+        <result column="updater_name" jdbcType="VARCHAR" property="updater.employeeName"/>
+        <result column="updater_no" jdbcType="VARCHAR" property="updater.employeeNo"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        activity_id, activity_name, activity_content, activity_person, activity_place, activity_start_time,
+    activity_end_time, activity_cost, create_by, create_time, update_by, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select a.activity_id,
+               a.activity_name,
+               a.activity_content,
+               a.activity_person,
+               a.activity_place,
+               a.activity_start_time,
+               a.activity_end_time,
+               a.activity_cost,
+               a.create_by,
+               ec.employee_name creator_name,
+               ec.employee_no   creator_no,
+               a.create_time,
+               a.update_by,
+               eu.employee_name updater_name,
+               eu.employee_no   updater_no,
+               a.update_time
+        from t_market_activity a
+                 left join t_employee ec on a.create_by = ec.employee_id
+                 left join t_employee eu on a.update_by = eu.employee_id
+        where activity_id = #{activityId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select a.activity_id,
+        a.activity_name,
+        a.activity_content,
+        a.activity_person,
+        a.activity_place,
+        a.activity_start_time,
+        a.activity_end_time,
+        a.activity_cost,
+        a.create_by,
+        ec.employee_name creator_name,
+        ec.employee_no creator_no,
+        a.create_time,
+        a.update_by,
+        eu.employee_name updater_name,
+        eu.employee_no updater_no,
+        a.update_time
+        from t_market_activity a
+        left join t_employee ec on a.create_by = ec.employee_id
+        left join t_employee eu on a.update_by = eu.employee_id
+        <where>
+            <if test="activityName != null and activityName != ''">
+                activity_name like concat('%', #{activityName}, '%')
+            </if>
+            <if test="activityPlace != null and activityPlace != ''">
+                and a.activity_place like concat('%', #{activityPlace}, '%')
+            </if>
+            <if test="activityPerson != null and activityPerson != ''">
+                and a.activity_person like concat('%', #{activityPerson}, '%')
+            </if>
+            <if test="activityStartTime != null">
+                and a.activity_start_time &gt;= #{activityStartTime}
+            </if>
+            <if test="activityEndTime != null">
+                and a.activity_end_time &lt;= #{activityEndTime}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey">
+        delete
+        from t_market_activity
+        where activity_id in
+        <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="activity_id" keyProperty="activityId"
+            parameterType="top.fallenangel.crm.model.entity.MarketActivity" useGeneratedKeys="true">
+        insert into t_market_activity (activity_name, activity_content, activity_person,
+                                       activity_place, activity_start_time, activity_end_time,
+                                       activity_cost, create_by, create_time,
+                                       update_by, update_time)
+        values (#{activityName,jdbcType=VARCHAR}, #{activityContent,jdbcType=VARCHAR},
+                #{activityPerson,jdbcType=VARCHAR},
+                #{activityPlace,jdbcType=VARCHAR}, #{activityStartTime,jdbcType=TIMESTAMP},
+                #{activityEndTime,jdbcType=TIMESTAMP},
+                #{activityCost,jdbcType=DOUBLE}, #{creator.employeeId,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP},
+                #{updater.employeeId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="activity_id" keyProperty="activityId"
+            parameterType="top.fallenangel.crm.model.entity.MarketActivity" useGeneratedKeys="true">
+        insert into t_market_activity
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityName != null">
+                activity_name,
+            </if>
+            <if test="activityContent != null">
+                activity_content,
+            </if>
+            <if test="activityPerson != null">
+                activity_person,
+            </if>
+            <if test="activityPlace != null">
+                activity_place,
+            </if>
+            <if test="activityStartTime != null">
+                activity_start_time,
+            </if>
+            <if test="activityEndTime != null">
+                activity_end_time,
+            </if>
+            <if test="activityCost != null">
+                activity_cost,
+            </if>
+            <if test="creator != null and creator.employeeId != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updater != null and updater.employeeId != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityName != null">
+                #{activityName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityContent != null">
+                #{activityContent,jdbcType=VARCHAR},
+            </if>
+            <if test="activityPerson != null">
+                #{activityPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="activityPlace != null">
+                #{activityPlace,jdbcType=VARCHAR},
+            </if>
+            <if test="activityStartTime != null">
+                #{activityStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activityEndTime != null">
+                #{activityEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activityCost != null">
+                #{activityCost,jdbcType=DOUBLE},
+            </if>
+            <if test="creator != null and creator.employeeId != null">
+                #{creator.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null and updater.employeeId != null">
+                #{updater.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.MarketActivity">
+        update t_market_activity
+        <set>
+            <if test="activityName != null">
+                activity_name = #{activityName,jdbcType=VARCHAR},
+            </if>
+            <if test="activityContent != null">
+                activity_content = #{activityContent,jdbcType=VARCHAR},
+            </if>
+            <if test="activityPerson != null">
+                activity_person = #{activityPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="activityPlace != null">
+                activity_place = #{activityPlace,jdbcType=VARCHAR},
+            </if>
+            <if test="activityStartTime != null">
+                activity_start_time = #{activityStartTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activityEndTime != null">
+                activity_end_time = #{activityEndTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="activityCost != null">
+                activity_cost = #{activityCost,jdbcType=DOUBLE},
+            </if>
+            <if test="creator != null and creator.employeeId != null">
+                create_by = #{creator.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null and updater.employeeId != null">
+                update_by = #{updater.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where activity_id = #{activityId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.MarketActivity">
+        update t_market_activity
+        set activity_name       = #{activityName,jdbcType=VARCHAR},
+            activity_content    = #{activityContent,jdbcType=VARCHAR},
+            activity_person     = #{activityPerson,jdbcType=VARCHAR},
+            activity_place      = #{activityPlace,jdbcType=VARCHAR},
+            activity_start_time = #{activityStartTime,jdbcType=TIMESTAMP},
+            activity_end_time   = #{activityEndTime,jdbcType=TIMESTAMP},
+            activity_cost       = #{activityCost,jdbcType=DOUBLE},
+            create_by           = #{creator.employeeId,jdbcType=INTEGER},
+            create_time         = #{createTime,jdbcType=TIMESTAMP},
+            update_by           = #{updater.employeeId,jdbcType=INTEGER},
+            update_time         = #{updateTime,jdbcType=TIMESTAMP}
+        where activity_id = #{activityId,jdbcType=INTEGER}
+    </update>
+</mapper>

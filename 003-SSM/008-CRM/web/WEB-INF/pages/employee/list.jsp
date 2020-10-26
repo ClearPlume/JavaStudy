@@ -19,8 +19,7 @@
         <link href="${pageContext.request.contextPath}/js/jquery/bootstrap_3.3.0/css/bootstrap.min.css" type="text/css"
               rel="stylesheet"/>
         <link href="${pageContext.request.contextPath}/js/jquery/bs_pagination/jquery.bs_pagination.min.css"
-              type="text/css"
-              rel="stylesheet"/>
+              type="text/css" rel="stylesheet"/>
         <link href="${pageContext.request.contextPath}/js/jquery/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"
               type="text/css" rel="stylesheet"/>
 
