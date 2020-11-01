@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.shoppingmanagement.model.dao.IShoppingDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.shoppingmanagement.model.entity.Shopping">
+        <id column="shopping_id" jdbcType="INTEGER" property="shoppingId"/>
+        <result column="shopping_no" jdbcType="CHAR" property="shoppingNo"/>
+        <result column="shopping_name" jdbcType="VARCHAR" property="shoppingName"/>
+        <result column="shopping_spec" jdbcType="VARCHAR" property="shoppingSpec"/>
+        <result column="shopping_price" jdbcType="DOUBLE" property="shoppingPrice"/>
+        <result column="shopping_origin" jdbcType="VARCHAR" property="shoppingOrigin"/>
+        <result column="shopping_shelf_date" jdbcType="DATE" property="shoppingShelfDate"/>
+        <result column="shopping_status" jdbcType="BIT" property="shoppingStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        shopping_id, shopping_no, shopping_name, shopping_spec, shopping_price, shopping_origin,
+    shopping_shelf_date, shopping_status
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_shopping
+        where shopping_id = #{shoppingId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_shopping
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_shopping
+        where shopping_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="shopping_id" keyProperty="shoppingId"
+            parameterType="top.fallenangel.shoppingmanagement.model.entity.Shopping" useGeneratedKeys="true">
+        insert into t_shopping (shopping_no, shopping_name, shopping_spec,
+                                shopping_price, shopping_origin, shopping_shelf_date,
+                                shopping_status)
+        values (#{shoppingNo,jdbcType=CHAR}, #{shoppingName,jdbcType=VARCHAR}, #{shoppingSpec,jdbcType=VARCHAR},
+                #{shoppingPrice,jdbcType=DOUBLE}, #{shoppingOrigin,jdbcType=VARCHAR},
+                #{shoppingShelfDate,jdbcType=DATE},
+                #{shoppingStatus,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" keyColumn="shopping_id" keyProperty="shoppingId"
+            parameterType="top.fallenangel.shoppingmanagement.model.entity.Shopping" useGeneratedKeys="true">
+        insert into t_shopping
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shoppingNo != null">
+                shopping_no,
+            </if>
+            <if test="shoppingName != null">
+                shopping_name,
+            </if>
+            <if test="shoppingSpec != null">
+                shopping_spec,
+            </if>
+            <if test="shoppingPrice != null">
+                shopping_price,
+            </if>
+            <if test="shoppingOrigin != null">
+                shopping_origin,
+            </if>
+            <if test="shoppingShelfDate != null">
+                shopping_shelf_date,
+            </if>
+            <if test="shoppingStatus != null">
+                shopping_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shoppingNo != null">
+                #{shoppingNo,jdbcType=CHAR},
+            </if>
+            <if test="shoppingName != null">
+                #{shoppingName,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppingSpec != null">
+                #{shoppingSpec,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppingPrice != null">
+                #{shoppingPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="shoppingOrigin != null">
+                #{shoppingOrigin,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppingShelfDate != null">
+                #{shoppingShelfDate,jdbcType=DATE},
+            </if>
+            <if test="shoppingStatus != null">
+                #{shoppingStatus,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.shoppingmanagement.model.entity.Shopping">
+        update t_shopping
+        <set>
+            <if test="shoppingNo != null">
+                shopping_no = #{shoppingNo,jdbcType=CHAR},
+            </if>
+            <if test="shoppingName != null">
+                shopping_name = #{shoppingName,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppingSpec != null">
+                shopping_spec = #{shoppingSpec,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppingPrice != null">
+                shopping_price = #{shoppingPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="shoppingOrigin != null">
+                shopping_origin = #{shoppingOrigin,jdbcType=VARCHAR},
+            </if>
+            <if test="shoppingShelfDate != null">
+                shopping_shelf_date = #{shoppingShelfDate,jdbcType=DATE},
+            </if>
+            <if test="shoppingStatus != null">
+                shopping_status = #{shoppingStatus,jdbcType=BIT},
+            </if>
+        </set>
+        where shopping_id = #{shoppingId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.shoppingmanagement.model.entity.Shopping">
+        update t_shopping
+        set shopping_no         = #{shoppingNo,jdbcType=CHAR},
+            shopping_name       = #{shoppingName,jdbcType=VARCHAR},
+            shopping_spec       = #{shoppingSpec,jdbcType=VARCHAR},
+            shopping_price      = #{shoppingPrice,jdbcType=DOUBLE},
+            shopping_origin     = #{shoppingOrigin,jdbcType=VARCHAR},
+            shopping_shelf_date = #{shoppingShelfDate,jdbcType=DATE},
+            shopping_status     = #{shoppingStatus,jdbcType=BIT}
+        where shopping_id = #{shoppingId,jdbcType=INTEGER}
+    </update>
+</mapper>
