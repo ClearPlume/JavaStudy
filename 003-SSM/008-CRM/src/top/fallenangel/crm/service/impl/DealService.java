@@ -11,7 +11,7 @@ import top.fallenangel.crm.template.ITemplateDao;
 import top.fallenangel.crm.template.impl.TemplateService;
 import top.fallenangel.crm.util.Util;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DealService extends TemplateService<Deal> implements IDealService {
@@ -64,5 +64,34 @@ public class DealService extends TemplateService<Deal> implements IDealService {
             dealDB.setDealStages(dealStageService.list(dealDB.getDealId()).toArray(new DealStage[]{}));
         }
         return deals;
+    }
+
+    @Override
+    public Map<String, Object> statistics() {
+        Map<String, Object> result = new HashMap<>();
+        Set<String> dealTypeSet = new LinkedHashSet<>();
+        List<List<Integer>> dataList = new ArrayList<>();
+
+        result.put("dealTypeSet", dealTypeSet);
+        result.put("dataList", dataList);
+
+        dealTypeSet.add("'product'");
+
+        List<Map<String, Object>> statistics = dealDao.statistics();
+        List<Integer> data = null;
+        String month = "";
+
+        for (Map<String, Object> statistic : statistics) {
+            dealTypeSet.add('\'' + statistic.get("type").toString() + '\'');
+
+            if (!month.equals(statistic.get("month").toString())) {
+                data = new ArrayList<>();
+                dataList.add(data);
+                month = statistic.get("month").toString();
+            }
+            assert data != null;
+            data.add(((Long) statistic.get("count")).intValue());
+        }
+        return result;
     }
 }

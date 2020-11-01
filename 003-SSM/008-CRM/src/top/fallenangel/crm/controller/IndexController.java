@@ -10,8 +10,8 @@ public class IndexController {
         return "index";
     }
 
-    @RequestMapping("mainIndex")
-    public String mainIndex() {
-        return "workbench/main/index";
+    @RequestMapping("home")
+    public String home() {
+        return "home";
     }
 }

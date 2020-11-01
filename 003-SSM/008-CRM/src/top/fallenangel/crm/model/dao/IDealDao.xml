@@ -111,6 +111,21 @@
             </if>
         </where>
     </select>
+    <select id="statistics" resultType="java.util.Map">
+        select type.month month, type.type_value type, ifnull(deal.count, 0) count
+        from (select m.month month, d.dictionary_value type_value, d.dictionary_id type
+              from t_dictionary d
+                       join t_dictionary_type dt on d.dictionary_type_id = dt.dictionary_type_id,
+                   t_month m
+              where dt.dictionary_type_code = 'dealType') type
+                 left join (select date_format(d.deal_actual_time, '%Y-%m') date,
+                                   count(d.deal_id)                         count,
+                                   d.deal_type                              type
+                            from t_deal d
+                                     left join t_month on date_format(d.deal_actual_time, '%Y-%m') = month
+                            group by date_format(d.deal_actual_time, '%Y-%m'), d.deal_type
+                            order by date) deal on type.type = deal.type and type.month = deal.date
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_deal

@@ -83,6 +83,13 @@
             </if>
         </where>
     </select>
+    <select id="statistics" resultType="java.lang.Integer">
+        select count(a.activity_id)
+        from t_month
+                 left join t_market_activity a on date_format(a.activity_end_time, '%Y-%m') = month
+        group by month
+        order by month
+    </select>
     <delete id="deleteByPrimaryKey">
         delete
         from t_market_activity

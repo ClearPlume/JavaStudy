@@ -26,4 +26,9 @@ public class MarketActivityService extends TemplateService<MarketActivity> imple
     public List<MarketActivity> list(MarketActivity marketActivity) {
         return marketActivityDao.selectAll(marketActivity);
     }
+
+    @Override
+    public List<Integer> statistics() {
+        return marketActivityDao.statistics();
+    }
 }

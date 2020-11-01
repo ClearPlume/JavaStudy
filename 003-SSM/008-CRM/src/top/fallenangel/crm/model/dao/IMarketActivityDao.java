@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface IMarketActivityDao extends ITemplateDao<MarketActivity> {
     List<MarketActivity> selectAll(MarketActivity marketActivity);
+
+    List<Integer> statistics();
 }

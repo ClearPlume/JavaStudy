@@ -51,7 +51,7 @@
                     $(this).children("a").css("color", "white");
                 });
 
-                window.open("${pageContext.request.contextPath}/mainIndex", "workareaFrame");
+                window.open("${pageContext.request.contextPath}/home", "workareaFrame");
             });
         </script>
     </head>
@@ -184,7 +184,7 @@
             <!-- 导航 -->
             <div id="navigation" style="left: 0; width: 18%; position: relative; height: 100%; overflow:auto;">
                 <ul id="no1" class="nav nav-pills nav-stacked">
-                    <li class="liClass"><a href="${pageContext.request.contextPath}/mainIndex"
+                    <li class="liClass"><a href="${pageContext.request.contextPath}/home"
                                            target="workareaFrame"><span
                             class="glyphicon glyphicon-home"></span> 工作台</a></li>
                     <li class="liClass"><a href="${pageContext.request.contextPath}/dept/list"
@@ -206,9 +206,11 @@
                         <a href="#no2" class="collapsed" data-toggle="collapse"><span
                                 class="glyphicon glyphicon-stats"></span> 统计图表</a>
                         <ul id="no2" class="nav nav-pills nav-stacked collapse">
-                            <li class="liClass"><a href="javascript:void(0)" target="workareaFrame">&nbsp;&nbsp;&nbsp;
+                            <li class="liClass"><a href="${pageContext.request.contextPath}/echarts/activity"
+                                                   target="workareaFrame">&nbsp;&nbsp;&nbsp;
                                 <span class="glyphicon glyphicon-chevron-right"></span> 市场活动统计图表</a></li>
-                            <li class="liClass"><a href="javascript:void(0)" target="workareaFrame">&nbsp;&nbsp;&nbsp;
+                            <li class="liClass"><a href="${pageContext.request.contextPath}/echarts/deal"
+                                                   target="workareaFrame">&nbsp;&nbsp;&nbsp;
                                 <span class="glyphicon glyphicon-chevron-right"></span> 交易统计图表</a></li>
                         </ul>
                     </li>
