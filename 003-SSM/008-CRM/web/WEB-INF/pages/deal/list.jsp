@@ -163,7 +163,7 @@
                 showRowsPerPage: true,//是否显示每页记录数
                 showRowsInfo: true,//是否显示行记录信息
                 onChangePage: function (event, data) {
-                    let searchForm = $("#marketActivity")[0]
+                    let searchForm = $("#deal")[0]
                     searchForm.action = "/deal/list?page=" + data.currentPage + "&pageSize=" + data.rowsPerPage
                     searchForm.submit()
                 }
