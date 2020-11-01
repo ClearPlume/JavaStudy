@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.IClueDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Clue">
+        <id column="clue_id" jdbcType="INTEGER" property="clueId"/>
+        <result column="activity_id" jdbcType="INTEGER" property="activity.activityId"/>
+        <result column="activity_name" jdbcType="INTEGER" property="activity.activityName"/>
+        <result column="clue_title" jdbcType="VARCHAR" property="clueTitle"/>
+        <result column="clue_content" jdbcType="VARCHAR" property="clueContent"/>
+        <result column="clue_provider_name" jdbcType="VARCHAR" property="clueProviderName"/>
+        <result column="clue_provider_mobile_phone" jdbcType="VARCHAR" property="clueProviderMobilePhone"/>
+        <result column="clue_intention_person" jdbcType="VARCHAR" property="clueIntentionPerson"/>
+        <result column="clue_intention_mobile_phone" jdbcType="VARCHAR" property="clueIntentionMobilePhone"/>
+        <result column="clue_intention_phone" jdbcType="VARCHAR" property="clueIntentionPhone"/>
+        <result column="clue_intention_mail" jdbcType="VARCHAR" property="clueIntentionMail"/>
+        <result column="clue_intention_job" jdbcType="VARCHAR" property="clueIntentionJob"/>
+        <result column="clue_intention_company" jdbcType="VARCHAR" property="clueIntentionCompany"/>
+        <result column="clue_intention_company_site" jdbcType="VARCHAR" property="clueIntentionCompanySite"/>
+        <result column="clue_intention_company_address" jdbcType="VARCHAR" property="clueIntentionCompanyAddress"/>
+        <result column="clue_status" jdbcType="INTEGER" property="clueStatus"/>
+        <result column="clue_source" jdbcType="INTEGER" property="clueSource"/>
+        <result column="create_by" jdbcType="INTEGER" property="creator.employeeId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updater.employeeId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        clue_id, activity_id, clue_title, clue_content, clue_provider_name, clue_provider_mobile_phone,
+    clue_intention_person, clue_intention_mobile_phone, clue_intention_phone, clue_intention_mail, 
+    clue_intention_job, clue_intention_company, clue_intention_company_site, clue_intention_company_address, 
+    clue_status, clue_source, create_by, create_time, update_by, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_clue
+        where clue_id = #{clueId,jdbcType=INTEGER}
+    </select>
+    <select id="fuzzySearch" resultMap="BaseResultMap">
+        select clue_id,
+               clue_title,
+               activity_name,
+               clue_intention_person,
+               clue_provider_name,
+               t_clue.update_time
+        from t_clue
+                 left join t_market_activity on t_clue.activity_id = t_market_activity.activity_id
+        where clue_title like concat('%', #{key}, '%')
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_clue
+        where clue_id = #{clueId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="clue_id" keyProperty="clueId" parameterType="top.fallenangel.crm.model.entity.Clue"
+            useGeneratedKeys="true">
+        insert into t_clue (activity_id, clue_title, clue_content,
+                            clue_provider_name, clue_provider_mobile_phone,
+                            clue_intention_person, clue_intention_mobile_phone,
+                            clue_intention_phone, clue_intention_mail,
+                            clue_intention_job, clue_intention_company,
+                            clue_intention_company_site, clue_intention_company_address,
+                            clue_status, clue_source, create_by,
+                            create_time, update_by, update_time)
+        values (#{activityId,jdbcType=INTEGER}, #{clueTitle,jdbcType=VARCHAR}, #{clueContent,jdbcType=VARCHAR},
+                #{clueProviderName,jdbcType=VARCHAR}, #{clueProviderMobilePhone,jdbcType=VARCHAR},
+                #{clueIntentionPerson,jdbcType=VARCHAR}, #{clueIntentionMobilePhone,jdbcType=VARCHAR},
+                #{clueIntentionPhone,jdbcType=VARCHAR}, #{clueIntentionMail,jdbcType=VARCHAR},
+                #{clueIntentionJob,jdbcType=VARCHAR}, #{clueIntentionCompany,jdbcType=VARCHAR},
+                #{clueIntentionCompanySite,jdbcType=VARCHAR}, #{clueIntentionCompanyAddress,jdbcType=VARCHAR},
+                #{clueStatus,jdbcType=INTEGER}, #{clueSource,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="clue_id" keyProperty="clueId"
+            parameterType="top.fallenangel.crm.model.entity.Clue" useGeneratedKeys="true">
+        insert into t_clue
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="activityId != null">
+                activity_id,
+            </if>
+            <if test="clueTitle != null">
+                clue_title,
+            </if>
+            <if test="clueContent != null">
+                clue_content,
+            </if>
+            <if test="clueProviderName != null">
+                clue_provider_name,
+            </if>
+            <if test="clueProviderMobilePhone != null">
+                clue_provider_mobile_phone,
+            </if>
+            <if test="clueIntentionPerson != null">
+                clue_intention_person,
+            </if>
+            <if test="clueIntentionMobilePhone != null">
+                clue_intention_mobile_phone,
+            </if>
+            <if test="clueIntentionPhone != null">
+                clue_intention_phone,
+            </if>
+            <if test="clueIntentionMail != null">
+                clue_intention_mail,
+            </if>
+            <if test="clueIntentionJob != null">
+                clue_intention_job,
+            </if>
+            <if test="clueIntentionCompany != null">
+                clue_intention_company,
+            </if>
+            <if test="clueIntentionCompanySite != null">
+                clue_intention_company_site,
+            </if>
+            <if test="clueIntentionCompanyAddress != null">
+                clue_intention_company_address,
+            </if>
+            <if test="clueStatus != null">
+                clue_status,
+            </if>
+            <if test="clueSource != null">
+                clue_source,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="activityId != null">
+                #{activityId,jdbcType=INTEGER},
+            </if>
+            <if test="clueTitle != null">
+                #{clueTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="clueContent != null">
+                #{clueContent,jdbcType=VARCHAR},
+            </if>
+            <if test="clueProviderName != null">
+                #{clueProviderName,jdbcType=VARCHAR},
+            </if>
+            <if test="clueProviderMobilePhone != null">
+                #{clueProviderMobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionPerson != null">
+                #{clueIntentionPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionMobilePhone != null">
+                #{clueIntentionMobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionPhone != null">
+                #{clueIntentionPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionMail != null">
+                #{clueIntentionMail,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionJob != null">
+                #{clueIntentionJob,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionCompany != null">
+                #{clueIntentionCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionCompanySite != null">
+                #{clueIntentionCompanySite,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionCompanyAddress != null">
+                #{clueIntentionCompanyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="clueStatus != null">
+                #{clueStatus,jdbcType=INTEGER},
+            </if>
+            <if test="clueSource != null">
+                #{clueSource,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Clue">
+        update t_clue
+        <set>
+            <if test="activityId != null">
+                activity_id = #{activityId,jdbcType=INTEGER},
+            </if>
+            <if test="clueTitle != null">
+                clue_title = #{clueTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="clueContent != null">
+                clue_content = #{clueContent,jdbcType=VARCHAR},
+            </if>
+            <if test="clueProviderName != null">
+                clue_provider_name = #{clueProviderName,jdbcType=VARCHAR},
+            </if>
+            <if test="clueProviderMobilePhone != null">
+                clue_provider_mobile_phone = #{clueProviderMobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionPerson != null">
+                clue_intention_person = #{clueIntentionPerson,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionMobilePhone != null">
+                clue_intention_mobile_phone = #{clueIntentionMobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionPhone != null">
+                clue_intention_phone = #{clueIntentionPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionMail != null">
+                clue_intention_mail = #{clueIntentionMail,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionJob != null">
+                clue_intention_job = #{clueIntentionJob,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionCompany != null">
+                clue_intention_company = #{clueIntentionCompany,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionCompanySite != null">
+                clue_intention_company_site = #{clueIntentionCompanySite,jdbcType=VARCHAR},
+            </if>
+            <if test="clueIntentionCompanyAddress != null">
+                clue_intention_company_address = #{clueIntentionCompanyAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="clueStatus != null">
+                clue_status = #{clueStatus,jdbcType=INTEGER},
+            </if>
+            <if test="clueSource != null">
+                clue_source = #{clueSource,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where clue_id = #{clueId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Clue">
+        update t_clue
+        set activity_id                    = #{activityId,jdbcType=INTEGER},
+            clue_title                     = #{clueTitle,jdbcType=VARCHAR},
+            clue_content                   = #{clueContent,jdbcType=VARCHAR},
+            clue_provider_name             = #{clueProviderName,jdbcType=VARCHAR},
+            clue_provider_mobile_phone     = #{clueProviderMobilePhone,jdbcType=VARCHAR},
+            clue_intention_person          = #{clueIntentionPerson,jdbcType=VARCHAR},
+            clue_intention_mobile_phone    = #{clueIntentionMobilePhone,jdbcType=VARCHAR},
+            clue_intention_phone           = #{clueIntentionPhone,jdbcType=VARCHAR},
+            clue_intention_mail            = #{clueIntentionMail,jdbcType=VARCHAR},
+            clue_intention_job             = #{clueIntentionJob,jdbcType=VARCHAR},
+            clue_intention_company         = #{clueIntentionCompany,jdbcType=VARCHAR},
+            clue_intention_company_site    = #{clueIntentionCompanySite,jdbcType=VARCHAR},
+            clue_intention_company_address = #{clueIntentionCompanyAddress,jdbcType=VARCHAR},
+            clue_status                    = #{clueStatus,jdbcType=INTEGER},
+            clue_source                    = #{clueSource,jdbcType=INTEGER},
+            create_by                      = #{createBy,jdbcType=INTEGER},
+            create_time                    = #{createTime,jdbcType=TIMESTAMP},
+            update_by                      = #{updateBy,jdbcType=INTEGER},
+            update_time                    = #{updateTime,jdbcType=TIMESTAMP}
+        where clue_id = #{clueId,jdbcType=INTEGER}
+    </update>
+</mapper>

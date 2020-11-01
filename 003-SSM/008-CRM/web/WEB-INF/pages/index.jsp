@@ -199,41 +199,28 @@
                     <li class="liClass"><a href="${pageContext.request.contextPath}/activity/list"
                                            target="workareaFrame"><span
                             class="glyphicon glyphicon-play-circle"></span> 市场活动</a></li>
-                    <li class="liClass"><a href="workbench/clue/index.html" target="workareaFrame"><span
-                            class="glyphicon glyphicon-search"></span> 线索（潜在客户）</a></li>
-                    <li class="liClass"><a href="workbench/customer/index.html" target="workareaFrame"><span
-                            class="glyphicon glyphicon-user"></span> 客户</a></li>
-                    <li class="liClass"><a href="workbench/contacts/index.html" target="workareaFrame"><span
-                            class="glyphicon glyphicon-earphone"></span> 联系人</a></li>
-                    <li class="liClass"><a href="workbench/transaction/index.html" target="workareaFrame"><span
-                            class="glyphicon glyphicon-usd"></span> 交易（商机）</a></li>
+                    <li class="liClass"><a href="${pageContext.request.contextPath}/deal/list"
+                                           target="workareaFrame"><span class="glyphicon glyphicon-usd"></span>
+                        交易（商机）</a></li>
                     <li class="liClass">
                         <a href="#no2" class="collapsed" data-toggle="collapse"><span
                                 class="glyphicon glyphicon-stats"></span> 统计图表</a>
                         <ul id="no2" class="nav nav-pills nav-stacked collapse">
-                            <li class="liClass"><a href="workbench/chart/activity/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
-                                    class="glyphicon glyphicon-chevron-right"></span> 市场活动统计图表</a></li>
-                            <li class="liClass"><a href="workbench/chart/clue/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
-                                    class="glyphicon glyphicon-chevron-right"></span> 线索统计图表</a></li>
-                            <li class="liClass"><a href="workbench/chart/customerAndContacts/index.html"
-                                                   target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
-                                    class="glyphicon glyphicon-chevron-right"></span> 客户和联系人统计图表</a></li>
-                            <li class="liClass"><a href="workbench/chart/transaction/index.html" target="workareaFrame">&nbsp;&nbsp;&nbsp;<span
-                                    class="glyphicon glyphicon-chevron-right"></span> 交易统计图表</a></li>
+                            <li class="liClass"><a href="javascript:void(0)" target="workareaFrame">&nbsp;&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-chevron-right"></span> 市场活动统计图表</a></li>
+                            <li class="liClass"><a href="javascript:void(0)" target="workareaFrame">&nbsp;&nbsp;&nbsp;
+                                <span class="glyphicon glyphicon-chevron-right"></span> 交易统计图表</a></li>
                         </ul>
                     </li>
                 </ul>
-
                 <!-- 分割线 -->
                 <div id="divider1"
                      style="position: absolute; top : 0; right: 0; width: 1px; height: 100% ; background-color: #B3B3B3;"></div>
             </div>
-
             <!-- 工作区 -->
             <div id="workarea" style="position: absolute; top : 0; left: 18%; width: 82%; height: 100%;">
                 <iframe style="border-width: 0; width: 100%; height: 100%;" name="workareaFrame"></iframe>
             </div>
-
         </div>
         <div id="divider2"
              style="height: 1px; width: 100%; position: absolute;bottom: 30px; background-color: #B3B3B3;"></div>

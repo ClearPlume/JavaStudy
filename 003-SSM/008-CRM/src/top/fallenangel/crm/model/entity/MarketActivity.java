@@ -1,5 +1,6 @@
 package top.fallenangel.crm.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fallenangel.crm.template.impl.BaseEntity;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * @author 坠天使
  */
 public class MarketActivity extends BaseEntity implements Serializable {
+    @JsonIgnore
     private Integer activityId;
 
     /**
@@ -22,33 +24,39 @@ public class MarketActivity extends BaseEntity implements Serializable {
     /**
      * 活动内容
      */
+    @JsonIgnore
     private String activityContent;
 
     /**
      * 参与对象
      */
+    @JsonIgnore
     private String activityPerson;
 
     /**
      * 活动地点
      */
+    @JsonIgnore
     private String activityPlace;
 
     /**
      * 开始时间
      */
+    @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityStartTime;
 
     /**
      * 结束时间
      */
+    @JsonIgnore
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date activityEndTime;
 
     /**
      * 活动成本
      */
+    @JsonIgnore
     private Double activityCost;
 
     private static final long serialVersionUID = 1L;

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.ILinkmanDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Linkman">
+        <id column="linkman_id" jdbcType="INTEGER" property="linkmanId"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customer.customerId"/>
+        <result column="linkman_name" jdbcType="VARCHAR" property="linkmanName"/>
+        <result column="linkman_sex" jdbcType="BIT" property="linkmanSex"/>
+        <result column="linkman_age" jdbcType="INTEGER" property="linkmanAge"/>
+        <result column="linkman_job" jdbcType="VARCHAR" property="linkmanJob"/>
+        <result column="appellation" jdbcType="INTEGER" property="appellation"/>
+        <result column="linkman_dept" jdbcType="VARCHAR" property="linkmanDept"/>
+        <result column="linkman_phone" jdbcType="VARCHAR" property="linkmanPhone"/>
+        <result column="linkman_mobile_phone" jdbcType="VARCHAR" property="linkmanMobilePhone"/>
+        <result column="linkman_mail" jdbcType="VARCHAR" property="linkmanMail"/>
+        <result column="linkman_address" jdbcType="VARCHAR" property="linkmanAddress"/>
+        <result column="linkman_birthday" jdbcType="DATE" property="linkmanBirthday"/>
+        <result column="linkman_next_date" jdbcType="TIMESTAMP" property="linkmanNextDate"/>
+        <result column="linkman_remark" jdbcType="VARCHAR" property="linkmanRemark"/>
+        <result column="create_by" jdbcType="INTEGER" property="creator.employeeId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updater.employeeId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        linkman_id, customer_id, linkman_name, linkman_sex, linkman_age, linkman_job, appellation,
+    linkman_dept, linkman_phone, linkman_mobile_phone, linkman_mail, linkman_address, 
+    linkman_birthday, linkman_next_date, linkman_remark, create_by, create_time, update_by, 
+    update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_linkman
+        where linkman_id = #{linkmanId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_linkman
+    </select>
+    <select id="relatedLinkman" resultType="java.util.Map">
+        select l.linkman_id, linkman_name
+        from t_linkman l
+                 left join t_customer c on l.customer_id = c.customer_id
+        where l.customer_id = #{customerId}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_linkman
+        where linkman_id = #{linkmanId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="linkman_id" keyProperty="linkmanId"
+            parameterType="top.fallenangel.crm.model.entity.Linkman" useGeneratedKeys="true">
+        insert into t_linkman (customer_id, linkman_name, linkman_sex,
+                               linkman_age, linkman_job, appellation,
+                               linkman_dept, linkman_phone, linkman_mobile_phone,
+                               linkman_mail, linkman_address, linkman_birthday,
+                               linkman_next_date, linkman_remark, create_by,
+                               create_time, update_by, update_time)
+        values (#{customerId,jdbcType=INTEGER}, #{linkmanName,jdbcType=VARCHAR}, #{linkmanSex,jdbcType=BIT},
+                #{linkmanAge,jdbcType=INTEGER}, #{linkmanJob,jdbcType=VARCHAR}, #{appellation,jdbcType=INTEGER},
+                #{linkmanDept,jdbcType=VARCHAR}, #{linkmanPhone,jdbcType=VARCHAR},
+                #{linkmanMobilePhone,jdbcType=VARCHAR},
+                #{linkmanMail,jdbcType=VARCHAR}, #{linkmanAddress,jdbcType=VARCHAR}, #{linkmanBirthday,jdbcType=DATE},
+                #{linkmanNextDate,jdbcType=TIMESTAMP}, #{linkmanRemark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="linkman_id" keyProperty="linkmanId"
+            parameterType="top.fallenangel.crm.model.entity.Linkman" useGeneratedKeys="true">
+        insert into t_linkman
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="linkmanName != null">
+                linkman_name,
+            </if>
+            <if test="linkmanSex != null">
+                linkman_sex,
+            </if>
+            <if test="linkmanAge != null">
+                linkman_age,
+            </if>
+            <if test="linkmanJob != null">
+                linkman_job,
+            </if>
+            <if test="appellation != null">
+                appellation,
+            </if>
+            <if test="linkmanDept != null">
+                linkman_dept,
+            </if>
+            <if test="linkmanPhone != null">
+                linkman_phone,
+            </if>
+            <if test="linkmanMobilePhone != null">
+                linkman_mobile_phone,
+            </if>
+            <if test="linkmanMail != null">
+                linkman_mail,
+            </if>
+            <if test="linkmanAddress != null">
+                linkman_address,
+            </if>
+            <if test="linkmanBirthday != null">
+                linkman_birthday,
+            </if>
+            <if test="linkmanNextDate != null">
+                linkman_next_date,
+            </if>
+            <if test="linkmanRemark != null">
+                linkman_remark,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="linkmanName != null">
+                #{linkmanName,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanSex != null">
+                #{linkmanSex,jdbcType=BIT},
+            </if>
+            <if test="linkmanAge != null">
+                #{linkmanAge,jdbcType=INTEGER},
+            </if>
+            <if test="linkmanJob != null">
+                #{linkmanJob,jdbcType=VARCHAR},
+            </if>
+            <if test="appellation != null">
+                #{appellation,jdbcType=INTEGER},
+            </if>
+            <if test="linkmanDept != null">
+                #{linkmanDept,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanPhone != null">
+                #{linkmanPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMobilePhone != null">
+                #{linkmanMobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMail != null">
+                #{linkmanMail,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanAddress != null">
+                #{linkmanAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanBirthday != null">
+                #{linkmanBirthday,jdbcType=DATE},
+            </if>
+            <if test="linkmanNextDate != null">
+                #{linkmanNextDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="linkmanRemark != null">
+                #{linkmanRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Linkman">
+        update t_linkman
+        <set>
+            <if test="customerId != null">
+                customer_id = #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="linkmanName != null">
+                linkman_name = #{linkmanName,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanSex != null">
+                linkman_sex = #{linkmanSex,jdbcType=BIT},
+            </if>
+            <if test="linkmanAge != null">
+                linkman_age = #{linkmanAge,jdbcType=INTEGER},
+            </if>
+            <if test="linkmanJob != null">
+                linkman_job = #{linkmanJob,jdbcType=VARCHAR},
+            </if>
+            <if test="appellation != null">
+                appellation = #{appellation,jdbcType=INTEGER},
+            </if>
+            <if test="linkmanDept != null">
+                linkman_dept = #{linkmanDept,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanPhone != null">
+                linkman_phone = #{linkmanPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMobilePhone != null">
+                linkman_mobile_phone = #{linkmanMobilePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanMail != null">
+                linkman_mail = #{linkmanMail,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanAddress != null">
+                linkman_address = #{linkmanAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="linkmanBirthday != null">
+                linkman_birthday = #{linkmanBirthday,jdbcType=DATE},
+            </if>
+            <if test="linkmanNextDate != null">
+                linkman_next_date = #{linkmanNextDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="linkmanRemark != null">
+                linkman_remark = #{linkmanRemark,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where linkman_id = #{linkmanId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Linkman">
+        update t_linkman
+        set customer_id          = #{customerId,jdbcType=INTEGER},
+            linkman_name         = #{linkmanName,jdbcType=VARCHAR},
+            linkman_sex          = #{linkmanSex,jdbcType=BIT},
+            linkman_age          = #{linkmanAge,jdbcType=INTEGER},
+            linkman_job          = #{linkmanJob,jdbcType=VARCHAR},
+            appellation          = #{appellation,jdbcType=INTEGER},
+            linkman_dept         = #{linkmanDept,jdbcType=VARCHAR},
+            linkman_phone        = #{linkmanPhone,jdbcType=VARCHAR},
+            linkman_mobile_phone = #{linkmanMobilePhone,jdbcType=VARCHAR},
+            linkman_mail         = #{linkmanMail,jdbcType=VARCHAR},
+            linkman_address      = #{linkmanAddress,jdbcType=VARCHAR},
+            linkman_birthday     = #{linkmanBirthday,jdbcType=DATE},
+            linkman_next_date    = #{linkmanNextDate,jdbcType=TIMESTAMP},
+            linkman_remark       = #{linkmanRemark,jdbcType=VARCHAR},
+            create_by            = #{createBy,jdbcType=INTEGER},
+            create_time          = #{createTime,jdbcType=TIMESTAMP},
+            update_by            = #{updateBy,jdbcType=INTEGER},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where linkman_id = #{linkmanId,jdbcType=INTEGER}
+    </update>
+</mapper>

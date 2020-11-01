@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.IDealDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Deal">
+        <id column="deal_id" jdbcType="INTEGER" property="dealId"/>
+        <result column="clue_id" jdbcType="INTEGER" property="clue.clueId"/>
+        <result column="clue_title" jdbcType="VARCHAR" property="clue.clueTitle"/>
+        <result column="activity_id" jdbcType="INTEGER" property="activity.activityId"/>
+        <result column="linkman_id" jdbcType="INTEGER" property="linkman.linkmanId"/>
+        <result column="linkman_name" jdbcType="VARCHAR" property="linkman.linkmanName"/>
+        <result column="customer_id" jdbcType="INTEGER" property="linkman.customer.customerId"/>
+        <result column="customer_name" jdbcType="VARCHAR" property="linkman.customer.customerName"/>
+        <result column="deal_no" jdbcType="CHAR" property="dealNo"/>
+        <result column="deal_name" jdbcType="VARCHAR" property="dealName"/>
+        <result column="deal_content" jdbcType="VARCHAR" property="dealContent"/>
+        <result column="deal_type" jdbcType="INTEGER" property="dealType"/>
+        <result column="deal_plan_time" jdbcType="TIMESTAMP" property="dealPlanTime"/>
+        <result column="deal_actual_time" jdbcType="TIMESTAMP" property="dealActualTime"/>
+        <result column="deal_amount" jdbcType="DOUBLE" property="dealAmount"/>
+        <result column="deal_source" jdbcType="INTEGER" property="dealSource"/>
+        <result column="deal_way" jdbcType="INTEGER" property="dealWay"/>
+        <result column="create_by" jdbcType="INTEGER" property="creator.employeeId"/>
+        <result column="creator_name" jdbcType="VARCHAR" property="creator.employeeName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updater.employeeId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        deal_id, clue_id, activity_id, linkman_id, deal_no, deal_name, deal_content, deal_type,
+    deal_plan_time, deal_actual_time, deal_amount, deal_source, deal_way, create_by, create_time, update_by, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select d.deal_id,
+               d.clue_id,
+               cl.clue_title,
+               d.activity_id,
+               d.linkman_id,
+               l.linkman_name,
+               c.customer_id,
+               c.customer_name,
+               d.deal_no,
+               d.deal_name,
+               d.deal_content,
+               d.deal_type,
+               d.deal_plan_time,
+               d.deal_actual_time,
+               d.deal_amount,
+               d.deal_source,
+               d.deal_way,
+               d.create_by,
+               ec.employee_name creator_name,
+               d.create_time,
+               d.update_by,
+               d.update_time
+        from t_deal d
+                 left join t_employee ec on d.create_by = ec.employee_id
+                 left join t_linkman l on d.linkman_id = l.linkman_id
+                 left join t_customer c on l.customer_id = c.customer_id
+                 left join t_clue cl on d.clue_id = cl.clue_id
+        where deal_id = #{dealId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select d.deal_id,
+        d.clue_id,
+        cl.clue_title,
+        d.activity_id,
+        d.linkman_id,
+        l.linkman_name,
+        c.customer_name,
+        d.deal_no,
+        d.deal_name,
+        d.deal_content,
+        d.deal_type,
+        d.deal_plan_time,
+        d.deal_actual_time,
+        d.deal_amount,
+        d.deal_source,
+        d.deal_way,
+        d.create_by,
+        ec.employee_name creator_name,
+        d.create_time,
+        d.update_by,
+        d.update_time
+        from t_deal d
+        left join t_employee ec on d.create_by = ec.employee_id
+        left join t_linkman l on d.linkman_id = l.linkman_id
+        left join t_customer c on l.customer_id = c.customer_id
+        left join t_clue cl on d.clue_id = cl.clue_id
+        <if test="dealStage != null and dealStage != ''">
+            left join t_deal_stage ds on d.deal_id = ds.deal_id
+        </if>
+        <where>
+            <if test="dealName != null and dealName != ''">
+                d.deal_name like concat('%', #{dealName}, '%')
+            </if>
+            <if test="linkman != null and linkman.customer != null and linkman.customer.customerName != null and linkman.customer.customerName != ''">
+                and c.customer_name like concat('%', #{linkman.customer.customerName}, '%')
+            </if>
+            <if test="dealStage != null and dealStage != ''">
+                and ds.stage_current = 1
+                and ds.stage_name like concat('%', #{dealStage}, '%')
+            </if>
+            <if test="dealType != null">
+                and d.deal_type = #{dealType}
+            </if>
+            <if test="dealSource != null">
+                and d.deal_source = #{dealSource}
+            </if>
+            <if test="linkman != null and linkman.linkmanName != '' and linkman.linkmanName != ''">
+                and l.linkman_name like concat('%', #{linkman.linkmanName}, '%')
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_deal
+        where deal_id = #{dealId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="deal_id" keyProperty="dealId" parameterType="top.fallenangel.crm.model.entity.Deal"
+            useGeneratedKeys="true">
+        insert into t_deal (clue_id, activity_id, linkman_id,
+                            deal_no, deal_name, deal_content,
+                            deal_type, deal_plan_time, deal_actual_time,
+                            deal_amount, deal_source, deal_way,
+                            create_by, create_time,
+                            update_by, update_time)
+        values (#{clue.clueId,jdbcType=INTEGER}, #{activity.activityId,jdbcType=INTEGER},
+                #{linkman.linkmanId,jdbcType=INTEGER},
+                #{dealNo,jdbcType=CHAR}, #{dealName,jdbcType=VARCHAR}, #{dealContent,jdbcType=VARCHAR},
+                #{dealType,jdbcType=INTEGER}, #{dealPlanTime,jdbcType=TIMESTAMP}, #{dealActualTime,jdbcType=TIMESTAMP},
+                #{dealAmount,jdbcType=DOUBLE}, #{dealSource,jdbcType=INTEGER}, #{dealWay,jdbcType=INTEGER},
+                #{creator.employeeId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+                #{updater.employeeId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="deal_id" keyProperty="dealId"
+            parameterType="top.fallenangel.crm.model.entity.Deal" useGeneratedKeys="true">
+        insert into t_deal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="clue != null and clue.clueId != null">
+                clue_id,
+            </if>
+            <if test="activity != null and activity.activityId != null">
+                activity_id,
+            </if>
+            <if test="linkman != null and linkman.linkmanId != null">
+                linkman_id,
+            </if>
+            <if test="dealNo != null">
+                deal_no,
+            </if>
+            <if test="dealName != null">
+                deal_name,
+            </if>
+            <if test="dealContent != null">
+                deal_content,
+            </if>
+            <if test="dealType != null">
+                deal_type,
+            </if>
+            <if test="dealPlanTime != null">
+                deal_plan_time,
+            </if>
+            <if test="dealActualTime != null">
+                deal_actual_time,
+            </if>
+            <if test="dealAmount != null">
+                deal_amount,
+            </if>
+            <if test="dealSource != null">
+                deal_source,
+            </if>
+            <if test="dealWay != null">
+                deal_way,
+            </if>
+            <if test="creator != null and creator.employeeId != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updater != null and updater.employeeId != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="clue.clueId != null">
+                #{clue.clueId,jdbcType=INTEGER},
+            </if>
+            <if test="activity != null and activity.activityId != null">
+                #{activity.activityId,jdbcType=INTEGER},
+            </if>
+            <if test="linkman.linkmanId != null">
+                #{linkman.linkmanId,jdbcType=INTEGER},
+            </if>
+            <if test="dealNo != null">
+                #{dealNo,jdbcType=CHAR},
+            </if>
+            <if test="dealName != null">
+                #{dealName,jdbcType=VARCHAR},
+            </if>
+            <if test="dealContent != null">
+                #{dealContent,jdbcType=VARCHAR},
+            </if>
+            <if test="dealType != null">
+                #{dealType,jdbcType=INTEGER},
+            </if>
+            <if test="dealPlanTime != null">
+                #{dealPlanTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealActualTime != null">
+                #{dealActualTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealAmount != null">
+                #{dealAmount,jdbcType=DOUBLE},
+            </if>
+            <if test="dealSource != null">
+                #{dealSource,jdbcType=INTEGER},
+            </if>
+            <if test="dealWay != null">
+                #{dealWay,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null and creator.employeeId != null">
+                #{creator.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null and updater.employeeId != null">
+                #{updater.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Deal">
+        update t_deal
+        <set>
+            <if test="clue.clueId != null">
+                clue_id = #{clue.clueId,jdbcType=INTEGER},
+            </if>
+            <if test="activity != null and activity.activityId != null">
+                activity_id = #{activity.activityId,jdbcType=INTEGER},
+            </if>
+            <if test="linkman.linkmanId != null">
+                linkman_id = #{linkman.linkmanId,jdbcType=INTEGER},
+            </if>
+            <if test="dealNo != null">
+                deal_no = #{dealNo,jdbcType=CHAR},
+            </if>
+            <if test="dealName != null">
+                deal_name = #{dealName,jdbcType=VARCHAR},
+            </if>
+            <if test="dealContent != null">
+                deal_content = #{dealContent,jdbcType=VARCHAR},
+            </if>
+            <if test="dealType != null">
+                deal_type = #{dealType,jdbcType=INTEGER},
+            </if>
+            <if test="dealPlanTime != null">
+                deal_plan_time = #{dealPlanTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealActualTime != null">
+                deal_actual_time = #{dealActualTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="dealAmount != null">
+                deal_amount = #{dealAmount,jdbcType=DOUBLE},
+            </if>
+            <if test="dealSource != null">
+                deal_source = #{dealSource,jdbcType=INTEGER},
+            </if>
+            <if test="dealWay != null">
+                deal_way = #{dealWay,jdbcType=INTEGER},
+            </if>
+            <if test="creator != null and creator.employeeId != null">
+                create_by = #{creator.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updater != null and updater.employeeId != null">
+                update_by = #{updater.employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where deal_id = #{dealId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Deal">
+        update t_deal
+        set clue_id          = #{clue.clueId,jdbcType=INTEGER},
+            activity_id      = #{activity.activityId,jdbcType=INTEGER},
+            linkman_id       = #{linkman.linkmanId,jdbcType=INTEGER},
+            deal_no          = #{dealNo,jdbcType=CHAR},
+            deal_name        = #{dealName,jdbcType=VARCHAR},
+            deal_content     = #{dealContent,jdbcType=VARCHAR},
+            deal_type        = #{dealType,jdbcType=INTEGER},
+            deal_plan_time   = #{dealPlanTime,jdbcType=TIMESTAMP},
+            deal_actual_time = #{dealActualTime,jdbcType=TIMESTAMP},
+            deal_amount      = #{dealAmount,jdbcType=DOUBLE},
+            deal_source      = #{dealSource,jdbcType=INTEGER},
+            deal_way         = #{dealWay,jdbcType=INTEGER},
+            create_by        = #{creator.employeeId,jdbcType=INTEGER},
+            create_time      = #{createTime,jdbcType=TIMESTAMP},
+            update_by        = #{updater.employeeId,jdbcType=INTEGER},
+            update_time      = #{updateTime,jdbcType=TIMESTAMP}
+        where deal_id = #{dealId,jdbcType=INTEGER}
+    </update>
+</mapper>

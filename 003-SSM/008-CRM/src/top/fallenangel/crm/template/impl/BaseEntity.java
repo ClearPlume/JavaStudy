@@ -1,5 +1,6 @@
 package top.fallenangel.crm.template.impl;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.fallenangel.crm.model.entity.Employee;
 
@@ -15,6 +16,7 @@ public class BaseEntity {
      * 创建时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date createTime;
 
     /**
@@ -26,6 +28,7 @@ public class BaseEntity {
      * 修改时间
      */
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     private Date updateTime;
 
     public Employee getCreator() {

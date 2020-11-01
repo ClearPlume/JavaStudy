@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.crm.model.dao.ICustomerDao">
+    <resultMap id="BaseResultMap" type="top.fallenangel.crm.model.entity.Customer">
+        <id column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="customer_name" jdbcType="VARCHAR" property="customerName"/>
+        <result column="customer_net" jdbcType="VARCHAR" property="customerNet"/>
+        <result column="customer_phone" jdbcType="VARCHAR" property="customerPhone"/>
+        <result column="customer_address" jdbcType="VARCHAR" property="customerAddress"/>
+        <result column="costumer_description" jdbcType="VARCHAR" property="costumerDescription"/>
+        <result column="costumer_star" jdbcType="INTEGER" property="costumerStar"/>
+        <result column="create_by" jdbcType="INTEGER" property="creator.employeeId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updater.employeeId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        customer_id, customer_name, customer_net, customer_phone, customer_address, costumer_description,
+    costumer_star, create_by, create_time, update_by, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_customer
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_customer
+    </select>
+    <select id="relatedCustomer" resultType="java.util.Map">
+        select customer_id, customer_name
+        from t_customer
+        where customer_name like concat('%', #{linkman}, '%')
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_customer
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" keyColumn="customer_id" keyProperty="customerId"
+            parameterType="top.fallenangel.crm.model.entity.Customer" useGeneratedKeys="true">
+        insert into t_customer (customer_name, customer_net, customer_phone,
+                                customer_address, costumer_description, costumer_star,
+                                create_by, create_time, update_by,
+                                update_time)
+        values (#{customerName,jdbcType=VARCHAR}, #{customerNet,jdbcType=VARCHAR}, #{customerPhone,jdbcType=VARCHAR},
+                #{customerAddress,jdbcType=VARCHAR}, #{costumerDescription,jdbcType=VARCHAR},
+                #{costumerStar,jdbcType=INTEGER},
+                #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER},
+                #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" keyColumn="customer_id" keyProperty="customerId"
+            parameterType="top.fallenangel.crm.model.entity.Customer" useGeneratedKeys="true">
+        insert into t_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerName != null">
+                customer_name,
+            </if>
+            <if test="customerNet != null">
+                customer_net,
+            </if>
+            <if test="customerPhone != null">
+                customer_phone,
+            </if>
+            <if test="customerAddress != null">
+                customer_address,
+            </if>
+            <if test="costumerDescription != null">
+                costumer_description,
+            </if>
+            <if test="costumerStar != null">
+                costumer_star,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerName != null">
+                #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerNet != null">
+                #{customerNet,jdbcType=VARCHAR},
+            </if>
+            <if test="customerPhone != null">
+                #{customerPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="customerAddress != null">
+                #{customerAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="costumerDescription != null">
+                #{costumerDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="costumerStar != null">
+                #{costumerStar,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.crm.model.entity.Customer">
+        update t_customer
+        <set>
+            <if test="customerName != null">
+                customer_name = #{customerName,jdbcType=VARCHAR},
+            </if>
+            <if test="customerNet != null">
+                customer_net = #{customerNet,jdbcType=VARCHAR},
+            </if>
+            <if test="customerPhone != null">
+                customer_phone = #{customerPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="customerAddress != null">
+                customer_address = #{customerAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="costumerDescription != null">
+                costumer_description = #{costumerDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="costumerStar != null">
+                costumer_star = #{costumerStar,jdbcType=INTEGER},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.crm.model.entity.Customer">
+        update t_customer
+        set customer_name        = #{customerName,jdbcType=VARCHAR},
+            customer_net         = #{customerNet,jdbcType=VARCHAR},
+            customer_phone       = #{customerPhone,jdbcType=VARCHAR},
+            customer_address     = #{customerAddress,jdbcType=VARCHAR},
+            costumer_description = #{costumerDescription,jdbcType=VARCHAR},
+            costumer_star        = #{costumerStar,jdbcType=INTEGER},
+            create_by            = #{createBy,jdbcType=INTEGER},
+            create_time          = #{createTime,jdbcType=TIMESTAMP},
+            update_by            = #{updateBy,jdbcType=INTEGER},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where customer_id = #{customerId,jdbcType=INTEGER}
+    </update>
+</mapper>

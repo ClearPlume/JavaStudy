@@ -2,6 +2,8 @@ package top.fallenangel.crm.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.InternalResourceView;
 import top.fallenangel.crm.model.entity.Employee;
 import top.fallenangel.crm.service.IEmployeeService;
 import top.fallenangel.crm.util.Constants;
@@ -27,8 +29,10 @@ public class LoginController {
     }
 
     @RequestMapping("logout")
-    public String logout() {
+    public ModelAndView logout() {
         Util.removeObjectFromSession(Constants.LOGIN_EMPLOYEE);
-        return "redirect:index";
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setView(new InternalResourceView("/WEB-INF/pages/login.jsp"));
+        return modelAndView;
     }
 }

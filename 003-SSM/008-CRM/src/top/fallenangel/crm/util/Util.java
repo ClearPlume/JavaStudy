@@ -1,12 +1,11 @@
 package top.fallenangel.crm.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.fallenangel.crm.model.entity.Dept;
-import top.fallenangel.crm.model.entity.Dictionary;
-import top.fallenangel.crm.model.entity.DictionaryType;
-import top.fallenangel.crm.model.entity.Employee;
+import top.fallenangel.crm.model.entity.*;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Util {
@@ -72,6 +72,19 @@ public class Util {
         return dt;
     }
 
+    public static Map<Integer, Dictionary> getDictionariesByTypeCodeFromApplication(String code) {
+        Map<DictionaryType, Map<Integer, Dictionary>> dictionaries = getDictionariesFromApplication();
+        DictionaryType dt = new DictionaryType();
+
+        for (DictionaryType dictionaryType : dictionaries.keySet()) {
+            if (dictionaryType.getDictionaryTypeCode().equals(code)) {
+                dt = dictionaryType;
+                break;
+            }
+        }
+        return dictionaries.get(dt);
+    }
+
     public static Map<Integer, Dictionary> getDictionariesFromApplicationByType(int dictionaryTypeId) {
         Map<DictionaryType, Map<Integer, Dictionary>> dictionaries = getDictionariesFromApplication();
         @SuppressWarnings("unchecked") final Map<Integer, Dictionary>[] dictionaryMap = new Map[]{new LinkedHashMap<>()};
@@ -106,5 +119,44 @@ public class Util {
     public static Map<Integer, Dept> getDeptsFromApplication() {
         //noinspection unchecked
         return (Map<Integer, Dept>) getServletContext().getAttribute(Constants.DEPTS_IN_APPLICATION);
+    }
+
+    public static String getDealNo() {
+        //noinspection SpellCheckingInspection
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        return format.format(new Date()) + randNum(15);
+    }
+
+    public static String randNum(int n) {
+        StringBuilder num = new StringBuilder();
+        Random random = new Random();
+
+        for (int i = 0; i < n; i++) {
+            num.append(random.nextInt(10));
+        }
+
+        return num.toString();
+    }
+
+    public static DealStage getCurrStage(Deal deal) {
+        DealStage curr = null;
+
+        for (DealStage dealStage : deal.getDealStages()) {
+            if (dealStage.getStageCurrent()) {
+                curr = dealStage;
+                break;
+            }
+        }
+        return curr;
+    }
+
+    public static String parseJSON(Object obj) {
+        String json = "";
+        try {
+            json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 }

@@ -22,4 +22,46 @@
             u:dateFormat(startTime, "yyyy-MM-dd")
         </example>
     </function>
+
+    <function>
+        <description>
+            按照code从字典中取出对应类型的全部字典值Map
+        </description>
+        <name>getTypesByCode</name>
+        <function-class>top.fallenangel.crm.util.Util</function-class>
+        <function-signature>
+            java.util.Map getDictionariesByTypeCodeFromApplication(java.lang.String)
+        </function-signature>
+        <example>
+            u:getTypesByCode(code)
+        </example>
+    </function>
+
+    <function>
+        <description>
+            从交易中取出当前阶段
+        </description>
+        <name>getCurrStage</name>
+        <function-class>top.fallenangel.crm.util.Util</function-class>
+        <function-signature>
+            top.fallenangel.crm.model.entity.DealStage getCurrStage(top.fallenangel.crm.model.entity.Deal)
+        </function-signature>
+        <example>
+            u:getCurrStage(deal)
+        </example>
+    </function>
+
+    <function>
+        <description>
+            将对象转为JSON
+        </description>
+        <name>parseJSON</name>
+        <function-class>top.fallenangel.crm.util.Util</function-class>
+        <function-signature>
+            java.lang.String parseJSON(java.lang.Object)
+        </function-signature>
+        <example>
+            u:parseJSON(obj)
+        </example>
+    </function>
 </taglib>
