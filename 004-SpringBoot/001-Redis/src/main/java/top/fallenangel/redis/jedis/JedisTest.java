@@ -9,7 +9,7 @@ import java.util.Map;
 public class JedisTest {
     public static void main(String[] args) {
         // 连接Redis
-        Jedis jedis = new Jedis("127.0.0.1", 6379);
+        Jedis jedis = JedisPoolUtil.get("127.0.0.1", 6379);
 
         // 字符串操作
         System.out.println("jedis.set(\"name\", \"张三\") = " + jedis.set("name", "张三"));
