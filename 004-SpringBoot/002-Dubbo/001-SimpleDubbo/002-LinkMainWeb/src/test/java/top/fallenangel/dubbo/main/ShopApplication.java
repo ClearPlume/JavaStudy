@@ -1,3 +1,5 @@
+package top.fallenangel.dubbo.main;
+
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import top.fallenangel.dubbo.main.service.impl.ShopService;

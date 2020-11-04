@@ -1,3 +1,5 @@
+package top.fallenangel.dubbo.order;
+
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
