@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!--服务提供者的名称，是dubbo内部使用的唯一标识-->
+    <dubbo:application name="001-Link-OrderService-Provider"/>
+
+    <!--访问服务协议的名称及端口号-->
+    <dubbo:protocol name="dubbo" port="20880"/>
+
+    <!--
+        暴露服务接口
+
+        interface：暴露服务的接口全限定类名
+        ref：暴露服务接口的实现类的bean id
+        registry：注册中心 N/A表示不使用注册中心，直连
+    -->
+    <dubbo:service interface="top.fallenangel.dubbo.order.service.IOrderService" ref="orderService" registry="N/A"/>
+
+    <!--暴露接口的实现类加载到Spring容器中-->
+    <bean id="orderService" class="top.fallenangel.dubbo.order.service.impl.OrderService"/>
+</beans>

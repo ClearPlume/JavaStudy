@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!--dubbo服务名称，dubbo内部的标识-->
+    <dubbo:application name="002-link-main-web"/>
+
+    <!--
+        引用远程接口服务
+
+        id：远程接口服务代理对象名称
+        interface：远程接口全限定类名
+        url：远程服务提供者地址
+        registry：不使用注册中心，直连
+    -->
+    <dubbo:reference id="remoteOrderService" interface="top.fallenangel.dubbo.order.service.IOrderService"
+                     url="dubbo://localhost:20880" registry="N/A"/>
+
+    <!--加载bean对象-->
+    <bean id="shopService" class="top.fallenangel.dubbo.main.service.impl.ShopService">
+        <property name="orderService" ref="remoteOrderService"/>
+    </bean>
+</beans>
