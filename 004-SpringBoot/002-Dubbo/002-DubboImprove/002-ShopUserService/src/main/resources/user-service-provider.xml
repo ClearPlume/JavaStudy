@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!--服务名称-->
+    <dubbo:application name="002-ShopUserService"/>
+
+    <!--服务协议-->
+    <dubbo:protocol name="dubbo" port="20880"/>
+
+    <!--
+        服务接口
+
+        interface：服务接口全限定类名
+        ref：服务接口实现类
+        registry：注册中心。“N/A”表示不使用注册中心
+    -->
+    <dubbo:service interface="top.fallenangel.dubbo.improve.service.IUserService" ref="userService" registry="N/A"/>
+
+    <!--服务接口的实现类-->
+    <bean id="userService" class="top.fallenangel.dubbo.improve.service.UserService"/>
+</beans>

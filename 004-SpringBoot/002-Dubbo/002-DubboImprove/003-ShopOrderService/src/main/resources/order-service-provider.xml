@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://dubbo.apache.org/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://dubbo.apache.org/schema/dubbo http://dubbo.apache.org/schema/dubbo/dubbo.xsd">
+    <!--服务名称-->
+    <dubbo:application name="003-ShopOrderService"/>
+
+    <!--服务协议-->
+    <dubbo:protocol name="dubbo" port="20881"/>
+
+    <!--
+        服务接口
+
+        interface：服务接口全限定名
+        ref：服务接口实现类
+        registry：注册中心。“N/A”表示不用注册中心
+    -->
+    <dubbo:service interface="top.fallenangel.dubbo.improve.service.IOrderService" ref="orderService" registry="N/A"/>
+
+    <!--服务接口实现类-->
+    <bean id="orderService" class="top.fallenangel.dubbo.improve.service.OrderService"/>
+</beans>
