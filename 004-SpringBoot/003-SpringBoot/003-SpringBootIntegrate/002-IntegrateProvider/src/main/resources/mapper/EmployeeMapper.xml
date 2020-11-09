@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.springboot.integrate_provider.model.mapper.EmployeeMapper">
+    <resultMap id="BaseResultMap" type="top.fallenangel.springboot.integrate_interface.model.entity.Employee">
+        <id column="employee_id" jdbcType="INTEGER" property="employeeId"/>
+        <result column="dept_id" jdbcType="INTEGER" property="deptId"/>
+        <result column="employee_no" jdbcType="VARCHAR" property="employeeNo"/>
+        <result column="employee_pwd" jdbcType="VARCHAR" property="employeePwd"/>
+        <result column="employee_name" jdbcType="VARCHAR" property="employeeName"/>
+        <result column="employee_sex" jdbcType="CHAR" property="employeeSex"/>
+        <result column="employee_age" jdbcType="INTEGER" property="employeeAge"/>
+        <result column="employee_phone" jdbcType="VARCHAR" property="employeePhone"/>
+        <result column="employee_card_no" jdbcType="VARCHAR" property="employeeCardNo"/>
+        <result column="employee_mail" jdbcType="VARCHAR" property="employeeMail"/>
+        <result column="employee_birthday" jdbcType="DATE" property="employeeBirthday"/>
+        <result column="employee_job" jdbcType="VARCHAR" property="employeeJob"/>
+        <result column="employee_address" jdbcType="VARCHAR" property="employeeAddress"/>
+        <result column="employee_expire_time" jdbcType="TIMESTAMP" property="employeeExpireTime"/>
+        <result column="employee_status" jdbcType="INTEGER" property="employeeStatus"/>
+        <result column="employee_allowed_ips" jdbcType="VARCHAR" property="employeeAllowedIps"/>
+        <result column="create_by" jdbcType="INTEGER" property="createBy"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_by" jdbcType="INTEGER" property="updateBy"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        employee_id, dept_id, employee_no, employee_pwd, employee_name, employee_sex, employee_age,
+    employee_phone, employee_card_no, employee_mail, employee_birthday, employee_job, 
+    employee_address, employee_expire_time, employee_status, employee_allowed_ips, create_by, 
+    create_time, update_by, update_time
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_employee
+        where employee_id = #{employeeId,jdbcType=INTEGER}
+    </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(1)
+        from t_employee
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_employee
+        where employee_id = #{employeeId,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="top.fallenangel.springboot.integrate_interface.model.entity.Employee">
+        insert into t_employee (employee_id, dept_id, employee_no,
+                                employee_pwd, employee_name, employee_sex,
+                                employee_age, employee_phone, employee_card_no,
+                                employee_mail, employee_birthday, employee_job,
+                                employee_address, employee_expire_time,
+                                employee_status, employee_allowed_ips, create_by,
+                                create_time, update_by, update_time)
+        values (#{employeeId,jdbcType=INTEGER}, #{deptId,jdbcType=INTEGER}, #{employeeNo,jdbcType=VARCHAR},
+                #{employeePwd,jdbcType=VARCHAR}, #{employeeName,jdbcType=VARCHAR}, #{employeeSex,jdbcType=CHAR},
+                #{employeeAge,jdbcType=INTEGER}, #{employeePhone,jdbcType=VARCHAR}, #{employeeCardNo,jdbcType=VARCHAR},
+                #{employeeMail,jdbcType=VARCHAR}, #{employeeBirthday,jdbcType=DATE}, #{employeeJob,jdbcType=VARCHAR},
+                #{employeeAddress,jdbcType=VARCHAR}, #{employeeExpireTime,jdbcType=TIMESTAMP},
+                #{employeeStatus,jdbcType=INTEGER}, #{employeeAllowedIps,jdbcType=VARCHAR},
+                #{createBy,jdbcType=INTEGER},
+                #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="top.fallenangel.springboot.integrate_interface.model.entity.Employee">
+        insert into t_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeId != null">
+                employee_id,
+            </if>
+            <if test="deptId != null">
+                dept_id,
+            </if>
+            <if test="employeeNo != null">
+                employee_no,
+            </if>
+            <if test="employeePwd != null">
+                employee_pwd,
+            </if>
+            <if test="employeeName != null">
+                employee_name,
+            </if>
+            <if test="employeeSex != null">
+                employee_sex,
+            </if>
+            <if test="employeeAge != null">
+                employee_age,
+            </if>
+            <if test="employeePhone != null">
+                employee_phone,
+            </if>
+            <if test="employeeCardNo != null">
+                employee_card_no,
+            </if>
+            <if test="employeeMail != null">
+                employee_mail,
+            </if>
+            <if test="employeeBirthday != null">
+                employee_birthday,
+            </if>
+            <if test="employeeJob != null">
+                employee_job,
+            </if>
+            <if test="employeeAddress != null">
+                employee_address,
+            </if>
+            <if test="employeeExpireTime != null">
+                employee_expire_time,
+            </if>
+            <if test="employeeStatus != null">
+                employee_status,
+            </if>
+            <if test="employeeAllowedIps != null">
+                employee_allowed_ips,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employeeId != null">
+                #{employeeId,jdbcType=INTEGER},
+            </if>
+            <if test="deptId != null">
+                #{deptId,jdbcType=INTEGER},
+            </if>
+            <if test="employeeNo != null">
+                #{employeeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="employeePwd != null">
+                #{employeePwd,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeName != null">
+                #{employeeName,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeSex != null">
+                #{employeeSex,jdbcType=CHAR},
+            </if>
+            <if test="employeeAge != null">
+                #{employeeAge,jdbcType=INTEGER},
+            </if>
+            <if test="employeePhone != null">
+                #{employeePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeCardNo != null">
+                #{employeeCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeMail != null">
+                #{employeeMail,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeBirthday != null">
+                #{employeeBirthday,jdbcType=DATE},
+            </if>
+            <if test="employeeJob != null">
+                #{employeeJob,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeAddress != null">
+                #{employeeAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeExpireTime != null">
+                #{employeeExpireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="employeeStatus != null">
+                #{employeeStatus,jdbcType=INTEGER},
+            </if>
+            <if test="employeeAllowedIps != null">
+                #{employeeAllowedIps,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="top.fallenangel.springboot.integrate_interface.model.entity.Employee">
+        update t_employee
+        <set>
+            <if test="deptId != null">
+                dept_id = #{deptId,jdbcType=INTEGER},
+            </if>
+            <if test="employeeNo != null">
+                employee_no = #{employeeNo,jdbcType=VARCHAR},
+            </if>
+            <if test="employeePwd != null">
+                employee_pwd = #{employeePwd,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeName != null">
+                employee_name = #{employeeName,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeSex != null">
+                employee_sex = #{employeeSex,jdbcType=CHAR},
+            </if>
+            <if test="employeeAge != null">
+                employee_age = #{employeeAge,jdbcType=INTEGER},
+            </if>
+            <if test="employeePhone != null">
+                employee_phone = #{employeePhone,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeCardNo != null">
+                employee_card_no = #{employeeCardNo,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeMail != null">
+                employee_mail = #{employeeMail,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeBirthday != null">
+                employee_birthday = #{employeeBirthday,jdbcType=DATE},
+            </if>
+            <if test="employeeJob != null">
+                employee_job = #{employeeJob,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeAddress != null">
+                employee_address = #{employeeAddress,jdbcType=VARCHAR},
+            </if>
+            <if test="employeeExpireTime != null">
+                employee_expire_time = #{employeeExpireTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="employeeStatus != null">
+                employee_status = #{employeeStatus,jdbcType=INTEGER},
+            </if>
+            <if test="employeeAllowedIps != null">
+                employee_allowed_ips = #{employeeAllowedIps,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where employee_id = #{employeeId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="top.fallenangel.springboot.integrate_interface.model.entity.Employee">
+        update t_employee
+        set dept_id              = #{deptId,jdbcType=INTEGER},
+            employee_no          = #{employeeNo,jdbcType=VARCHAR},
+            employee_pwd         = #{employeePwd,jdbcType=VARCHAR},
+            employee_name        = #{employeeName,jdbcType=VARCHAR},
+            employee_sex         = #{employeeSex,jdbcType=CHAR},
+            employee_age         = #{employeeAge,jdbcType=INTEGER},
+            employee_phone       = #{employeePhone,jdbcType=VARCHAR},
+            employee_card_no     = #{employeeCardNo,jdbcType=VARCHAR},
+            employee_mail        = #{employeeMail,jdbcType=VARCHAR},
+            employee_birthday    = #{employeeBirthday,jdbcType=DATE},
+            employee_job         = #{employeeJob,jdbcType=VARCHAR},
+            employee_address     = #{employeeAddress,jdbcType=VARCHAR},
+            employee_expire_time = #{employeeExpireTime,jdbcType=TIMESTAMP},
+            employee_status      = #{employeeStatus,jdbcType=INTEGER},
+            employee_allowed_ips = #{employeeAllowedIps,jdbcType=VARCHAR},
+            create_by            = #{createBy,jdbcType=INTEGER},
+            create_time          = #{createTime,jdbcType=TIMESTAMP},
+            update_by            = #{updateBy,jdbcType=INTEGER},
+            update_time          = #{updateTime,jdbcType=TIMESTAMP}
+        where employee_id = #{employeeId,jdbcType=INTEGER}
+    </update>
+</mapper>
