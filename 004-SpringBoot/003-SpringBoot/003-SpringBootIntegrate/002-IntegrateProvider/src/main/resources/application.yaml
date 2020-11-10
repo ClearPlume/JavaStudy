@@ -1,0 +1,22 @@
+server:
+  # 服务器端口
+  port: 18081
+
+spring:
+  # JDBC 数据库配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: mysql:jdbc://127.0.0.1:3306/crm?serverTimezone=Asia/Shanghai
+    username: root
+    password: 590965
+
+  # 应用名称
+  application:
+    name: 002-IntegrateProvider
+
+  # 注册中心
+  dubbo:
+    registry=zookeeper://127.0.0.1:2181
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
