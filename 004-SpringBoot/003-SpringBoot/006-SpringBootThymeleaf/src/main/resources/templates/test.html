@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>参数测试</title>
+    </head>
+    <body>
+        <h3 style="color: darkcyan; font: 20px '楷体'">each 遍历 List</h3>
+        <span th:each="course:${courses}">
+            <span th:text="${course}"></span>
+            <span th:unless="${courseStat.last}">, </span>
+        </span>
+        <h3 style="color: darkcyan; font: 20px '楷体'">each 遍历 Map</h3>
+        <span th:each="testEntry:${testMap}">
+            <span th:text="|第${testEntryStat.count}次遍历: key is ${testEntry.key}, value is ${testEntry.value.text}|"></span>
+            <span th:unless="${testEntryStat.last}">, </span>
+        </span>
+        <h3 style="color: darkcyan; font: 20px '楷体'">each 遍历 Map(直接取values)</h3>
+        <span th:each="test:${testMap.values()}">
+            <span th:text="|第${testStat.count}次遍历: ${test.text}|"></span>
+            <span th:unless="${testStat.last}">, </span>
+        </span>
+        <h3 style="color: darkcyan; font: 20px '楷体'">each 遍历数组</h3>
+        <span th:each="testVar:${tests}">
+            <span th:text="|第${testVarStat.count}次遍历: ${testVar.text}|"></span>
+            <span th:unless="${testVarStat.last}">, </span>
+        </span>
+        <h3 style="color: darkcyan; font: 20px '楷体'">each 遍历复杂数据结构</h3>
+        <div th:each="testMap:${testMapList}">
+            <span th:each="testEntry:${testMap}">
+                <span th:each="testII:${testEntry.value}">
+                    <span th:text="|第${testMapStat.count}大组 第${testEntry.key}小组的Test: ${testII.text}|"></span>
+                    <span th:unless="${testIIStat.last}">,&nbsp;</span>
+                </span>
+                <span th:unless="testEntryStat.last"><br/></span>
+            </span>
+        </div>
+    </body>
+</html>
