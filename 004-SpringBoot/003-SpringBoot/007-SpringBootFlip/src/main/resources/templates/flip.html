@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <title>欢迎</title>
+
+        <link rel="stylesheet" type="text/css" th:href="@{/js/bootstrap/bootstrap_3.3.0/css/bootstrap.min.css}"/>
+
+        <style type="text/css">
+            .poker-box {
+                width: 100px;
+                height: 130px;
+                display: inline-block;
+            }
+
+            .poker {
+                width: 100px;
+                height: 130px;
+                position: absolute;
+                transform-style: preserve-3d;
+                backface-visibility: hidden;
+                transition: transform 1s, background-color 0.3s;
+                text-align: center;
+            }
+
+            .poker-box img {
+                width: 90px;
+                height: 90px;
+                position: relative;
+                top: 20px;
+            }
+
+            .name {
+                font: 35px "楷体";
+                text-shadow: 5px 5px 5px aqua;
+                color: azure;
+                writing-mode: vertical-lr;
+                position: relative;
+                cursor: default;
+            }
+
+            .poker-front {
+                background-color: rgb(127, 255, 212);
+                transform: rotateY(0);
+            }
+
+            .poker-back {
+                background-color: rgb(0, 139, 139);
+                transform: rotateY(180deg);
+            }
+
+            .btn.disabled {
+                pointer-events: auto;
+            }
+        </style>
+
+        <script type="text/javascript" th:src="@{/js/jquery-3.4.1.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap/bootstrap_3.3.0/js/bootstrap.min.js}"></script>
+
+        <script type="text/javascript" th:inline="javascript">
+            // 重设状态按钮
+            let resetPokersBtn
+            // 全部扑克
+            let pokers
+            // 当前高亮的扑克在全部扑克中的索引
+            let currentPoker = 0
+            // 当前是否正在随机滚动
+            let rolling = false
+            // 滚动时，每张牌高亮的时间
+            let rollTime = 75
+            // 随机滚动计时器
+            let rollTimer
+
+            $(document).ready(function () {
+                resetPokersBtn = $("#reset-pokers-btn")
+                pokers = $(".poker-box")
+
+                /*
+                 * 为每张牌的名字设置垂直居中
+                 *
+                 * 为每张牌设置点击事件，将其翻转：
+                 *   若点击的牌正面朝上，则没有额外操作；
+                 *   若点击的牌反面朝上：
+                 *     同时没有别的牌被选中，则没有额外操作
+                 *     同时有另外一张牌选中，则将那张牌反转
+                 */
+                pokers.each(function (index, poker) {
+                    let nameSpan = $(poker).find("span.name")
+                    let nameHeight = nameSpan.height()
+                    nameSpan.css("top", (130 - nameHeight) / 2)
+
+                    $(poker).click(function () {
+                        if (!rolling) {
+                            if (isPokerSelected(this)) {
+                                unSelectedPoker(this)
+                                btnEnabled(resetPokersBtn[0], false)
+                            } else {
+                                pokers.each(function () {
+                                    unSelectedPoker(this)
+                                })
+                                selectPoker(this)
+                                btnEnabled(resetPokersBtn[0], true)
+                            }
+                        }
+                    })
+                })
+
+                /*
+                 * 点击“开始”，则所有牌依次高亮(滚动)，按钮变为“停止”；点击“停止”，则当前高亮的牌翻转，按钮变为“开始”，“重置”按钮可用
+                 */
+                $("#start-roll-btn").click(function () {
+                    if (rolling) {
+                        rolling = false
+                        clearInterval(rollTimer)
+                        setTimeout(function () {
+                            pokers.children(".poker-front").css("backgroundColor", "rgb(127,255,212)")
+                            let curPoker
+
+                            if (currentPoker === 0) {
+                                if ($(pokers[pokers.length - 1]).children(".poker-front").css("backgroundColor") === "rgb(127, 255, 212)") {
+                                    curPoker = $(pokers[0])
+                                } else {
+                                    curPoker = $(pokers[pokers.length - 1])
+                                }
+                            } else {
+                                curPoker = $(pokers[currentPoker - 1])
+                            }
+                            selectPoker(curPoker)
+                        }, rollTime)
+
+                        $(this).removeClass("btn-danger")
+                        $(this).addClass("btn-primary")
+                        $(this).html("<span class='glyphicon glyphicon-dashboard'></span> 开始")
+                        btnEnabled(this, false)
+                        btnEnabled(resetPokersBtn[0], true)
+                    } else {
+                        rolling = true
+                        let last = false
+                        $(this).removeClass("btn-primary")
+                        $(this).addClass("btn-danger")
+                        $(this).html("<span class='glyphicon glyphicon-time'></span> 停止")
+
+                        rollTimer = setInterval(function () {
+                            if (currentPoker === 0) {
+                                if ($(pokers[pokers.length - 1]).children(".poker-front").css("backgroundColor") !== "rgb(127, 255, 212)") {
+                                    last = false
+                                    $(pokers[pokers.length - 1]).children(".poker-front").css("backgroundColor", "rgb(127,255,212)")
+                                }
+                                $(pokers[0]).children(".poker-front").css("backgroundColor", "rgb(76, 174, 76)")
+                            } else {
+                                $(pokers[currentPoker - 1]).children(".poker-front").css("backgroundColor", "rgb(127, 255, 212)")
+                                $(pokers[currentPoker]).children(".poker-front").css("backgroundColor", "rgb(76, 174, 76)")
+
+                                if (currentPoker + 1 === pokers.length) {
+                                    last = true
+                                    currentPoker = 0
+                                }
+                            }
+                            if (!last) {
+                                currentPoker++
+                            }
+                        }, rollTime);
+                    }
+                })
+
+                resetPokersBtn.click(resetState)
+
+                $("#all-stu-btn").click(function () {
+                    let context = '[[@{/}]]'
+                    location.href = context.substring(1, context.length - 1) + "student/list"
+                })
+            })
+
+            /**
+             * 恢复初始状态
+             */
+            function resetState() {
+                currentPoker = 0
+                btnEnabled(this, false)
+                btnEnabled($("#start-roll-btn")[0], true)
+                pokers.each(function (index, poker) {
+                    unSelectedPoker(poker)
+                })
+            }
+
+            /**
+             * 将扑克翻到正面，然后将状态设置为选中
+             *
+             * @param poker 要翻的扑克
+             */
+            function selectPoker(poker) {
+                $(poker).children(".poker-front").css("transform", "rotateY(180deg)")
+                setTimeout(function () {
+                    $(poker).children(".poker-back").css("transform", "rotateY(0)")
+                    setPokerSelected(poker, true)
+                }, 150)
+            }
+
+            /**
+             * 将扑克翻到反面，然后将状态设置为不选中
+             *
+             * @param poker 要翻的扑克
+             */
+            function unSelectedPoker(poker) {
+                $(poker).children(".poker-front").css("transform", "rotateY(0)")
+                $(poker).children(".poker-back").css("transform", "rotateY(180deg)")
+                setPokerSelected(poker, false)
+            }
+
+            /**
+             * 获取扑克的选中状态(和页面效果无关！)
+             *
+             * @param poker 扑克
+             */
+            function isPokerSelected(poker) {
+                return $(poker).children("input[type='hidden']").val() === "true"
+            }
+
+            /**
+             * 设置扑克的选中状态(和页面效果无关！)
+             *
+             * @param poker 要设置的扑克
+             * @param selected 状态
+             */
+            function setPokerSelected(poker, selected) {
+                $(poker).children("input[type='hidden']").val(selected ? "true" : "false")
+            }
+
+            /**
+             * 启用/禁用按钮
+             *
+             * @param btn 按钮
+             * @param enable 启用/禁用
+             */
+            function btnEnabled(btn, enable) {
+                if (enable) {
+                    $(btn).removeClass("disabled")
+                } else {
+                    $(btn).addClass("disabled")
+                }
+                btn.disabled = !enable
+            }
+        </script>
+    </head>
+    <body>
+        <div style="width: 80%; margin: 5px auto 0; text-align: center">
+            <!--/*@thymesVar id="studentList" type="java.util.List<top.fallenangel.springboot.flip.model.entity.Student>"*/-->
+            <div class="poker-box" th:each="student:${studentList}">
+                <input type="hidden" value="false"/>
+                <div class="poker poker-front">
+                    <img th:src="@{/img/poker.png}" src="" alt=""/>
+                </div>
+                <div class="poker poker-back">
+                    <span class="name" th:text="${student.stuName}"></span>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center">
+            <button id="reset-pokers-btn" type="button" class="btn btn-warning disabled" style="margin: 0 auto"
+                    disabled="disabled">
+                <span class="glyphicon glyphicon-cog"></span> 重置
+            </button>
+            <button id="start-roll-btn" type="button" class="btn btn-primary" style="margin: 0 auto">
+                <span class="glyphicon glyphicon-dashboard"></span> 开始
+            </button>
+            <button id="all-stu-btn" type="button" class="btn btn-block btn-info"
+                    style="margin: 5px auto 0; width: 65%">
+                <span class="glyphicon glyphicon-user"></span> 所有学生信息
+            </button>
+        </div>
+    </body>
+</html>

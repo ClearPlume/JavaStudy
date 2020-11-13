@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.springboot.flip.model.mapper.StudentMapper">
+    <resultMap id="BaseResultMap" type="top.fallenangel.springboot.flip.model.entity.Student">
+        <id column="stu_id" jdbcType="INTEGER" property="stuId"/>
+        <result column="stu_name" jdbcType="VARCHAR" property="stuName"/>
+        <result column="stu_shared" jdbcType="BIT" property="stuShared"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        stu_id, stu_name, stu_shared
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_student
+        where stu_id = #{stuId,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_student
+        <where>
+            <if test="stuName != null and stuName != ''">
+                stu_name like concat('%', #{stuName}, '%')
+            </if>
+            <if test="stuShared != null">
+                and stu_shared = #{stuShared}
+            </if>
+        </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_student
+        where stu_id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insert" keyColumn="stu_id" keyProperty="stuId" parameterType="top.fallenangel.springboot.flip.model.entity.Student"
+            useGeneratedKeys="true">
+        insert into t_student (stu_name, stu_shared)
+        values (#{stuName,jdbcType=VARCHAR}, #{stuShared,jdbcType=BIT})
+    </insert>
+    <insert id="insertSelective" keyColumn="stu_id" keyProperty="stuId"
+            parameterType="top.fallenangel.springboot.flip.model.entity.Student" useGeneratedKeys="true">
+        insert into t_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="stuName != null">
+                stu_name,
+            </if>
+            <if test="stuShared != null">
+                stu_shared,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="stuName != null">
+                #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuShared != null">
+                #{stuShared,jdbcType=BIT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.springboot.flip.model.entity.Student">
+        update t_student
+        <set>
+            <if test="stuName != null">
+                stu_name = #{stuName,jdbcType=VARCHAR},
+            </if>
+            <if test="stuShared != null">
+                stu_shared = #{stuShared,jdbcType=BIT},
+            </if>
+        </set>
+        where stu_id = #{stuId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.springboot.flip.model.entity.Student">
+        update t_student
+        set stu_name   = #{stuName,jdbcType=VARCHAR},
+            stu_shared = #{stuShared,jdbcType=VARCHAR}
+        where stu_id = #{stuId,jdbcType=INTEGER}
+    </update>
+</mapper>

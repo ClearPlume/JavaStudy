@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>学生列表</title>
+
+        <link th:href="@{/js/bootstrap/bootstrap_3.3.0/css/bootstrap.min.css}" type="text/css" rel="stylesheet"/>
+        <link th:href="@{/js/bootstrap/bs_pagination/jquery.bs_pagination.min.css}" type="text/css" rel="stylesheet"/>
+
+        <style type="text/css">
+            .required {
+                font-size: 15px;
+                color: red;
+            }
+
+            a {
+                text-decoration: none;
+            }
+
+            .form-group {
+                margin-bottom: 0;
+            }
+        </style>
+
+        <script type="text/javascript" th:src="@{/js/jquery-1.11.1-min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap/bootstrap_3.3.0/js/bootstrap.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap/bs_pagination/zh-CN.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bootstrap/bs_pagination/jquery.bs_pagination.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/bs_alert.js}"></script>
+
+        <!--suppress JSUnusedGlobalSymbols-->
+        <script type="text/javascript" th:inline="javascript">
+            // 分享下拉框
+            let sharedSelect
+            // 编辑学生表单
+            let studentForm
+            // 是否正在翻页
+            let paging = false
+            // 全选复选框
+            let selectAllCheckbox
+            // 每个学生的复选框
+            let studentListCheckboxes
+            // 批量删除表单
+            let batchDeleteForm
+            // 编辑学生模态框
+            let editStudentModal
+
+            $(document).ready(function () {
+                sharedSelect = $(".student-shared-select")
+                studentForm = $("#student-form")[0]
+                selectAllCheckbox = $("#select-all-checkbox")
+                studentListCheckboxes = $(".student-list-checkbox")
+                batchDeleteForm = $("#batch-delete-form")[0]
+                editStudentModal = $("#editStudentModal")
+
+                $("#pagination").bs_pagination({
+                    //当前页号
+                    currentPage: [[${pageInfo.pageNum}]],
+                    //每页记录数
+                    rowsPerPage: [[${pageInfo.pageSize}]],
+                    //总共页号
+                    totalPages: [[${pageInfo.pages}]],
+                    //总记录数
+                    totalRows: [[${pageInfo.total}]],
+                    //页码导航标签个数
+                    visiblePageLinks: 5,
+                    //是否显示直接去多少页的跳转
+                    showGoToPage: true,
+                    //是否显示每页记录数
+                    showRowsPerPage: true,
+                    //是否显示行记录信息
+                    showRowsInfo: true,
+                    onChangePage: function (event, data) {
+                        if (!paging) {
+                            paging = true
+                            let searchForm = $("#student")[0]
+                            searchForm.action = searchForm.action + "?page=" + data.currentPage + "&pageSize=" + data.rowsPerPage
+                            searchForm.submit()
+                        }
+                    }
+                })
+
+                selectAllCheckbox.change(function () {
+                    studentListCheckboxes.each(function () {
+                        this.checked = selectAllCheckbox[0].checked
+                    })
+                })
+
+                studentListCheckboxes.change(function () {
+                    selectAllCheckbox[0].checked = studentListCheckboxes.length === $(".student-list-checkbox:checked").length
+                })
+
+                $("#delete-batch-btn").click(function () {
+                    let selectedEmployeeCheckbox = $(".student-list-checkbox:checked")
+                    if (selectedEmployeeCheckbox.length === 0) {
+                        bs_alert("至少选择一个要删除的学生！", "提示", 30)
+                    } else {
+                        batchDeleteForm.submit()
+                    }
+                })
+
+                $("#reset-search-btn").click(function () {
+                    $("#student").find("input,select").val("")
+                    sharedSelect.change()
+                })
+
+                sharedSelect.change(function () {
+                    let color
+
+                    switch (this.value) {
+                        case "false":
+                            color = "red"
+                            break
+                        case "true":
+                            color = "green"
+                            break
+                        default:
+                            color = "rgb(85, 85, 85)"
+                    }
+                    $(this).css("color", color)
+                })
+
+                $("#insert-student-btn").click(function () {
+                    studentForm.stuId.value = ""
+                    studentForm.stuName.value = ""
+                    studentForm.stuShared.value = ""
+
+                    sharedSelect.change()
+                    editStudentModal.modal("show")
+                })
+
+                sharedSelect.change()
+            })
+
+            function modifyStudent(stuId) {
+                let context = '[[@{/}]]'
+
+                $.getJSON(
+                    context.substring(1, context.length - 1) + "student/edit",
+                    {"id": stuId},
+                    function (student) {
+                        studentForm.stuId.value = student.stuId
+                        studentForm.stuName.value = student.stuName
+                        studentForm.stuShared.value = student.stuShared
+                        sharedSelect.change()
+
+                        editStudentModal.modal("show")
+                    }
+                )
+            }
+        </script>
+    </head>
+    <body>
+        <!--Thymeleaf变量声明开始-->
+        <!--/*@thymesVar id="pageInfo" type="com.github.pagehelper.PageInfo<top.fallenangel.springboot.flip.model.entity.Student>"*/-->
+        <!--/*@thymesVar id="student" type="top.fallenangel.springboot.flip.model.entity.Student"*/-->
+        <!--Thymeleaf变量声明结束-->
+
+        <!--编辑学生模态框-->
+        <div class="modal fade" id="editStudentModal" role="dialog">
+            <div class="modal-dialog" role="document" style="width: 50%;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                        <h4 class="modal-title">新增学生</h4>
+                    </div>
+                    <form th:action="@{/student/save}" id="student-form" class="form-horizontal" method="post"
+                          role="form">
+                        <input type="hidden" name="stuId"/>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">学生姓名<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <input type="text" name="stuName" class="form-control"/>
+                                    </label>
+                                </div>
+                                <label class="col-sm-2 control-label">分享状态<span class="required">*</span></label>
+                                <div class="col-sm-10" style="width: 300px">
+                                    <label>
+                                        <select name="stuShared" class="form-control student-shared-select"
+                                                style="width: 210px">
+                                            <option value="" style="color: rgb(85, 85, 85)">请选择</option>
+                                            <option value="true" style="color: green">已分享</option>
+                                            <option value="false" style="color: red" selected="selected">未分享</option>
+                                        </select>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div style="width: 96.5%">
+            <div style="position: relative; left: 30px; top: -10px;">
+                <div class="page-header">
+                    <h3>
+                        <a th:href="@{/index}"><span class="glyphicon glyphicon-arrow-left"></span></a>
+                        学生列表
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <!--搜索学生-->
+        <div class="btn-toolbar" role="toolbar"
+             style="position: relative; height: 80px; left: 35px; top: -10px; width: 96.5%">
+            <form id="student" class="form-inline" th:action="@{/student/list}" th:object="${student}" method="post">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">学生姓名</div>
+                        <label for="stuName"></label>
+                        <input id="stuName" name="stuName" class="form-control" th:value="*{stuName}"/>
+                    </div>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-addon">分享状态</div>
+                        <label for="stuShared"></label>
+                        <select id="stuShared" name="stuShared" class="form-control student-shared-select"
+                                style="width: 170px">
+                            <option value="" style="color: rgb(85, 85, 85)">请选择</option>
+                            <option value="true" th:selected="*{stuShared == true}" style="color: green">已分享</option>
+                            <option value="false" th:selected="*{stuShared == false}" style="color: red">未分享</option>
+                        </select>
+                    </div>
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button id="reset-search-btn" type="button" class="btn btn-warning">重置</button>
+                <button type="submit" class="btn btn-info">查询</button>
+            </form>
+        </div>
+        <div class="btn-toolbar" role="toolbar"
+             style="background-color: #F7F7F7; height: 50px; position: relative;left: 35px; width: 96.5%; top: 20px;">
+            <div class="btn-group" style="position: relative; top: 18%; left: 5px">
+                <button id="insert-student-btn" type="button" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-plus"></span>&nbsp;新增
+                </button>
+                <button id="delete-batch-btn" type="button" class="btn btn-danger">
+                    <span class="glyphicon glyphicon-remove"></span>&nbsp;删除
+                </button>
+            </div>
+        </div>
+        <!--学生列表-->
+        <div style="position: relative; left: 30px; top: 40px; width: 96.5%">
+            <form id="batch-delete-form" th:action="@{/student/delete}" method="post">
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="color: #B3B3B3;">
+                            <td style="text-align: center">
+                                <label>
+                                    <input type="checkbox" id="select-all-checkbox"/>
+                                </label>
+                            </td>
+                            <td>序号</td>
+                            <td>学生姓名</td>
+                            <td>分享状态</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="active" th:each="student:${pageInfo.list}">
+                            <td style="text-align: center">
+                                <label>
+                                    <input type="checkbox" name="id" th:value="${student.stuId}"
+                                           class="student-list-checkbox"/>
+                                </label>
+                            </td>
+                            <td th:text="${studentStat.count}"></td>
+                            <td>
+                                <a href="javascript:void(0)" th:text="${student.stuName}"
+                                   th:onclick="|modifyStudent(${student.stuId})|">
+                                </a>
+                            </td>
+                            <td th:switch="${student.stuShared}">
+                                <span th:case="true" style="color: green">已分享</span>
+                                <span th:case="false" style="color: red">未分享</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+        <!--翻页插件-->
+        <div id="pagination" style="position: relative;top: 30px; left: 30px; width: 96.5%"></div>
+    </body>
+</html>
