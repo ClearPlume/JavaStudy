@@ -3,6 +3,7 @@ package top.fallenangel.springboot.flip.controller;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -48,8 +49,10 @@ public class StudentController {
     }
 
     @RequestMapping("list")
-    public PageInfo<Student> list(Student student, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize) {
+    public String list(Model model, Student student, @RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "10") Integer pageSize) {
         PageHelper.startPage(page, pageSize);
-        return PageInfo.of(studentService.list(student));
+        model.addAttribute("pageInfo", PageInfo.of(studentService.list(student)));
+        model.addAttribute("student", student);
+        return "student/list";
     }
 }

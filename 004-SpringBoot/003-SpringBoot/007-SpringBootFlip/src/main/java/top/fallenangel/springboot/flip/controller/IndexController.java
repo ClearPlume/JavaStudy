@@ -1,8 +1,8 @@
 package top.fallenangel.springboot.flip.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import top.fallenangel.springboot.flip.model.entity.Student;
 import top.fallenangel.springboot.flip.service.IStudentService;
 
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ public class IndexController {
     }
 
     @GetMapping("index")
-    public String index(ArrayList<Student> students) {
-        students.addAll(studentService.list());
+    public String index(Model model) {
+        model.addAttribute("studentList", new ArrayList<>(studentService.list()));
         return "flip";
     }
 }
