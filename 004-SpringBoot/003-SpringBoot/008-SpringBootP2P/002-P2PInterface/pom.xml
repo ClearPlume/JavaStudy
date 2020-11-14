@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>001-p2p-parent</artifactId>
+        <groupId>top.fallenangel.springboot.p2p</groupId>
+        <version>1.0.0</version>
+        <relativePath>../001-P2PParent/pom.xml</relativePath>
+    </parent>
+    <artifactId>002-p2p-interface</artifactId>
+    <version>1.0.0</version>
+    <name>002-P2PInterface</name>
+    <description>P2P项目的接口工程，存放接口、实体类</description>
+</project>

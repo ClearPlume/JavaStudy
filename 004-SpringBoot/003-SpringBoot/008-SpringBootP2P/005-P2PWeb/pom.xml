@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+	<parent>
+		<artifactId>001-p2p-parent</artifactId>
+		<groupId>top.fallenangel.springboot.p2p</groupId>
+		<version>1.0.0</version>
+		<relativePath>../001-P2PParent/pom.xml</relativePath>
+	</parent>
+	<artifactId>005-p2p-web</artifactId>
+    <version>1.0.0</version>
+    <name>005-P2PWeb</name>
+    <description>P2P项目的Web工程，实现前端相关</description>
+
+    <dependencies>
+		<!--Spring-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+		<!--测试起步依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+		<!--Thymeleaf-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+
+		<!--Dubbo-->
+		<dependency>
+			<groupId>com.alibaba.spring.boot</groupId>
+			<artifactId>dubbo-spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.101tec</groupId>
+			<artifactId>zkclient</artifactId>
+		</dependency>
+
+        <!--热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+
+        <!--接口项目-->
+        <dependency>
+            <groupId>top.fallenangel.springboot.p2p</groupId>
+            <artifactId>002-p2p-interface</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--公共项目-->
+        <dependency>
+            <groupId>top.fallenangel.springboot.p2p</groupId>
+            <artifactId>004-p2p-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>
