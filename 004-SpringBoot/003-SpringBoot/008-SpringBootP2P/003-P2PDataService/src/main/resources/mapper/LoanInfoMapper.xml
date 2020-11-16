@@ -34,40 +34,61 @@
         from b_loan_info
     </select>
     <select id="selectProductInfo" resultMap="BaseResultMap">
-        (select product_name,
-                bid_min_limit,
-                bid_max_limit,
+        (select id,
+                product_name,
                 rate,
                 cycle,
+                release_time,
+                product_type,
+                product_no,
+                product_money,
                 left_product_money,
+                bid_min_limit,
+                bid_max_limit,
+                product_status,
+                product_full_time,
                 product_desc,
-                product_type
+                version
          from b_loan_info
          where product_type = #{new}
          order by rate desc, left_product_money desc
          limit 0, #{newNum})
         union all
-        (select product_name,
-                bid_min_limit,
-                bid_max_limit,
+        (select id,
+                product_name,
                 rate,
                 cycle,
+                release_time,
+                product_type,
+                product_no,
+                product_money,
                 left_product_money,
+                bid_min_limit,
+                bid_max_limit,
+                product_status,
+                product_full_time,
                 product_desc,
-                product_type
+                version
          from b_loan_info
          where product_type = #{pro}
          order by rate desc, left_product_money desc
          limit 0, #{proNum})
         union all
-        (select product_name,
-                bid_min_limit,
-                bid_max_limit,
+        (select id,
+                product_name,
                 rate,
                 cycle,
+                release_time,
+                product_type,
+                product_no,
+                product_money,
                 left_product_money,
+                bid_min_limit,
+                bid_max_limit,
+                product_status,
+                product_full_time,
                 product_desc,
-                product_type
+                version
          from b_loan_info
          where product_type = #{all}
          order by rate desc, left_product_money desc
