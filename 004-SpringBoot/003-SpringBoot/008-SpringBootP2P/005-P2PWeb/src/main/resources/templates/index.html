@@ -89,26 +89,26 @@
                     <div class="inner">
                         <div class="index-exper-top">
                             <span class="title"><span style="font-size: 28px"
-                                                      th:text="${newInfo.getProductName()}">新手宝</span></span>
+                                                      th:text="${newInfo.productName}">新手宝</span></span>
                             <p class="text"
-                               th:text="|${#numbers.formatDecimal(newInfo.getBidMinLimit(), 0, 2)}元起投,投资最高限额${#numbers.formatDecimal(newInfo.getBidMaxLimit(), 0, 2)}元,当日计息|">
+                               th:text="|${#numbers.formatDecimal(newInfo.bidMinLimit, 0, 2)}元起投,投资最高限额${#numbers.formatDecimal(newInfo.bidMaxLimit, 0, 2)}元,当日计息|">
                                 1000.00元起投,投资最高限额100000.00元,当日计息
                             </p>
                         </div>
                         <div class="index-exper-bottom">
                             <ul class="list cf">
                                 <li class="box1">
-                                    <p class="text1"><span th:text="${newInfo.getRate()}">15.0</span><span>%</span>
+                                    <p class="text1"><span th:text="${newInfo.rate}">15.0</span><span>%</span>
                                     </p>
                                     <p class="text2">历史年化收益率</p>
                                 </li>
                                 <li class="box2">
-                                    <p class="text1"><span th:text="${newInfo.getCycle()}">7</span><span>天</span></p>
+                                    <p class="text1"><span th:text="${newInfo.cycle}">7</span><span>天</span></p>
                                     <p class="text2">投资周期</p>
                                 </li>
                                 <li class="box3">
                                     <p class="text1"><span
-                                            th:text="${newInfo.getLeftProductMoney()}">993000.0</span><span>元</span>
+                                            th:text="${newInfo.leftProductMoney}">993000.0</span><span>元</span>
                                     </p>
                                     <p class="text2">剩余可投金额</p>
                                 </li>
@@ -128,34 +128,34 @@
                 <div th:each="proInfo:${productInfo.subList(1, 5)}">
                     <!-- 1:已满标时class样式追加 pro-full-->
                     <div class="pro-box pro-full"
-                         th:class="${proInfo.getLeftProductMoney() == 0.0 ? 'pro-box pro-full' : 'pro-box'}">
+                         th:class="${proInfo.leftProductMoney == 0.0 ? 'pro-box pro-full' : 'pro-box'}">
                         <div class="pro-top">
-                            <h3 th:text="${proInfo.getProductName()}">满月宝</h3>
-                            <p th:text="${proInfo.getProductDesc()}">短期小额信用借款集合投资计划</p>
+                            <h3 th:text="${proInfo.productName}">满月宝</h3>
+                            <p th:text="${proInfo.productDesc}">短期小额信用借款集合投资计划</p>
                         </div>
                         <div class="pro-main">
                             <div class="pro-rate">
                                 <div class="rate">
-                                    <span th:text="${#numbers.formatDecimal(proInfo.getRate(), 0, 2)}">5.6</span><span>%</span>
+                                    <span th:text="${#numbers.formatDecimal(proInfo.rate, 0, 2)}">5.6</span><span>%</span>
                                 </div>
                                 <h3>历史年化收益率</h3>
                             </div>
                             <div class="pro-data clearfix">
                                 <div class="pro-cycle">
                                     <h3>投资周期</h3>
-                                    <div class="data"><span><span th:text="${proInfo.getCycle()}">1</span>个月</span>
+                                    <div class="data"><span><span th:text="${proInfo.cycle}">1</span>个月</span>
                                     </div>
                                 </div>
                                 <div class="pro-money">
                                     <h3>剩余可投金额</h3>
                                     <div class="data">
-                                        <span th:text="${proInfo.getLeftProductMoney()}">98600.0元</span>
+                                        <span th:text="${proInfo.leftProductMoney}">98600.0元</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="pro-intr"><p>优选计划项目，投资回报周期1个月，起点低，适合短期资金周转、对流动性要求高的投资人。</p></div>
                             <div class="pro-btn">
-                                <a th:href="@{/loan/loanInfo}" class="btn-1">立即投资</a>
+                                <a th:href="@{/loan/loanInfo(productType=${proInfo.productType})}" class="btn-1">立即投资</a>
                             </div>
                         </div>
                     </div>
@@ -173,27 +173,27 @@
                                                th:src="@{/images/new-pro-icon.png}" alt=""/></div>
                 <div th:each="allInfo:${productInfo.subList(5, 13)}">
                     <!-- 1:已满标时追加pro-full-->
-                    <div class="pro-box" th:class="${allInfo.getLeftProductMoney() == 0.0 ? 'pro-box pro-full' : 'pro-box'}">
+                    <div class="pro-box" th:class="${allInfo.leftProductMoney == 0.0 ? 'pro-box pro-full' : 'pro-box'}">
                         <div class="pro-top">
-                            <h3 th:text="${allInfo.getProductName()}">个人信用消费借款</h3>
-                            <p th:text="${allInfo.getProductDesc()}">动力金融网特选小额理财产品</p>
+                            <h3 th:text="${allInfo.productName}">个人信用消费借款</h3>
+                            <p th:text="${allInfo.productDesc}">动力金融网特选小额理财产品</p>
                         </div>
                         <div class="pro-main">
                             <div class="pro-rate">
                                 <div class="rate"><span
-                                        th:text="${#numbers.formatDecimal(allInfo.getRate(), 0, 2)}">4.9</span><span>%</span>
+                                        th:text="${#numbers.formatDecimal(allInfo.rate, 0, 2)}">4.9</span><span>%</span>
                                 </div>
                                 <h3>历史年化收益率</h3>
                             </div>
                             <div class="pro-data clearfix">
                                 <div class="pro-cycle">
                                     <h3>投资周期</h3>
-                                    <div class="data"><span><span th:text="${allInfo.getCycle()}">1</span>个月</span></div>
+                                    <div class="data"><span><span th:text="${allInfo.cycle}">1</span>个月</span></div>
                                 </div>
                                 <div class="pro-money">
                                     <h3>剩余可投金额</h3>
                                     <div class="data">
-                                        <span th:text="${allInfo.getLeftProductMoney() == 0 ? 0 : #numbers.formatDecimal(allInfo.getLeftProductMoney(), 0, 2)}">500000.0元</span>
+                                        <span th:text="${allInfo.leftProductMoney == 0 ? 0 : #numbers.formatDecimal(allInfo.leftProductMoney, 0, 2)}">500000.0元</span>
                                     </div>
                                 </div>
                             </div>
