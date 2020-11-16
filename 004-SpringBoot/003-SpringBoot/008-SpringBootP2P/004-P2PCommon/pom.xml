@@ -13,4 +13,12 @@
     <version>1.0.0</version>
     <name>004-P2PCommon</name>
     <description>P2P项目的公共工程，存放工具类、常量类等</description>
+
+    <dependencies>
+        <!--Redis-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    </dependencies>
 </project>
