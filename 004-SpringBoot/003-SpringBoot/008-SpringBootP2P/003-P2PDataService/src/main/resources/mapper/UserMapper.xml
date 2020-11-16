@@ -20,6 +20,10 @@
         from u_user
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="count" resultType="java.lang.Integer">
+        select count(1)
+        from u_user
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from u_user

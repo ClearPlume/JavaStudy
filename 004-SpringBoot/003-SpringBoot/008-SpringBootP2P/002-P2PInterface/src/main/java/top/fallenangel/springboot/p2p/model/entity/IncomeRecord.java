@@ -1,8 +1,9 @@
 package top.fallenangel.springboot.p2p.model.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class IncomeRecord {
+public class IncomeRecord implements Serializable {
     private Integer id;
 
     private Integer uid;

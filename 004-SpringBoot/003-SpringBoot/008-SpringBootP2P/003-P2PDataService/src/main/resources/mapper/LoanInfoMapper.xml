@@ -29,6 +29,50 @@
         from b_loan_info
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectAvgRate" resultType="java.lang.Double">
+        select avg(rate)
+        from b_loan_info
+    </select>
+    <select id="selectProductInfo" resultMap="BaseResultMap">
+        (select product_name,
+                bid_min_limit,
+                bid_max_limit,
+                rate,
+                cycle,
+                left_product_money,
+                product_desc,
+                product_type
+         from b_loan_info
+         where product_type = #{new}
+         order by rate desc, left_product_money desc
+         limit 0, #{newNum})
+        union all
+        (select product_name,
+                bid_min_limit,
+                bid_max_limit,
+                rate,
+                cycle,
+                left_product_money,
+                product_desc,
+                product_type
+         from b_loan_info
+         where product_type = #{pro}
+         order by rate desc, left_product_money desc
+         limit 0, #{proNum})
+        union all
+        (select product_name,
+                bid_min_limit,
+                bid_max_limit,
+                rate,
+                cycle,
+                left_product_money,
+                product_desc,
+                product_type
+         from b_loan_info
+         where product_type = #{all}
+         order by rate desc, left_product_money desc
+         limit 0, #{allNum})
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from b_loan_info
