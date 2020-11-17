@@ -155,14 +155,14 @@
                             </div>
                             <div class="pro-intr"><p>优选计划项目，投资回报周期1个月，起点低，适合短期资金周转、对流动性要求高的投资人。</p></div>
                             <div class="pro-btn">
-                                <a th:href="@{/loan/loanInfo(productType=${proInfo.productType})}" class="btn-1">立即投资</a>
+                                <a th:href="@{/loan/loanInfo}"
+                                   class="btn-1">立即投资</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <!--loan/loan?productType=1-->
-            <div class="pro-more"><i class="left-i"></i><a href="javascript:void(0)">查看更多优选类产品</a><i
+            <div class="pro-more"><i class="left-i"></i><a th:href="@{/loan/loan(productType=1)}">查看更多优选类产品</a><i
                     class="right-i"></i>
             </div>
             <!-- 优选计划end -->
@@ -206,7 +206,8 @@
                     <div style="line-height:25px;" th:if="${allInfoStat.count % 4 == 0}">&nbsp;</div>
                 </div>
             </div>
-            <div class="pro-more"><i class="left-i"></i><a th:href="@{/loan/loan}">查看更多散标类产品</a><i class="right-i"></i>
+            <div class="pro-more"><i class="left-i"></i><a th:href="@{/loan/loan(productType=2)}">查看更多散标类产品</a><i
+                    class="right-i"></i>
             </div>
             <!-- 散标end -->
         </div>
@@ -262,7 +263,8 @@
                                 <!-- 图片列表 begin -->
                                 <div class="pic"><a title="金融安全认证权威机构"
                                                     href="http://webverify.cfca.com.cn/WebVerify/webVerifyServlet?domain=www.powernode.com"
-                                                    target="_blank" rel="nofollow"><img alt="" th:src="@{/images/logo_cooperate_1.jpg}"
+                                                    target="_blank" rel="nofollow"><img alt=""
+                                                                                        th:src="@{/images/logo_cooperate_1.jpg}"
                                                                                         src="/static/images/logo_cooperate_1.jpg"/></a>
                                 </div>
                                 <div class="pic"><a title="专业的网络安全专家" href="http://cn.norton.com/" target="_blank"
@@ -278,11 +280,13 @@
                                                                         src="/static/images/logo_cooperate_6.jpg"/></a>
                                 </div>
                                 <div class="pic"><a title="NS FOCUS" href="http://www.nsfocus.com.cn/index.html"
-                                                    target="_blank" rel="nofollow"><img alt="" th:src="@{/images/logo_cooperate_12.jpg}"
+                                                    target="_blank" rel="nofollow"><img alt=""
+                                                                                        th:src="@{/images/logo_cooperate_12.jpg}"
                                                                                         src="/static/images/logo_cooperate_12.jpg"/></a>
                                 </div>
                                 <div class="pic"><a title="CISCO" href="http://www.cisco.com/web/CN/index.html"
-                                                    target="_blank" rel="nofollow"><img alt="" th:src="@{/images/logo_cooperate_13.jpg}"
+                                                    target="_blank" rel="nofollow"><img alt=""
+                                                                                        th:src="@{/images/logo_cooperate_13.jpg}"
                                                                                         src="/static/images/logo_cooperate_13.jpg"/></a>
                                 </div>
                                 <div class="pic"><a title="连连支付" href="http://www.lianlianpay.com/" target="_blank"
