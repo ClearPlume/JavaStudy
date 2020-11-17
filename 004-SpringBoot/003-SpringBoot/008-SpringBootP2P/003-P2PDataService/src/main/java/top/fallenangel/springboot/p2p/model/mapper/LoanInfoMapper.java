@@ -1,5 +1,6 @@
 package top.fallenangel.springboot.p2p.model.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
 
@@ -23,4 +24,8 @@ public interface LoanInfoMapper {
     double selectAvgRate();
 
     List<LoanInfo> selectProductInfo(Map<String, Object> param);
+
+    List<LoanInfo> selectProductInfoByType(@Param("productType") Integer productType);
+
+    int selectTotalByType(@Param("productType") Integer productType);
 }

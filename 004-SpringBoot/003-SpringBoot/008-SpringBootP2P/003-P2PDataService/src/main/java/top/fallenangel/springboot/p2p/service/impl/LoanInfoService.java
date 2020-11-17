@@ -1,6 +1,8 @@
 package top.fallenangel.springboot.p2p.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import top.fallenangel.springboot.p2p.common.Constant;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
 import top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper;
@@ -29,5 +31,17 @@ public class LoanInfoService implements ILoanInfoService {
     @Override
     public List<LoanInfo> queryProductInfo(Map<String, Object> param) {
         return loanInfoMapper.selectProductInfo(param);
+    }
+
+    @Override
+    public PageInfo<LoanInfo> queryProductInfo(Integer productType, Integer page, Integer pageSize) {
+        PageHelper.startPage(page, pageSize);
+        return PageInfo.of(loanInfoMapper.selectProductInfoByType(productType));
+    }
+
+    @Override
+    public int queryTotalPage(Integer productType, Integer pageSize) {
+        int total = loanInfoMapper.selectTotalByType(productType);
+        return total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
     }
 }

@@ -51,7 +51,7 @@
                 version
          from b_loan_info
          where product_type = #{new}
-         order by rate desc, left_product_money desc
+         order by rate desc
          limit 0, #{newNum})
         union all
         (select id,
@@ -71,7 +71,7 @@
                 version
          from b_loan_info
          where product_type = #{pro}
-         order by rate desc, left_product_money desc
+         order by rate desc
          limit 0, #{proNum})
         union all
         (select id,
@@ -91,8 +91,32 @@
                 version
          from b_loan_info
          where product_type = #{all}
-         order by rate desc, left_product_money desc
+         order by rate desc
          limit 0, #{allNum})
+    </select>
+    <select id="selectProductInfoByType" resultMap="BaseResultMap">
+        select id,
+               product_name,
+               rate,
+               cycle,
+               release_time,
+               product_type,
+               product_no,
+               product_money,
+               left_product_money,
+               bid_min_limit,
+               bid_max_limit,
+               product_status,
+               product_full_time,
+               product_desc,
+               version
+        from b_loan_info
+        where product_type = #{productType}
+    </select>
+    <select id="selectTotalByType" resultType="java.lang.Integer">
+        select count(1)
+        from b_loan_info
+        where product_type = #{productType}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
