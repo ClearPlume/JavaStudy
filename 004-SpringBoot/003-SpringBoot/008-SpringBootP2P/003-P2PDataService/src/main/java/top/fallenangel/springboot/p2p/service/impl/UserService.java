@@ -17,6 +17,7 @@ public class UserService implements IUserService {
         this.redisUtil = redisUtil;
     }
 
+    // 查询平台用户数
     @Override
     public int queryTotalUser() {
         return Integer.parseInt(redisUtil.getValueFromRedis(Constant.TOTAL_USER, () -> String.valueOf(userMapper.count())));

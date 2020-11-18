@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+        <title>动力金融网-CFCA认证的互联网金融公司</title>
+        <script type="text/javascript" th:src="@{/js/jquery-1.7.2.min.js}"></script>
+        <script type="text/javascript" th:src="@{/js/trafficStatistics.js}"></script>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/share.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+
+    </head>
+
+    <body>
+        <div id="header">
+            <!--<jsp:include page="commons/header.jsp"/>-->
+            <div th:include="commons/header :: html"></div>
+        </div>
+
+        <!--散标投资 begin-->
+        <div class="invest-details">
+            <!--页中begin-->
+            <div class="mainBox pro-details-body">
+                <div class="homeWap clearfix">
+                    <div class="pro-details-left">
+
+                        <!-- 产品详情start -->
+                        <div class="pro-info-details">
+                            <div class="pro-name">
+                                <h2><span
+                                        th:text="|${loanInfo.productName} (${#dates.format(loanInfo.releaseTime, 'yyyyMMdd')}期)|">季度宝 (20170726期)</span>
+                                </h2>
+                            </div>
+                            <div class="pro-info">
+                                <ul class="clearfix">
+                                    <li class="info-1">
+                                        <p>历史年化利率</p>
+                                        <h3 th:text="${loanInfo.rate}">4.9%</h3>
+                                        <div class="info-bt">
+                                            <span>本产品采用普通利率</span>
+                                        </div>
+                                    </li>
+                                    <li class="info-2">
+                                        <p>募集金额(元)</p>
+                                        <h3 th:text="${loanInfo.productMoney}">500000.0</h3>
+                                        <div class="info-bt">
+                                            <!-- 只有状态为0时为募集，其它都为已满标 -->
+                                            <span th:if="${loanInfo.productStatus == 0}"
+                                                  th:text="|募集中,剩余募集金额 ${loanInfo.leftProductMoney}元|">
+                                                募集中,剩余募集金额 500000.0元
+                                            </span>
+                                            <!-- 只有状态为0时为募集，其它都为已满标 -->
+                                            <span th:unless="${loanInfo.productStatus == 0}">
+                                                已满标
+                                            </span>
+                                        </div>
+                                    </li>
+                                    <li class="info-3">
+                                        <p>投资周期</p>
+                                        <!-- 只有新手宝产品周期为天 -->
+                                        <h3 th:text="|${loanInfo.cycle}${loanInfo.productType == 0 ? '天' : '个月'}|">
+                                            6个月</h3>
+                                        <div class="info-bt"><span></span></div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <dl class="pro-return-of-proceeds">
+                                <dt><span>收益获取方式</span></dt>
+                                <dd><span>收益返还：</span>到期还本付息</dd>
+                            </dl>
+                        </div>
+                        <!-- 产品详情end -->
+
+                        <!-- 投资记录start -->
+                        <div class="pro-details-cnt">
+                            <ul class="tabNav clearfix">
+                                <li><a id="one3" href="javascript:void(0)" class="s">投资记录</a></li>
+                            </ul>
+
+                            <div class="invest-record" id="con_one_3" style="display:block">
+                                <div class="vertical-side">投资列表</div>
+                                <dl class="record-list">
+                                    <dt>
+                                        <span class="record-num">序号</span><span class="invest-user">投资人</span><span
+                                            class="invest-money">投资金额(元)</span><span class="invest-time">投资时间</span>
+                                    </dt>
+                                    <!-- 如果投资记录为空，显示以下文字 -->
+                                    <div th:if="${bidRecordList.size() == 0}">
+                                        <dd style="text-align:center;">该产品暂时还没有人投资，赶快去投资吧~</dd>
+                                    </div>
+
+                                    <!-- 如果有投资记录，循环遍历显示 -->
+                                    <div id="bidRecordDiv">
+                                        <div th:each="bidRecord:${bidRecordList}">
+                                            <dd>
+                                                <span class="record-num" th:text="${bidRecordStat.count}">1</span>
+                                                <span class="invest-user"
+                                                      th:text="|${#strings.substring(bidRecord['phone'], 0, 3)}******${#strings.substring(bidRecord['phone'], 9)}|">137******89</span>
+                                                <span class="invest-money"
+                                                      th:text="${bidRecord['bid_money']}">1000.0</span>
+                                                <span class="invest-time" th:text="${bidRecord['bid_time']}">2017-09-12 13:34:22</span>
+                                            </dd>
+                                        </div>
+                                    </div>
+
+                                    <!--页码 start-->
+                                    <div class="page_bar" style="position: relative; left: 44.3%"
+                                         th:unless="${bidRecordList.size() == 0}">
+                                        <a href="javascript:void(0)" th:onclick="prevRecord()">上一页</a>
+                                        <a href="javascript:void(0)" th:onclick="nextRecord()">下一页</a>
+                                    </div>
+                                    <!--页码 end-->
+                                </dl>
+                            </div>
+                        </div>
+                        <!-- 投资记录end -->
+                    </div>
+
+                    <!--页面右侧begin-->
+                    <div class="pro-details-right">
+                        <div class="right-calculator">
+                            <div class="calculator-cnt">
+                                <h2>立即投资</h2>
+                                <dl class="profits-mode">
+                                    <dt>收益获取方式</dt>
+                                    <dd class="clearfix"><span><em>到期还本付息</em></span></dd>
+                                </dl>
+                                <dl class="usable">
+                                    <dt>我的账户可用</dt>
+                                    <dd>资金(元)：
+                                        <!-- 判断用户是否登录：未登录，显示登录连接 -->
+                                        <span style="font-size:18px;color:#ff6161;vertical-align:bottom;"><a
+                                                th:href="@{/loan/page/login}">请登录</a></span>
+
+                                        <!-- 判断用户是否登录：已登录，显示可用余额 -->
+                                        <!--<span style="font-size:18px;color:#ff6161;vertical-align:bottom;">1,000,12 元</span>-->
+
+                                    </dd>
+                                </dl>
+                                <div class="expect-box">
+                                    <div class="expect-money">预计本息收入(元)：<span class="money"></span><span
+                                            class="prompt" style="display:block;">请在下方输入投资金额</span>
+                                    </div>
+                                    <label for="bidMoney"></label>
+                                    <input type="text" id="bidMoney" name="bidMoney" placeholder="请输入投资金额，应为100元的整倍数"
+                                           maxlength="9"/>
+                                    <div class="max-invest-money"></div>
+                                </div>
+                                <div class="invest-btn">
+                                    <a id="investNow" href="javascript:void(0)" class="btn-1">立即投资</a>
+                                </div>
+                                <input type="hidden" id="loanId" name="loanId" th:value="${loanInfo.id}"/>
+                            </div>
+                        </div>
+                    </div>
+                    <!--页面右侧end-->
+                </div>
+            </div>
+            <!--页中end-->
+
+        </div>
+        <!--散标投资 end-->
+
+        <!--遮罩层-->
+        <div class="dialog-overlay" id="dialog-overlay1" style="display:none;"></div>
+
+        <!--投资成功浮层start-->
+        <div class="layer-body failureSuccess failurePayment" id="failurePayment"
+             style="display:none;width:500px;height:100px;top:75%;">
+            <a class="layer-close"></a>
+            <div style="background:#f2f2f2; line-height:105px;text-align:center;"><span
+                    style="font-size:25px;">投资成功</span></div>
+        </div>
+        <!--投资成功浮层end-->
+
+        <!--页脚start-->
+        <div th:include="commons/footer :: html"></div>
+        <!--页脚end-->
+
+        <!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable -->
+        <script type="text/javascript">
+            let context = '[[@{/}]]'
+            let curRecordPage = 1
+            let bidRecordDiv = $("#bidRecordDiv")
+
+            function nextRecord() {
+                $.getJSON(
+                    "/" + context.substring(1, context.length - 1) + "/loan/nextRecord",
+                    {
+                        "page": curRecordPage,
+                        "loanId": [[${loanInfo.id}]]
+                    },
+                    function (records) {
+                        fillRecordDiv(records)
+                        curRecordPage++
+
+                        if (curRecordPage > [[${pages}]]) {
+                            curRecordPage = [[${pages}]]
+                        }
+                    }
+                )
+            }
+
+            function prevRecord() {
+                $.getJSON(
+                    "/" + context.substring(1, context.length - 1) + "/loan/prevRecord",
+                    {
+                        "page": curRecordPage,
+                        "loanId": [[${loanInfo.id}]]
+                    },
+                    function (records) {
+                        fillRecordDiv(records)
+                        curRecordPage--
+
+                        if (curRecordPage < 1) {
+                            curRecordPage = 1
+                        }
+                    }
+                )
+            }
+
+            function fillRecordDiv(records) {
+                bidRecordDiv.empty()
+
+                for (let record of records) {
+                    let div = $("<div></div>")
+                    let dd = $("<dd></dd>")
+                    let numSpan = $("<span class='record-num'></span>")
+                    let userSpan = $("<span class='invest-user'></span>")
+                    let moneySpan = $("<span class='invest-money'></span>")
+                    let timeSpan = $("<span class='invest-time'></span>")
+
+                    dd.append(numSpan)
+                    dd.append(userSpan)
+                    dd.append(moneySpan)
+                    dd.append(timeSpan)
+
+                    numSpan.text(records.indexOf(record) + 1)
+                    userSpan.text(record.phone.substring(0, 3) + "******" + record.phone.substring(9))
+                    moneySpan.text(record.bid_money.toFixed(1))
+                    timeSpan.text(record.bid_time)
+
+                    div.append(dd)
+
+                    bidRecordDiv.append(div)
+                }
+            }
+        </script>
+    </body>
+</html>

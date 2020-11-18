@@ -51,7 +51,8 @@
                                     </div>
                                 </div>
                                 <div class="pro-btn">
-                                    <a th:href="@{/loan/loanInfo}" class="btn-1">立即投资</a><!--已满标按钮-->
+                                    <a th:href="@{/loan/loanInfo(loanId=${loanInfo.id})}" class="btn-1">立即投资</a>
+                                    <!--已满标按钮-->
                                 </div>
                             </div>
                         </div>
@@ -64,10 +65,22 @@
                             <tr>
                                 <td>
                                     <span th:text="|共${loanInfoPageInfo.total}条${loanInfoPageInfo.pages}页&nbsp;&nbsp;当前为第${loanInfoPageInfo.pageNum}页|">共20条3页&nbsp;&nbsp;当前为第2页　</span>
-                                    <a id="linkHomePage" th:href="@{/loan/first(productType=${productType})}">首页</a>
-                                    <a id="linkPreviousPage" th:href="@{/loan/prev(page=${loanInfoPageInfo.pageNum},productType=${productType})}">上一页</a>
-                                    <a id="linkNextPage" th:href="@{/loan/next(page=${loanInfoPageInfo.pageNum},productType=${productType})}">下一页 </a>
-                                    <a id="linkLastPage" th:href="@{/loan/last(page=${loanInfoPageInfo.pages},productType=${productType})}">尾页</a>
+
+                                    <a href="javascript:void(0)" th:if="${loanInfoPageInfo.isFirstPage}">首页</a>
+                                    <a th:href="@{/loan/first(productType=${productType})}"
+                                       th:unless="${loanInfoPageInfo.isFirstPage}">首页</a>
+
+                                    <a href="javascript:void(0)" th:if="${loanInfoPageInfo.isFirstPage}">上一页</a>
+                                    <a th:href="@{/loan/prev(page=${loanInfoPageInfo.pageNum},productType=${productType})}"
+                                       th:unless="${loanInfoPageInfo.isFirstPage}">上一页</a>
+
+                                    <a href="javascript:void(0)" th:if="${loanInfoPageInfo.isLastPage}">下一页 </a>
+                                    <a th:href="@{/loan/next(page=${loanInfoPageInfo.pageNum},productType=${productType})}"
+                                       th:unless="${loanInfoPageInfo.isLastPage}">下一页 </a>
+
+                                    <a href="javascript:void(0)" th:if="${loanInfoPageInfo.isLastPage}">尾页</a>
+                                    <a th:href="@{/loan/last(page=${loanInfoPageInfo.pages},productType=${productType})}"
+                                       th:unless="${loanInfoPageInfo.isLastPage}">尾页</a>
                                 </td>
                             </tr>
                         </tbody>

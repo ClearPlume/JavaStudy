@@ -331,12 +331,12 @@
 .pro-info .info-3 h3{ color: #666;}
 .pro-info .info-bt span{ display: inline-block; font-size: 14px; color: #999;}
 .pro-info .info-bt .help-prompt{ display: inline-block; top: 3px;}
-.pro-syfs { margin-top: 46px; background:#f6f6f6; height: 70px;}
-.pro-syfs dt { float: left; width: 75px; height: 70px; background: #e7e7e7; margin-right: 25px;}
-.pro-syfs dt span { display: block; width: 32px; line-height: 16px; text-align: center; font-size: 14px; color: #666; padding-top: 10px; margin:0 auto;}
-.pro-syfs dd { float: left; line-height: 70px;  padding:0 40px; font-size: 14px; color: #666; position: relative;}
-.pro-syfs dd span { color: #999;}
-.pro-syfs dt:first-child + dd + dd:after { display: block; content: " "; width: 1px; height: 16px; background: #e1e1e1; position: absolute; left: 0; top: 27px;}
+.pro-return-of-proceeds { margin-top: 46px; background:#f6f6f6; height: 70px;}
+.pro-return-of-proceeds dt { float: left; width: 75px; height: 70px; background: #e7e7e7; margin-right: 25px;}
+.pro-return-of-proceeds dt span { display: block; width: 32px; line-height: 16px; text-align: center; font-size: 14px; color: #666; padding-top: 10px; margin:0 auto;}
+.pro-return-of-proceeds dd { float: left; line-height: 70px;  padding:0 40px; font-size: 14px; color: #666; position: relative;}
+.pro-return-of-proceeds dd span { color: #999;}
+.pro-return-of-proceeds dt:first-child + dd + dd:after { display: block; content: " "; width: 1px; height: 16px; background: #e1e1e1; position: absolute; left: 0; top: 27px;}
 
 .pro-details-cnt { min-height:600px; background: #fff; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; padding-bottom: 45px; margin-top: 10px;}
 .pro-details-cnt .tabNav { border-bottom:solid 1px #eeeeee; height: 59px; padding-left: 30px;}

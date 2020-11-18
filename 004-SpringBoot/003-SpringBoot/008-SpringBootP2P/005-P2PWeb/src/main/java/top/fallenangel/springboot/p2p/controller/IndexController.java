@@ -30,7 +30,7 @@ public class IndexController {
         model.addAttribute("totalDealMoney", bidInfoService.queryTotalDealMoney());
 
         Map<String, Object> param = new HashMap<>();
-        // 新手宝
+        // 新手宝(产品类型，查询数量)
         param.put("new", 0);
         param.put("newNum", 1);
         // 优选

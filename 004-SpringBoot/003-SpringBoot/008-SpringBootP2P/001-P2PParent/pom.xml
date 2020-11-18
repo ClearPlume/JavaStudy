@@ -35,13 +35,6 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--监视器-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring-boot.version}</version>
-            </dependency>
-
             <!--Redis-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -107,15 +100,6 @@
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
                 <scope>runtime</scope>
-            </dependency>
-
-            <!--热部署-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-devtools</artifactId>
-                <version>${spring-boot.version}</version>
-                <scope>runtime</scope>
-                <optional>true</optional>
             </dependency>
 
             <!--Spring-->

@@ -18,9 +18,25 @@
         from b_bid_info
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <!--查询总成交金额-->
     <select id="selectTotalDealMoney" resultType="java.lang.Double">
         select sum(bid_money)
         from b_bid_info
+    </select>
+    <!--查询指定页的产品投资记录(投资人 投资金额 投资时间)-->
+    <select id="selectBidRecordByLoanId" resultType="java.util.Map">
+        select phone, bid_money, bid_time
+        from b_bid_info b
+                 join u_user u on b.uid = u.id
+        where loan_id = #{loanId}
+        order by bid_time desc
+        limit #{startRow}, #{pageSize}
+    </select>
+    <!--产品的投资记录数-->
+    <select id="count" resultType="java.lang.Integer">
+        select count(1)
+        from b_bid_info
+        where loan_id = #{loanId}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
