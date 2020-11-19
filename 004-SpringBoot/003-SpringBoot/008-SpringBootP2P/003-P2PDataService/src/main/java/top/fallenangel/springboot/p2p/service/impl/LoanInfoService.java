@@ -3,7 +3,7 @@ package top.fallenangel.springboot.p2p.service.impl;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import top.fallenangel.springboot.p2p.common.Constant;
+import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
 import top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper;
 import top.fallenangel.springboot.p2p.service.ILoanInfoService;
@@ -26,7 +26,7 @@ public class LoanInfoService implements ILoanInfoService {
     // 查询产品平均收益率
     @Override
     public double queryAvgRate() {
-        return Double.parseDouble(redisUtil.getValueFromRedis(Constant.AVG_RATE, () -> String.valueOf(loanInfoMapper.selectAvgRate())));
+        return Double.parseDouble(redisUtil.getValueFromRedis(Constants.AVG_RATE, () -> String.valueOf(loanInfoMapper.selectAvgRate())));
     }
 
     // 根据指定参数查询产品信息

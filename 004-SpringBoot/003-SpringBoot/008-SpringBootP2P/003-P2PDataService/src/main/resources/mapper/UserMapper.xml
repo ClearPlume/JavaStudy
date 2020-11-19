@@ -20,9 +20,16 @@
         from u_user
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <!--平台用户数-->
     <select id="count" resultType="java.lang.Integer">
         select count(1)
         from u_user
+    </select>
+    <!--手机号数量-->
+    <select id="selectPhoneCount" resultType="java.lang.Integer">
+        select count(1)
+        from u_user
+        where phone = #{phone}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

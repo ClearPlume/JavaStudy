@@ -1,7 +1,7 @@
 package top.fallenangel.springboot.p2p.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import top.fallenangel.springboot.p2p.common.Constant;
+import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.model.mapper.BidInfoMapper;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
 import top.fallenangel.springboot.p2p.util.RedisUtil;
@@ -25,7 +25,7 @@ public class BidInfoService implements IBidInfoService {
     // 查询平台总成交额
     @Override
     public double queryTotalDealMoney() {
-        return Double.parseDouble(redisUtil.getValueFromRedis(Constant.TOTAL_DEAL_MONEY, () -> String.valueOf(bidInfoMapper.selectTotalDealMoney())));
+        return Double.parseDouble(redisUtil.getValueFromRedis(Constants.TOTAL_DEAL_MONEY, () -> String.valueOf(bidInfoMapper.selectTotalDealMoney())));
     }
 
     // 查询指定页产品投资记录

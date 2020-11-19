@@ -45,6 +45,10 @@
             </if>
         </trim>
     </insert>
+    <insert id="registerGift" useGeneratedKeys="true" keyColumn="id">
+        insert into u_finance_account (uid, available_money)
+        VALUES (#{userId}, #{amount})
+    </insert>
     <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.springboot.p2p.model.entity.FinanceAccount">
         update u_finance_account
         <set>

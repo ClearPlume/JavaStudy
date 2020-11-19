@@ -30,21 +30,43 @@ public class RedisUtil {
      * @param key      要查找/设置的key
      * @param operator key不存在时，要进行的操作
      * @param timeout  超时时间
-     * @param unit     超时的时间单位
+     * @param timeUnit 超时的时间单位
      * @return 最终的value值
      */
-    public String getValueFromRedis(String key, Operator operator, long timeout, TimeUnit unit) {
+    public String getValueFromRedis(String key, Operator operator, long timeout, TimeUnit timeUnit) {
         String valueStr = redis.opsForValue().get(key);
         if (valueStr == null) {
             synchronized (this) {
                 valueStr = redis.opsForValue().get(key);
                 if (valueStr == null) {
                     valueStr = operator.operation();
-                    redis.opsForValue().set(key, valueStr, timeout, unit);
+                    redis.opsForValue().set(key, valueStr, timeout, timeUnit);
                 }
             }
         }
         return valueStr;
+    }
+
+    /**
+     * 往Redis中设置key-value键值对
+     *
+     * @param phone    key
+     * @param authCode value
+     * @param timeout  超时时间
+     * @param timeUnit 超时的时间单位
+     */
+    public void setValue(String phone, String authCode, long timeout, TimeUnit timeUnit) {
+        redis.opsForValue().set(phone, authCode, timeout, timeUnit);
+    }
+
+    /**
+     * 从Redis中获取key的value
+     *
+     * @param key key
+     * @return value
+     */
+    public String getValue(String key) {
+        return redis.opsForValue().get(key);
     }
 
     /**
@@ -58,4 +80,6 @@ public class RedisUtil {
          */
         String operation();
     }
+
+
 }
