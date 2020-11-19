@@ -147,22 +147,36 @@ $(function () {
     // 点击验证码按钮
     $("#messageCodeBtn").click(function () {
         if (phoneOK && pwdOK) {
-            $.ajax({
-                "url": "/P2PWeb/loan/page/checkNum",
-                "data": {
-                    "phone": phone
-                },
-                "success": function (data) {
-                    if (data.success) {
-                        alert(data.msg)
-                    } else {
-                        alert(data.msg)
+            let _this = $(this)
+
+            if (!_this.hasClass("on")) {
+                $.ajax({
+                    "url": "/P2PWeb/loan/page/checkNum",
+                    "data": {
+                        "phone": phone
+                    },
+                    "success": function (data) {
+                        if (data.success) {
+                            $.leftTime(60, function (data) {
+                                if (data.status) {
+                                    _this.addClass("on")
+                                    _this.html((data.s === "00" ? "60" : data.s) + "秒后重新获取")
+                                } else {
+                                    _this.removeClass("on")
+                                    _this.html("获取验证码")
+                                }
+                            })
+                            // FIXME 这个只是测试时获取生成的验证码
+                            alert(data.msg)
+                        } else {
+                            alert(data.msg)
+                        }
+                    },
+                    "error": function () {
+                        alert("系统维护中...")
                     }
-                },
-                "error": function () {
-                    alert("系统维护中...")
-                }
-            })
+                })
+            }
         } else {
             showError("messageCodeBtn", "请正确填写信息！")
             setTimeout(function () {
