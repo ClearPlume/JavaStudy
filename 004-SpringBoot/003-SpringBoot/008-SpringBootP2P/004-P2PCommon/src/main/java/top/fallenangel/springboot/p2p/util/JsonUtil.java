@@ -9,9 +9,12 @@ public final class JsonUtil {
     private final ObjectMapper mapper;
     private JsonNode node;
 
-    private JsonUtil(ObjectMapper mapper) {
+    public JsonUtil(ObjectMapper mapper) {
         this.mapper = mapper;
-        node = null;
+    }
+
+    public void setNode(JsonNode node) {
+        this.node = node;
     }
 
     /**
@@ -25,6 +28,18 @@ public final class JsonUtil {
     }
 
     /**
+     * 从Json字符串中获取Json变量
+     *
+     * @param fieldName 变量名
+     * @return 变量值。若不存在，则返回null
+     */
+    public JsonUtil getJson(String fieldName) {
+        JsonUtil jsonUtil = new JsonUtil(null);
+        jsonUtil.setNode(node.path(fieldName));
+        return jsonUtil;
+    }
+
+    /**
      * 从Json字符串中获取String变量
      *
      * @param fieldName 变量名
@@ -32,5 +47,15 @@ public final class JsonUtil {
      */
     public String getString(String fieldName) {
         return node.path(fieldName).asText();
+    }
+
+    /**
+     * 从Json字符串中获取Boolean变量
+     *
+     * @param fieldName 变量名
+     * @return 变量值
+     */
+    public boolean getBoolean(String fieldName) {
+        return node.path(fieldName).asBoolean();
     }
 }

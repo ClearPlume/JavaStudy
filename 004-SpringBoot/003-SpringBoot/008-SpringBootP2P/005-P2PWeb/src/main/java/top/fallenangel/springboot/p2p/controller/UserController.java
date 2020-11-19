@@ -34,11 +34,13 @@ public class UserController {
         this.redis = redis;
     }
 
+    // 跳转登录页面
     @GetMapping("register")
     public String register() {
         return "register";
     }
 
+    // 检查手机号是否可用
     @ResponseBody
     @GetMapping("checkPhoneAvailable")
     public Object checkPhoneAvailable(String phone) {
@@ -49,11 +51,12 @@ public class UserController {
         }
     }
 
+    // 提交注册
     @ResponseBody
     @GetMapping("registerSubmit")
     public Object registerSubmit(String phone, String pwd, String authCode, HttpServletRequest request) {
         if (!authCode.equals(redis.getValue(phone))) {
-            return Result.error("验证码填写错误！");
+            return Result.error("验证码填写有误！");
         }
         User user = userService.register(phone, pwd);
         request.getSession().setAttribute(Constants.LOGIN_USER, user);
@@ -64,6 +67,7 @@ public class UserController {
         }
     }
 
+    // 发送短信验证码
     @ResponseBody
     @GetMapping("checkNum")
     public Object checkNum(String phone, HttpServletRequest request) {
@@ -78,7 +82,8 @@ public class UserController {
 
         String data;
         try {
-            data = HttpClientUtil.doPost("https://way.jd.com/kaixintong/kaixintong", param);
+            // https://way.jd.com/kaixintong/kaixintong
+            data = HttpClientUtil.doPost("http://127.0.0.1:18081", param);
             data = "{\n" +
                     "    \"code\": \"10000\",\n" +
                     "    \"charge\": false,\n" +
@@ -98,10 +103,71 @@ public class UserController {
             return Result.error("系统维护中，请稍候再试");
         }
         String code = json.getString("code");
+        if (!"10000".equals(code)) {
+            return Result.error("网络波动，请稍候再试...");
+        }
         String status = xml.getElementText("/returnsms/returnstatus");
-        System.out.println("phone = " + phone);
-        System.out.println("code = " + code);
-        System.out.println("status = " + status);
+        if (!"Success".equals(status)) {
+            return Result.error("网络波动，请稍候再试...");
+        }
         return Result.success(authCode);
+    }
+
+    // 跳转实名认证页面
+    @GetMapping("realName")
+    public String realName() {
+        return "realName";
+    }
+
+    // 提交交名认证
+    @ResponseBody
+    @GetMapping("realNameSubmit")
+    public Object realNameSubmit(String phone, String authCode, String idCard, String realName, HttpServletRequest request) {
+        if (!authCode.equals(redis.getValue(phone))) {
+            return Result.error("验证码填写有误！");
+        }
+        Map<String, Object> param = new HashMap<>();
+        // param.put("cardNo", idCard);
+        // param.put("realName", realName);
+        // param.put("appkey", "cd5b89522646433fad8e1c667b95b5d9");
+
+        String data;
+        try {
+            // https://way.jd.com/youhuoBeijing/test
+            data = HttpClientUtil.doPost("http://127.0.0.1:18081", param);
+            data = "{\n" +
+                    "    \"code\": \"10000\",\n" +
+                    "    \"charge\": false,\n" +
+                    "    \"remain\": 1305,\n" +
+                    "    \"msg\": \"查询成功\",\n" +
+                    "    \"result\": {\n" +
+                    "        \"error_code\": 0,\n" +
+                    "        \"reason\": \"成功\",\n" +
+                    "        \"result\": {\n" +
+                    "            \"realname\": \"乐天磊\",\n" +
+                    "            \"idcard\": \"350721197702134399\",\n" +
+                    "            \"isok\": true\n" +
+                    "        }\n" +
+                    "    }\n" +
+                    "}";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Result.error("网络波动，请稍候再试...");
+        }
+        try {
+            json.parseJson(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Result.error("系统维护中，请稍候再试");
+        }
+        String code = json.getString("code");
+        if (!"10000".equals(code)) {
+            return Result.error("网络波动，请稍候再试...");
+        }
+        boolean isOk = json.getJson("result").getJson("result").getBoolean("isok");
+        if (!isOk) {
+            return Result.error("实名认证失败，检查身份信息！");
+        }
+        return Result.success();
     }
 }

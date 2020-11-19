@@ -1,7 +1,7 @@
 //错误提示
 function showError(id, msg) {
     let okSign = $("#" + id + "Ok")
-    let errSign = $("#" + id + "Err");
+    let errSign = $("#" + id + "Err")
 
     okSign.hide()
     errSign.html("<i></i><p>" + msg + "</p>")
@@ -40,7 +40,6 @@ function closeBox(maskId, agreeId) {
     $("#" + agreeId).hide()
 }
 
-//注册协议确认
 $(function () {
     // 输入的信息是否正确
     let phoneOK = false
@@ -52,7 +51,7 @@ $(function () {
     let pwd
     let authCode
 
-    // 点击同意协议复选框
+    // 注册协议确认
     $("#agree").click(function () {
         let isCheck = document.getElementById("agree").checked
         let btnRegister = $("#btnRegister")
@@ -69,7 +68,6 @@ $(function () {
     // 手机号输入框失去焦点
     $("#phone").blur(function () {
         hideError("phone")
-
         phone = this.value.trim()
 
         if (phone.length !== 11) {
@@ -104,7 +102,6 @@ $(function () {
     // 密码输入框失去焦点
     $("#loginPassword").blur(function () {
         hideError("loginPassword")
-
         pwd = this.value.trim()
 
         if (pwd.length < 6 || pwd.length > 20) {
@@ -127,7 +124,6 @@ $(function () {
     // 验证码输入框失去焦点
     $("#messageCode").blur(function () {
         hideError("messageCode")
-
         authCode = this.value.trim()
 
         if (authCode.length !== 6) {
@@ -197,7 +193,7 @@ $(function () {
                 },
                 "success": function (data) {
                     if (data.success) {
-                        location.href = "/P2PWeb"
+                        location.href = "/P2PWeb/loan/page/realName"
                     } else {
                         alert(data.msg)
                     }
