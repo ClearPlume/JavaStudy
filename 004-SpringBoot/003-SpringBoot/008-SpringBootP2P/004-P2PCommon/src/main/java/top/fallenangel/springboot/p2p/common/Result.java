@@ -11,12 +11,17 @@ public class Result {
     }
 
     public static Map<String, Object> success() {
-        setValue("code", 1, "success", true, "msg", "ok");
+        setValue("code", 0, "success", true, "msg", "ok");
         return result;
     }
 
     public static Map<String, Object> success(String msg) {
-        setValue("code", 1, "success", true, "msg", msg);
+        setValue("code", 0, "success", true, "msg", msg);
+        return result;
+    }
+
+    public static Map<String, Object> success(int code, String msg) {
+        setValue("code", code, "success", true, "msg", msg);
         return result;
     }
 
@@ -27,6 +32,11 @@ public class Result {
 
     public static Map<String, Object> error(String msg) {
         setValue("code", 0, "success", false, "msg", msg);
+        return result;
+    }
+
+    public static Map<String, Object> error(int code, String msg) {
+        setValue("code", code, "success", false, "msg", msg);
         return result;
     }
 

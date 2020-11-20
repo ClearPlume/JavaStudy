@@ -1,8 +1,13 @@
 package top.fallenangel.springboot.p2p.service;
 
+import top.fallenangel.springboot.p2p.model.entity.User;
+
 import java.util.List;
 import java.util.Map;
 
+/**
+ * 投资记录Service
+ */
 public interface IBidInfoService {
     /**
      * 查询平台总成交额
@@ -29,4 +34,19 @@ public interface IBidInfoService {
      * @return 页数
      */
     int queryLoanBidPages(Integer loanId, Integer pageSize);
+
+    /**
+     * 用户投资
+     * <p>
+     * 返回值中的code：
+     * 2：余额不足
+     * 3：产品可投金额不足
+     * 4：产品已满标
+     *
+     * @param user     用户
+     * @param loanId   投资产品
+     * @param bidMoney 投资金额
+     * @return 投资结果
+     */
+    Map<String, Object> invest(User user, int loanId, int bidMoney);
 }

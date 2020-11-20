@@ -14,8 +14,15 @@ public class FinanceAccountService implements IFinanceAccountService {
         this.financeAccountMapper = financeAccountMapper;
     }
 
+    // 根据用户id查询帐户信息
     @Override
     public FinanceAccount queryFinanceAccount(Integer uId) {
         return financeAccountMapper.selectFinanceAccountByUserId(uId);
+    }
+
+    // 更新帐户信息
+    @Override
+    public void updateFinanceAccount(FinanceAccount financeAccount) {
+        financeAccountMapper.updateByPrimaryKeySelective(financeAccount);
     }
 }

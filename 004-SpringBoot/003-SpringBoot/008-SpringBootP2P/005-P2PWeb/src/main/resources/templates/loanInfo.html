@@ -115,8 +115,7 @@
                                     </div>
 
                                     <!--页码 start-->
-                                    <div class="page_bar" style="position: relative; left: 44.3%"
-                                         th:unless="${bidRecordList.size() == 0}">
+                                    <div class="page_bar" style="position: relative; left: 44.3%" th:if="${pages > 1}">
                                         <a href="javascript:void(0)" onclick="prevRecord()">上一页</a>
                                         <a href="javascript:void(0)" onclick="nextRecord()">下一页</a>
                                     </div>
@@ -154,8 +153,8 @@
                                     </dd>
                                 </dl>
                                 <div class="expect-box">
-                                    <div class="expect-money">预计本息收入(元)：<span class="money"></span><span
-                                            class="prompt" style="display:block;">请在下方输入投资金额</span>
+                                    <div class="expect-money">预计本息收入(元)：<span class="money" id="expectMoney"></span>
+                                        <span class="prompt" style="display:block;">请在下方输入投资金额</span>
                                     </div>
                                     <label for="bidMoney"></label>
                                     <input type="text" id="bidMoney" name="bidMoney" placeholder="请输入投资金额，应为100元的整倍数"
@@ -201,13 +200,13 @@
 
         <!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable -->
         <script type="text/javascript" th:inline="javascript">
-            let context = '[[@{/}]]'
+            let context = location.pathname.substring(0, location.pathname.indexOf("/", 1))
             let curRecordPage = 1
             let bidRecordDiv = $("#bidRecordDiv")
 
             function nextRecord() {
                 $.getJSON(
-                    "/" + context.substring(1, context.length - 1) + "/loaninfo/nextRecord",
+                    location.origin + context + "/loaninfo/nextRecord",
                     {
                         "page": curRecordPage,
                         "loanId": [[${loanInfo.id}]]
@@ -225,7 +224,7 @@
 
             function prevRecord() {
                 $.getJSON(
-                    "/" + context.substring(1, context.length - 1) + "/loaninfo/prevRecord",
+                    location.origin + context + "/loaninfo/prevRecord",
                     {
                         "page": curRecordPage,
                         "loanId": [[${loanInfo.id}]]
@@ -268,6 +267,8 @@
                 }
             }
 
+            // 预计本息收入
+            let expectMoney = $("#expectMoney")
             // 投资金额提示
             let investMoneyTip = $("#investMoneyTip")
             // 起投金额
@@ -284,9 +285,11 @@
             let productType = [[${loanInfo.productType}]]
             // 产品编号
             let loanId = [[${loanInfo.id}]]
+            // 投资金额
+            let bidMoney
 
             function checkMoney() {
-                let bidMoney = $.trim($("#bidMoney").val())
+                bidMoney = $.trim($("#bidMoney").val())
 
                 if (bidMoney === '' || bidMoney == null) {
                     investMoneyTip.html("请输入金额")
@@ -329,11 +332,11 @@
                 //新手宝
                 // noinspection JSIncompatibleTypesComparison
                 if (productType === 0) {
-                    $("#shouyi").html((rate / 100 / 365 * cycle * Number(bidMoney)).toFixed(2))
+                    expectMoney.html((rate / 100 / 365 * cycle * Number(bidMoney)).toFixed(2))
 
                 } else {
                     //其它宝
-                    $("#shouyi").html((rate / 100 / 365 * cycle * 30 * Number(bidMoney)).toFixed(2))
+                    expectMoney.html((rate / 100 / 365 * cycle * 30 * Number(bidMoney)).toFixed(2))
                 }
                 return true
             }
@@ -357,12 +360,19 @@
                     $.ajax({
                         type: "post",
                         url: "/P2PWeb/bid/invest",
-                        data: {"loanId": loanId, "bidMoney": $.trim($("#bidMoney").val())},
+                        data: {
+                            "loanId": loanId, "bidMoney": bidMoney
+                        },
                         success: function (data) {
-                            if (data.code === "1") {
-                                location.href = $("#ReturnUrl").val()
-                            }
-                            if (data.code === "0") {
+                            if (data.success) {
+                                let href = location.href
+
+                                if (confirm("投资成功，将刷新页面...")) {
+                                    location.href = href
+                                } else {
+                                    location.href = href
+                                }
+                            } else {
                                 investMoneyTip.html(data.msg)
                             }
                         },

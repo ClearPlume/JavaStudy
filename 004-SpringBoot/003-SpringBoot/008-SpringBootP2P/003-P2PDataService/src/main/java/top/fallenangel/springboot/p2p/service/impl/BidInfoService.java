@@ -1,24 +1,38 @@
 package top.fallenangel.springboot.p2p.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.fallenangel.springboot.p2p.common.Constants;
+import top.fallenangel.springboot.p2p.common.Result;
+import top.fallenangel.springboot.p2p.model.entity.BidInfo;
+import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
+import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
+import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.model.mapper.BidInfoMapper;
+import top.fallenangel.springboot.p2p.model.mapper.FinanceAccountMapper;
+import top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
 import top.fallenangel.springboot.p2p.util.RedisUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+// 投资记录Service
 @org.springframework.stereotype.Service
 @Service(interfaceClass = IBidInfoService.class, version = "1.0.0", timeout = 15000)
 public class BidInfoService implements IBidInfoService {
     private final BidInfoMapper bidInfoMapper;
+    private final FinanceAccountMapper financeAccountMapper;
+    private final LoanInfoMapper loanInfoMapper;
     private final RedisUtil redisUtil;
 
-    public BidInfoService(BidInfoMapper bidInfoMapper, RedisUtil redisUtil) {
+    public BidInfoService(BidInfoMapper bidInfoMapper, FinanceAccountMapper financeAccountMapper, LoanInfoMapper loanInfoMapper, RedisUtil redisUtil) {
         this.bidInfoMapper = bidInfoMapper;
+        this.financeAccountMapper = financeAccountMapper;
+        this.loanInfoMapper = loanInfoMapper;
         this.redisUtil = redisUtil;
     }
 
@@ -49,5 +63,52 @@ public class BidInfoService implements IBidInfoService {
     public int queryLoanBidPages(Integer loanId, Integer pageSize) {
         int count = bidInfoMapper.count(loanId);
         return count % pageSize == 0 ? count / pageSize : count / pageSize + 1;
+    }
+
+    // 用户投资
+    @Override
+    @Transactional
+    public Map<String, Object> invest(User user, int loanId, int bidMoney) {
+        FinanceAccount financeAccount = financeAccountMapper.selectFinanceAccountByUserId(user.getId());
+
+        // 帐户余额
+        Double availableMoney = financeAccount.getAvailableMoney();
+        if (availableMoney < bidMoney) {
+            return Result.error(2, "您的帐户余额不足，请充值！");
+        }
+
+        financeAccount.setAvailableMoney(availableMoney - bidMoney);
+        financeAccountMapper.updateByPrimaryKeySelective(financeAccount);
+
+        // 操作投资产品
+        LoanInfo loanInfo = loanInfoMapper.selectByPrimaryKey(loanId);
+        Double leftProductMoney = loanInfo.getLeftProductMoney();
+
+        // 产品剩余可投金额是否足够
+        if (leftProductMoney < bidMoney) {
+            return Result.error(3, "产品可投金额仅剩" + leftProductMoney + "！");
+        }
+        // 产品是否已满标
+        if (leftProductMoney == 0) {
+            return Result.error(4, "产品已满标！");
+        }
+        loanInfo.setLeftProductMoney(leftProductMoney - bidMoney);
+        // 投资后，产品是否已满标
+        if (loanInfo.getLeftProductMoney() == 0) {
+            loanInfo.setProductStatus(1);
+            loanInfo.setProductFullTime(new Date());
+        }
+        loanInfoMapper.updateByPrimaryKeySelective(loanInfo);
+
+        // 新增投资记录
+        BidInfo bidInfo = new BidInfo();
+        bidInfo.setUid(user.getId());
+        bidInfo.setLoanId(loanId);
+        bidInfo.setBidMoney((double) bidMoney);
+        bidInfo.setBidTime(new Date());
+        bidInfo.setBidStatus(1);
+        bidInfoMapper.insertSelective(bidInfo);
+
+        return Result.success();
     }
 }

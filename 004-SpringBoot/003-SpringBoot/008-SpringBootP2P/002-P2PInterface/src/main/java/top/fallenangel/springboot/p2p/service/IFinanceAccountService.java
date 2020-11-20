@@ -10,4 +10,11 @@ public interface IFinanceAccountService {
      * @return 余额
      */
     FinanceAccount queryFinanceAccount(Integer uId);
+
+    /**
+     * 更新帐户信息
+     *
+     * @param financeAccount 帐户信息
+     */
+    void updateFinanceAccount(FinanceAccount financeAccount);
 }
