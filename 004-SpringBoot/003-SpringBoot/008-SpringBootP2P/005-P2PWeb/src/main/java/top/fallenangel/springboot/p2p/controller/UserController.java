@@ -2,12 +2,15 @@ package top.fallenangel.springboot.p2p.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.common.Result;
 import top.fallenangel.springboot.p2p.model.entity.User;
+import top.fallenangel.springboot.p2p.service.IBidInfoService;
 import top.fallenangel.springboot.p2p.service.IUserService;
 import top.fallenangel.springboot.p2p.util.*;
 
@@ -23,6 +26,9 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
     @Reference(interfaceClass = IUserService.class, version = "1.0.0", timeout = 15000)
     private IUserService userService;
+
+    @Reference(interfaceClass = IBidInfoService.class, version = "1.0.0", timeout = 15000)
+    private IBidInfoService bidInfoService;
 
     private final JsonUtil json;
     private final XmlUtil xml;
@@ -119,7 +125,7 @@ public class UserController {
         return "realName";
     }
 
-    // 提交交名认证
+    // 提交实名认证
     @ResponseBody
     @GetMapping("realNameSubmit")
     public Object realNameSubmit(String phone, String authCode, String idCard, String realName, HttpServletRequest request) {
@@ -169,5 +175,38 @@ public class UserController {
             return Result.error("实名认证失败，检查身份信息！");
         }
         return Result.success();
+    }
+
+    // 跳转登录界面
+    @GetMapping("login")
+    public String login(Model model, @RequestParam(required = false) String returnUrl) {
+        model.addAttribute("totalUser", userService.queryTotalUser());
+        model.addAttribute("totalDealMoney", bidInfoService.queryTotalDealMoney());
+        model.addAttribute("returnUrl", returnUrl);
+        return "login";
+    }
+
+    // 提交登录
+    @ResponseBody
+    @GetMapping("loginSubmit")
+    public Object loginSubmit(String phone, String pwd, String authCode, HttpServletRequest request) {
+        if (!authCode.equals(redis.getValue(phone))) {
+            return Result.error("验证码填写有误！");
+        }
+        User user = userService.register(phone, pwd);
+        request.getSession().setAttribute(Constants.LOGIN_USER, user);
+
+        if (user == null) {
+            return Result.error("用户名或密码错误！");
+        } else {
+            return Result.success();
+        }
+    }
+
+    // 退出登录
+    @GetMapping("logout")
+    public String logout(HttpServletRequest request) {
+        request.getSession().removeAttribute(Constants.LOGIN_USER);
+        return "redirect:/";
     }
 }

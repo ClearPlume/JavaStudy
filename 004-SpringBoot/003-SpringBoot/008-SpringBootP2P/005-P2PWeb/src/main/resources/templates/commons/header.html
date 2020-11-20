@@ -1,4 +1,6 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <!--<link rel="stylesheet" type="text/css" th:href="@{/css/share.css}"/>-->
+    <script type="text/javascript" th:src="@{/js/trafficStatistics.js}"></script>
     <script type="text/javascript">
         //我要投资下拉
         $(function () {
@@ -8,6 +10,11 @@
                 $(this).children(".menu-drop").stop(false, true).hide();
             });
         });
+
+        function toLogin() {
+            let returnUrl = location.href
+            location.href = "/P2PWeb/loan/page/login?returnUrl=" + returnUrl
+        }
     </script>
     <!--页头start-->
     <a id="top"></a>
@@ -16,8 +23,8 @@
             <div class="mainBox clearfix">
                 <div class="head_l"><span>客服电话：400-8080-105</span><em></em><a href="http://weibo.com/bjpowernode"
                                                                               target="_blank" class="weibo"></a></div>
-                <div class="head_r"><a href="javascript:void(0);">帮助中心</a><em></em><a
-                        href="javascript:void(0);" id="/webPage/invest/phone_jinxin.html" class="phone_jinxin"
+                <div class="head_r"><a href="javascript:void(0)">帮助中心</a><em></em><a
+                        href="javascript:void(0)" id="/webPage/invest/phone_jinxin.html" class="phone_jinxin"
                         style="margin-right:15px;"><i></i>手机客户端</a>
                     <div class="phone-ewm" style="display:none;">
                         <a href="javascript:void(0)" class="phone_jinxin"><i></i>手机客户端</a>
@@ -31,7 +38,7 @@
         </div>
         <div class="headCnt clearfix">
             <div class="logo"><a th:href="@{/}"><img th:src="@{/images/logo.jpg}" src="/static/images/logo.jpg"
-                                                          alt=""></a></div>
+                                                     alt=""></a></div>
             <ul class="main-nav">
                 <li><h2><a id="jinxin" th:href="@{/}">首页<i></i></a></h2></li><!--current为当前状态-->
                 <li>
@@ -49,29 +56,32 @@
             </ul>
             <div class="login-right">
                 <!-- 未登录start -->
-                <div class="no-login"><a th:href="@{/loan/page/register}" class="btn-reg">注册</a><a
-                        th:href="@{/loan/page/login}" class="btn-login">登录</a></div>
+                <div class="no-login" th:if="${session.LOGIN_USER == null}">
+                    <a th:href="@{/loan/page/register}" class="btn-reg">注册</a>
+                    <a href="javascript:void(0)" onclick="toLogin()">登录</a>
+                </div>
                 <!-- 未登录end -->
 
                 <!--登录后begin-->
-                <!--
-                 <div class="logged">
-                     <div class="userinfo-up">
-                         <a href="loan/myCenter" class="user-phone">13788889999</a><a href="/webPage/account/member_systems.html" class="user-vip" id="member">VIP1</a><i></i>
-                     </div>
-                     <div class="userinfo-drop-down" style="height: 0px;">
-                         <div class="down-bk">
-                             <div class="user-balance">余额：<span id="frame_top">1000.00</span>元</div>
-                             <ul class="quick-entry clearfix">
-                                 <li class="icon-recharge"><a href="toRecharge.html"><i></i><span>充值</span></a></li>
-                                 <li class="icon-invest" style="margin-left:85px;"><a href="loan/loan"><i></i><span>投资</span></a></li>
-                             </ul>
-                             <div class="enter">进入“<a href="/webPage/account/acc.html?myTime=1501046257129">我的小金库</a>”</div>
-                             <div class="exit"><a th:href="@{/loan/logout}">退出</a></div>
-                         </div>
-                     </div>
-                 </div>
-                  -->
+                <div class="logged" th:if="${session.LOGIN_USER != null}">
+                    <div class="userinfo-up">
+                        <a href="loan/myCenter" class="user-phone" th:text="${session.LOGIN_USER.phone}">13788889999</a>
+                        <a href="/webPage/account/member_systems.html" class="user-vip" id="member">VIP1</a><i></i>
+                    </div>
+                    <div class="userinfo-drop-down" style="height: 0">
+                        <div class="down-bk">
+                            <div class="user-balance">余额：<span id="frame_top">1000.00</span>元</div>
+                            <ul class="quick-entry clearfix">
+                                <li class="icon-recharge"><a href="toRecharge.html"><i></i><span>充值</span></a></li>
+                                <li class="icon-invest" style="margin-left:85px;"><a
+                                        href="loan/loan"><i></i><span>投资</span></a></li>
+                            </ul>
+                            <div class="enter">进入“<a href="/webPage/account/acc.html?myTime=1501046257129">我的小金库</a>”
+                            </div>
+                            <div class="exit"><a th:href="@{/loan/page/logout}">退出</a></div>
+                        </div>
+                    </div>
+                </div>
                 <!--登录后end-->
             </div>
         </div>

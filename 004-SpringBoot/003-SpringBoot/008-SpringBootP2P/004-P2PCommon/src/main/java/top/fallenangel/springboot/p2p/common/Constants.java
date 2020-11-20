@@ -1,9 +1,8 @@
 package top.fallenangel.springboot.p2p.common;
 
 public final class Constants {
-    public static final String AVG_RATE = "avgRate";
-    public static final String TOTAL_USER = "totalUser";
-    public static final String TOTAL_DEAL_MONEY = "totalDealMoney";
-    public static final String LOGIN_USER = "loginUser";
-    public static final String AUTH_CODE = "auth_Code";
+    public static final String AVG_RATE = "AVG_RATE";
+    public static final String TOTAL_USER = "TOTAL_USER";
+    public static final String TOTAL_DEAL_MONEY = "TOTAL_DEAL_MONEY";
+    public static final String LOGIN_USER = "LOGIN_USER";
 }

@@ -15,6 +15,11 @@
         from u_finance_account
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <select id="selectAccountAmountByUserId" resultType="java.lang.Integer">
+        select available_money
+        from u_finance_account
+        where uid = #{uId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from u_finance_account

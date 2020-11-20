@@ -25,4 +25,12 @@ public interface FinanceAccountMapper {
     int updateByPrimaryKey(FinanceAccount record);
 
     FinanceAccount selectByPrimaryKey(Integer id);
+
+    /**
+     * 根据用户id查询帐户余额
+     *
+     * @param uId 用户id
+     * @return 余额
+     */
+    int selectAccountAmountByUserId(@Param("uId") Integer uId);
 }
