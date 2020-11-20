@@ -9,7 +9,17 @@
         <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/share.css}"/>
         <link rel="stylesheet" type="text/css" th:href="@{/css/main.css}"/>
+        <script type="text/javascript">
+            function toLogin() {
+                let returnUrl = location.href
+                location.href = "/P2PWeb/loan/page/login?returnUrl=" + returnUrl
+            }
 
+            function toRealName() {
+                let returnUrl = location.href
+                location.href = "/P2PWeb/loan/page/realName?returnUrl=" + returnUrl
+            }
+        </script>
     </head>
 
     <body>
@@ -36,7 +46,7 @@
                                 <ul class="clearfix">
                                     <li class="info-1">
                                         <p>历史年化利率</p>
-                                        <h3 th:text="${loanInfo.rate}">4.9%</h3>
+                                        <h3 th:text="|${loanInfo.rate}%|">4.9%</h3>
                                         <div class="info-bt">
                                             <span>本产品采用普通利率</span>
                                         </div>
@@ -130,11 +140,16 @@
                                     <dt>我的账户可用</dt>
                                     <dd>资金(元)：
                                         <!-- 判断用户是否登录：未登录，显示登录连接 -->
-                                        <span style="font-size:18px;color:#ff6161;vertical-align:bottom;"><a
-                                                th:href="@{/loan/page/login}">请登录</a></span>
+                                        <span style="font-size:18px;color:#ff6161;vertical-align:bottom;"
+                                              th:if="${session.LOGIN_USER == null}">
+                                            <a href="javascript:void(0)" onclick="toLogin()">请登录</a>
+                                        </span>
 
                                         <!-- 判断用户是否登录：已登录，显示可用余额 -->
-                                        <!--<span style="font-size:18px;color:#ff6161;vertical-align:bottom;">1,000,12 元</span>-->
+                                        <span style="font-size:18px;color:#ff6161;vertical-align:bottom;"
+                                              th:unless="${session.LOGIN_USER == null}">
+                                            <span th:text="${financeAccount.availableMoney}">1,000,12</span> 元
+                                        </span>
 
                                     </dd>
                                 </dl>
@@ -144,11 +159,12 @@
                                     </div>
                                     <label for="bidMoney"></label>
                                     <input type="text" id="bidMoney" name="bidMoney" placeholder="请输入投资金额，应为100元的整倍数"
-                                           maxlength="9"/>
-                                    <div class="max-invest-money"></div>
+                                           maxlength="9" onblur="checkMoney()"/>
+                                    <div id="investMoneyTip" class="max-invest-money"></div>
                                 </div>
                                 <div class="invest-btn">
-                                    <a id="investNow" href="javascript:void(0)" class="btn-1">立即投资</a>
+                                    <a id="investNow" href="javascript:void(0)" onclick="invest()"
+                                       class="btn-1">立即投资</a>
                                 </div>
                                 <input type="hidden" id="loanId" name="loanId" th:value="${loanInfo.id}"/>
                             </div>
@@ -178,8 +194,13 @@
         <div th:include="commons/footer :: html"></div>
         <!--页脚end-->
 
+        <div th:if="${session.LOGIN_USER != null}">
+            <input type="hidden" id="user" th:value="${session.LOGIN_USER}"/>
+            <input type="hidden" id="userName" th:value="${session.LOGIN_USER.name}"/>
+        </div>
+
         <!--suppress JSUnusedGlobalSymbols, JSUnresolvedVariable -->
-        <script type="text/javascript">
+        <script type="text/javascript" th:inline="javascript">
             let context = '[[@{/}]]'
             let curRecordPage = 1
             let bidRecordDiv = $("#bidRecordDiv")
@@ -244,6 +265,111 @@
                     div.append(dd)
 
                     bidRecordDiv.append(div)
+                }
+            }
+
+            // 投资金额提示
+            let investMoneyTip = $("#investMoneyTip")
+            // 起投金额
+            let bidMinLimit = [[${loanInfo.bidMinLimit}]]
+            // 单笔上限金额
+            let bidMaxLimit = [[${loanInfo.bidMaxLimit}]]
+            // 剩余可投金额
+            let leftProductMoney = [[${loanInfo.leftProductMoney}]]
+            // 年化利率
+            let rate = [[${loanInfo.rate}]]
+            // 周期
+            let cycle = [[${loanInfo.cycle}]]
+            // 产品类型
+            let productType = [[${loanInfo.productType}]]
+            // 产品编号
+            let loanId = [[${loanInfo.id}]]
+
+            function checkMoney() {
+                let bidMoney = $.trim($("#bidMoney").val())
+
+                if (bidMoney === '' || bidMoney == null) {
+                    investMoneyTip.html("请输入金额")
+                    return
+                }
+                if (parseInt(bidMoney) <= 0) {
+                    investMoneyTip.html("输入的金额不能为负数")
+                    return
+                }
+                if (parseInt(bidMoney) < 100) {
+                    investMoneyTip.html("输入的金额不能小于100")
+                    return
+                }
+                if (parseInt(bidMoney) % 100 > 0) {
+                    investMoneyTip.html("输入的金额只能是100的整数倍")
+                    return
+                }
+                //不能小于起投金额
+                if (parseInt(bidMoney) < bidMinLimit) {
+                    investMoneyTip.html("输入的金额不能低于最小起投金额" + bidMinLimit)
+                    return
+                }
+                //不能大于单笔上限金额
+                if (parseInt(bidMoney) > bidMaxLimit) {
+                    investMoneyTip.html("输入的金额不能大于单笔最大金额" + bidMaxLimit)
+                    return
+                }
+                //不能大于剩余金额
+                if (parseInt(bidMoney) > leftProductMoney) {
+                    investMoneyTip.html("输入的金额不能大于剩余可投金额" + leftProductMoney)
+                    return
+                }
+                investMoneyTip.html("")
+
+                /*
+                 * 利息：日利息 * 天数
+                 * 日利息：年化利率 / 365
+                 * 天数:一个月 = 30天
+                 */
+                //新手宝
+                // noinspection JSIncompatibleTypesComparison
+                if (productType === 0) {
+                    $("#shouyi").html((rate / 100 / 365 * cycle * Number(bidMoney)).toFixed(2))
+
+                } else {
+                    //其它宝
+                    $("#shouyi").html((rate / 100 / 365 * cycle * 30 * Number(bidMoney)).toFixed(2))
+                }
+                return true
+            }
+
+            function invest() {
+                if (checkMoney()) {
+                    let user = $("#user").val()
+                    let userName = $("#userName").val()
+
+                    //没有登录：请登录
+                    if (user == null || user === "") {
+                        investMoneyTip.html("请先<a style='color: #2AAF6F' href='javascript:void(0)' onclick='toLogin()'>登录</a>,再继续投资")
+                        return
+                    }
+                    //没有实名认证：请实名认证
+                    if (userName == null || userName === "") {
+                        investMoneyTip.html("请先完成<a style='color: #2AAF6F' href='javascript:void(0)' onclick='toRealName()'>实名认证</a>,再继续投资")
+                        return
+                    }
+                    //投资
+                    $.ajax({
+                        type: "post",
+                        url: "/P2PWeb/bid/invest",
+                        data: {"loanId": loanId, "bidMoney": $.trim($("#bidMoney").val())},
+                        success: function (data) {
+                            if (data.code === "1") {
+                                location.href = $("#ReturnUrl").val()
+                            }
+                            if (data.code === "0") {
+                                investMoneyTip.html(data.msg)
+                            }
+                        },
+                        error: function () {
+                            investMoneyTip.html("系统维护中")
+                        }
+                    })
                 }
             }
         </script>

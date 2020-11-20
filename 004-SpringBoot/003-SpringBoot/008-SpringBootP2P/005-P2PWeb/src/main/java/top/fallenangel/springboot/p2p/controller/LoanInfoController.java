@@ -8,9 +8,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import top.fallenangel.springboot.p2p.common.Constants;
+import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
+import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
+import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 import top.fallenangel.springboot.p2p.service.ILoanInfoService;
+
+import javax.servlet.http.HttpServletRequest;
 
 @SuppressWarnings("unused")
 @Controller
@@ -21,6 +27,9 @@ public class LoanInfoController {
 
     @Reference(interfaceClass = IBidInfoService.class, version = "1.0.0", timeout = 15000)
     private IBidInfoService bidInfoService;
+
+    @Reference(interfaceClass = IFinanceAccountService.class, version = "1.0.0", timeout = 15000)
+    private IFinanceAccountService financeAccountService;
 
     /**
      * 某一页的产品信息
@@ -93,7 +102,7 @@ public class LoanInfoController {
      * @param loanId 产品Id
      */
     @GetMapping("loanInfo")
-    public String loanInfo(Model model, Integer loanId, @RequestParam(defaultValue = "1") Integer page) {
+    public String loanInfo(Model model, Integer loanId, @RequestParam(defaultValue = "1") Integer page, HttpServletRequest request) {
         int pages = bidInfoService.queryLoanBidPages(loanId, 5);
 
         if (page < 1) {
@@ -106,20 +115,27 @@ public class LoanInfoController {
         model.addAttribute("page", page);
         model.addAttribute("pages", pages);
         model.addAttribute("bidRecordList", bidInfoService.queryBidRecord(loanId, page, 5));
+        try {
+            User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
+            FinanceAccount financeAccount = financeAccountService.queryFinanceAccount(user.getId());
+            model.addAttribute("financeAccount", financeAccount);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return "loanInfo";
     }
 
     @ResponseBody
     @GetMapping("prevRecord")
-    public Object prevRecord(Model model, Integer loanId, @RequestParam(defaultValue = "1") Integer page) {
-        loanInfo(model, loanId, page - 1);
+    public Object prevRecord(Model model, Integer loanId, @RequestParam(defaultValue = "1") Integer page, HttpServletRequest request) {
+        loanInfo(model, loanId, page - 1, request);
         return model.getAttribute("bidRecordList");
     }
 
     @ResponseBody
     @GetMapping("nextRecord")
-    public Object nextRecord(Model model, Integer loanId, @RequestParam(defaultValue = "1") Integer page) {
-        loanInfo(model, loanId, page + 1);
+    public Object nextRecord(Model model, Integer loanId, @RequestParam(defaultValue = "1") Integer page, HttpServletRequest request) {
+        loanInfo(model, loanId, page + 1, request);
         return model.getAttribute("bidRecordList");
     }
 }

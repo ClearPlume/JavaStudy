@@ -122,7 +122,8 @@ public class UserController {
 
     // 跳转实名认证页面
     @GetMapping("page/realName")
-    public String realName() {
+    public String realName(Model model, @RequestParam(required = false) String returnUrl) {
+        model.addAttribute("returnUrl", returnUrl);
         return "realName";
     }
 
@@ -169,6 +170,10 @@ public class UserController {
         if (!isOk) {
             return Result.error("实名认证失败，检查身份信息！");
         }
+        User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
+        user.setIdCard(idCard);
+        user.setName(realName);
+        userService.modify(user);
         return Result.success();
     }
 

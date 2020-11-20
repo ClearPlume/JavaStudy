@@ -212,8 +212,14 @@ $(function () {
                     "idCard": idCard
                 },
                 "success": function (data) {
+                    let prevPageURL = $("#prevPageURL")
+
                     if (data.success) {
-                        location.href = "/P2PWeb"
+                        if (prevPageURL.val() === '') {
+                            location.href = "/P2PWeb/"
+                        } else {
+                            location.href = prevPageURL.val()
+                        }
                     } else {
                         alert(data.msg)
                     }
