@@ -48,4 +48,16 @@ public class UserService implements IUserService {
         financeAccountMapper.registerGift(user.getId(), 888);
         return user;
     }
+
+    // 用户登录
+    @Override
+    public User login(String phone, String pwd) {
+        return userMapper.selectByPhonePwd(phone, pwd);
+    }
+
+    // 修改用户信息
+    @Override
+    public void modify(User user) {
+        userMapper.updateByPrimaryKeySelective(user);
+    }
 }

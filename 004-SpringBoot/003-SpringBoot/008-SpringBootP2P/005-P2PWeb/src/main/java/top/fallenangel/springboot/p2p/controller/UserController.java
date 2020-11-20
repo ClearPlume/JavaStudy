@@ -11,11 +11,13 @@ import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.common.Result;
 import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
+import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 import top.fallenangel.springboot.p2p.service.IUserService;
 import top.fallenangel.springboot.p2p.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,6 +31,9 @@ public class UserController {
 
     @Reference(interfaceClass = IBidInfoService.class, version = "1.0.0", timeout = 15000)
     private IBidInfoService bidInfoService;
+
+    @Reference(interfaceClass = IFinanceAccountService.class, version = "1.0.0", timeout = 15000)
+    private IFinanceAccountService financeAccountService;
 
     private final JsonUtil json;
     private final XmlUtil xml;
@@ -193,12 +198,12 @@ public class UserController {
         if (!authCode.equals(redis.getValue(phone))) {
             return Result.error("验证码填写有误！");
         }
-        User user = userService.register(phone, pwd);
-        request.getSession().setAttribute(Constants.LOGIN_USER, user);
+        User user = userService.login(phone, pwd);
 
         if (user == null) {
             return Result.error("用户名或密码错误！");
         } else {
+            request.getSession().setAttribute(Constants.LOGIN_USER, user);
             return Result.success();
         }
     }
@@ -206,7 +211,18 @@ public class UserController {
     // 退出登录
     @GetMapping("logout")
     public String logout(HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
+        user.setLastLoginTime(new Date());
+        userService.modify(user);
         request.getSession().removeAttribute(Constants.LOGIN_USER);
         return "redirect:/";
+    }
+
+    // 跳转“我的小金库”
+    @GetMapping("myCenter")
+    public String myCenter(Model model, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
+        model.addAttribute("accountAmount", financeAccountService.queryAccountAmount(user.getId()));
+        return "myCenter";
     }
 }

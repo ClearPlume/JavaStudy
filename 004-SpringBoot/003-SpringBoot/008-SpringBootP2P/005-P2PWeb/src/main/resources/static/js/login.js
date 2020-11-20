@@ -50,13 +50,13 @@ $(document).ready(function () {
         hideError()
         authCode = this.value.trim()
 
-        if (!authCode.length === 6) {
+        if (authCode === '') {
             authCodeOK = false
-            showError("messageCode", "验证码长度必须为6！")
+            showError("验证码不能为空！")
             return
         }
         if (!/\d{6}/.test(authCode)) {
-            showError("messageCode", "验证码为6位数字！")
+            showError("验证码为6位数字！")
             authCodeOK = false
             return
         }
@@ -115,8 +115,8 @@ $(document).ready(function () {
                     let prevPageURL = $("#prevPageURL")
 
                     if (data.success) {
-                        if (prevPageURL === '') {
-                            location.href = "/P2PWeb/index"
+                        if (prevPageURL.val() === '') {
+                            location.href = "/P2PWeb/"
                         } else {
                             location.href = prevPageURL.val()
                         }

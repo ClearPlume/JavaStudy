@@ -31,6 +31,13 @@
         from u_user
         where phone = #{phone}
     </select>
+    <!--用户登录-->
+    <select id="selectByPhonePwd" resultMap="BaseResultMap">
+        select id, phone, login_password, name, id_card, add_time, last_login_time, header_image
+        from u_user
+        where phone = #{phone}
+          and login_password = #{pwd}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from u_user

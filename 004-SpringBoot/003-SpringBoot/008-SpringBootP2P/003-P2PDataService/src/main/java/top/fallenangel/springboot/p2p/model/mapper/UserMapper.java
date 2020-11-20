@@ -32,4 +32,13 @@ public interface UserMapper {
      * @return 手机号数量
      */
     int selectPhoneCount(@Param("phone") String phone);
+
+    /**
+     * 用户登录
+     *
+     * @param phone 手机号
+     * @param pwd   密码
+     * @return 登录后的用户
+     */
+    User selectByPhonePwd(@Param("phone") String phone, @Param("pwd") String pwd);
 }
