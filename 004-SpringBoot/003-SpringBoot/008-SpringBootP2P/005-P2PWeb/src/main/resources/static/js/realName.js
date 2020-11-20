@@ -47,6 +47,9 @@ $(function () {
     let idCardOK = false
     let authCodeOK = false
 
+    // 是否已经点击获取验证码
+    let clickedGetMessage = false
+
     // 输入的实名信息
     let phone
     let realName
@@ -154,42 +157,46 @@ $(function () {
 
     // 点击验证码按钮
     $("#messageCodeBtn").click(function () {
-        if (phoneOK && realNameOK && idCardOK) {
-            let _this = $(this)
+        if (!clickedGetMessage) {
+            clickedGetMessage = true
+            if (phoneOK && realNameOK && idCardOK) {
+                let _this = $(this)
 
-            if (!_this.hasClass("on")) {
-                $.ajax({
-                    "data": {
-                        "phone": phone
-                    },
-                    "url": "/P2PWeb/loan/page/checkNum",
-                    "success": function (data) {
-                        if (data.success) {
-                            $.leftTime(60, function (data) {
-                                if (data.status) {
-                                    _this.html((data.s === "00" ? "60" : data.s) + "秒后重新获取")
-                                    _this.addClass("on")
-                                } else {
-                                    _this.removeClass("on")
-                                    _this.html("获取验证码")
-                                }
-                            })
-                            // FIXME 这个只是测试时获取生成的验证码
-                            alert(data.msg)
-                        } else {
-                            alert(data.msg)
+                if (!_this.hasClass("on")) {
+                    $.ajax({
+                        "data": {
+                            "phone": phone
+                        },
+                        "url": "/P2PWeb/loan/page/checkNum",
+                        "success": function (data) {
+                            if (data.success) {
+                                clickedGetMessage = false
+                                $.leftTime(60, function (data) {
+                                    if (data.status) {
+                                        _this.html((data.s === "00" ? "60" : data.s) + "秒后重新获取")
+                                        _this.addClass("on")
+                                    } else {
+                                        _this.removeClass("on")
+                                        _this.html("获取验证码")
+                                    }
+                                })
+                                // FIXME 这个只是测试时获取生成的验证码
+                                alert(data.msg)
+                            } else {
+                                alert(data.msg)
+                            }
+                        },
+                        "error": function () {
+                            alert("系统维护中...")
                         }
-                    },
-                    "error": function () {
-                        alert("系统维护中...")
-                    }
-                })
+                    })
+                }
+            } else {
+                showError("messageCodeBtn", "请正确填写信息！")
+                setTimeout(function () {
+                    hideError("messageCodeBtn")
+                }, 2000)
             }
-        } else {
-            showError("messageCodeBtn", "请正确填写信息！")
-            setTimeout(function () {
-                hideError("messageCodeBtn")
-            }, 2000)
         }
     })
 
