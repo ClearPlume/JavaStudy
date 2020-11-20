@@ -186,7 +186,7 @@
 
             function nextRecord() {
                 $.getJSON(
-                    "/" + context.substring(1, context.length - 1) + "/loan/nextRecord",
+                    "/" + context.substring(1, context.length - 1) + "/loaninfo/nextRecord",
                     {
                         "page": curRecordPage,
                         "loanId": [[${loanInfo.id}]]
@@ -204,7 +204,7 @@
 
             function prevRecord() {
                 $.getJSON(
-                    "/" + context.substring(1, context.length - 1) + "/loan/prevRecord",
+                    "/" + context.substring(1, context.length - 1) + "/loaninfo/prevRecord",
                     {
                         "page": curRecordPage,
                         "loanId": [[${loanInfo.id}]]

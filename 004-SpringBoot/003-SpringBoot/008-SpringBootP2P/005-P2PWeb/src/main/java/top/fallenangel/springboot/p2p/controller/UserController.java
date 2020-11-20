@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 @SuppressWarnings("unused")
 @Controller
-@RequestMapping("loan/page")
+@RequestMapping("loan")
 public class UserController {
     @Reference(interfaceClass = IUserService.class, version = "1.0.0", timeout = 15000)
     private IUserService userService;
@@ -41,14 +41,14 @@ public class UserController {
     }
 
     // 跳转登录页面
-    @GetMapping("register")
+    @GetMapping("page/register")
     public String register() {
         return "register";
     }
 
     // 检查手机号是否可用
     @ResponseBody
-    @GetMapping("checkPhoneAvailable")
+    @GetMapping("page/checkPhoneAvailable")
     public Object checkPhoneAvailable(String phone) {
         if (userService.queryPhoneNum(phone) == 0) {
             return Result.success();
@@ -59,7 +59,7 @@ public class UserController {
 
     // 提交注册
     @ResponseBody
-    @GetMapping("registerSubmit")
+    @GetMapping("page/registerSubmit")
     public Object registerSubmit(String phone, String pwd, String authCode, HttpServletRequest request) {
         if (!authCode.equals(redis.getValue(phone))) {
             return Result.error("验证码填写有误！");
@@ -75,7 +75,7 @@ public class UserController {
 
     // 发送短信验证码
     @ResponseBody
-    @GetMapping("checkNum")
+    @GetMapping("page/checkNum")
     public Object checkNum(String phone, HttpServletRequest request) {
         String authCode = RandomUtil.num(6);
         redis.setValue(phone, authCode, 1, TimeUnit.MINUTES);
@@ -120,14 +120,14 @@ public class UserController {
     }
 
     // 跳转实名认证页面
-    @GetMapping("realName")
+    @GetMapping("page/realName")
     public String realName() {
         return "realName";
     }
 
     // 提交实名认证
     @ResponseBody
-    @GetMapping("realNameSubmit")
+    @GetMapping("page/realNameSubmit")
     public Object realNameSubmit(String phone, String authCode, String idCard, String realName, HttpServletRequest request) {
         if (!authCode.equals(redis.getValue(phone))) {
             return Result.error("验证码填写有误！");
@@ -178,7 +178,7 @@ public class UserController {
     }
 
     // 跳转登录界面
-    @GetMapping("login")
+    @GetMapping("page/login")
     public String login(Model model, @RequestParam(required = false) String returnUrl) {
         model.addAttribute("totalUser", userService.queryTotalUser());
         model.addAttribute("totalDealMoney", bidInfoService.queryTotalDealMoney());
@@ -188,7 +188,7 @@ public class UserController {
 
     // 提交登录
     @ResponseBody
-    @GetMapping("loginSubmit")
+    @GetMapping("page/loginSubmit")
     public Object loginSubmit(String phone, String pwd, String authCode, HttpServletRequest request) {
         if (!authCode.equals(redis.getValue(phone))) {
             return Result.error("验证码填写有误！");
