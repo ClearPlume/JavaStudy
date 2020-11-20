@@ -194,10 +194,6 @@ public class UserController {
             return Result.error("用户名或密码错误！");
         } else {
             request.getSession().setAttribute(Constants.LOGIN_USER, user);
-            new Thread(() -> {
-                user.setLastLoginTime(new Date());
-                userService.modify(user);
-            }).start();
             return Result.success();
         }
     }
