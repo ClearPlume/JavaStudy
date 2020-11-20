@@ -97,7 +97,7 @@ $(function () {
         $.getJSON(
             "/P2PWeb/finance/accountAmount",
             function (amount) {
-                $("#frame_top").text(amount)
+                $("#frame_top").text(amount.availableMoney)
             }
         )
         $(this).addClass("logged-hover")

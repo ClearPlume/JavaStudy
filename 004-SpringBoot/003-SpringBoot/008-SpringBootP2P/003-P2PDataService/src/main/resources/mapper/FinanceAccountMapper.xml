@@ -15,8 +15,9 @@
         from u_finance_account
         where id = #{id,jdbcType=INTEGER}
     </select>
-    <select id="selectAccountAmountByUserId" resultType="java.lang.Integer">
-        select available_money
+    <!--根据用户id查询帐户信息-->
+    <select id="selectFinanceAccountByUserId" resultMap="BaseResultMap">
+        select id, uid, available_money
         from u_finance_account
         where uid = #{uId}
     </select>

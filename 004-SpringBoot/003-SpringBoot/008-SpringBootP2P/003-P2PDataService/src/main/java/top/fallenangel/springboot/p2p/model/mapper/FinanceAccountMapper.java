@@ -27,10 +27,10 @@ public interface FinanceAccountMapper {
     FinanceAccount selectByPrimaryKey(Integer id);
 
     /**
-     * 根据用户id查询帐户余额
+     * 根据用户id查询帐户信息
      *
      * @param uId 用户id
      * @return 余额
      */
-    int selectAccountAmountByUserId(@Param("uId") Integer uId);
+    FinanceAccount selectFinanceAccountByUserId(@Param("uId") Integer uId);
 }

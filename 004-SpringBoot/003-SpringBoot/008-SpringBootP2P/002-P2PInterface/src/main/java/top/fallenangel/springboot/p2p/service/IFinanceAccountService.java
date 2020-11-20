@@ -1,11 +1,13 @@
 package top.fallenangel.springboot.p2p.service;
 
+import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
+
 public interface IFinanceAccountService {
     /**
-     * 根据用户id查询帐户余额
+     * 根据用户id查询帐户信息
      *
      * @param uId 用户id
      * @return 余额
      */
-    int queryAccountAmount(Integer uId);
+    FinanceAccount queryFinanceAccount(Integer uId);
 }

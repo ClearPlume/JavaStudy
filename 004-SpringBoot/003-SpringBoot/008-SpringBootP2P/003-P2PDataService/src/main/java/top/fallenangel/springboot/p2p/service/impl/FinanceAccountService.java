@@ -1,6 +1,7 @@
 package top.fallenangel.springboot.p2p.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
 import top.fallenangel.springboot.p2p.model.mapper.FinanceAccountMapper;
 import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 
@@ -14,7 +15,7 @@ public class FinanceAccountService implements IFinanceAccountService {
     }
 
     @Override
-    public int queryAccountAmount(Integer uId) {
-        return financeAccountMapper.selectAccountAmountByUserId(uId);
+    public FinanceAccount queryFinanceAccount(Integer uId) {
+        return financeAccountMapper.selectFinanceAccountByUserId(uId);
     }
 }

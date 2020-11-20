@@ -13,10 +13,12 @@ import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
 import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 import top.fallenangel.springboot.p2p.service.IUserService;
-import top.fallenangel.springboot.p2p.util.*;
+import top.fallenangel.springboot.p2p.util.JsonUtil;
+import top.fallenangel.springboot.p2p.util.RandomUtil;
+import top.fallenangel.springboot.p2p.util.RedisUtil;
+import top.fallenangel.springboot.p2p.util.XmlUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,20 +94,14 @@ public class UserController {
         // param.put("appkey", "cd5b89522646433fad8e1c667b95b5d9");
 
         String data;
-        try {
-            // https://way.jd.com/kaixintong/kaixintong
-            data = HttpClientUtil.doPost("http://127.0.0.1:18081", param);
-            data = "{\n" +
-                    "    \"code\": \"10000\",\n" +
-                    "    \"charge\": false,\n" +
-                    "    \"remain\": 0,\n" +
-                    "    \"msg\": \"查询成功\",\n" +
-                    "    \"result\": \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\" ?><returnsms>\\n <returnstatus>Success</returnstatus>\\n <message>ok</message>\\n <remainpoint>-1111611</remainpoint>\\n <taskID>101609164</taskID>\\n <successCounts>1</successCounts></returnsms>\"\n" +
-                    "}";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Result.error("网络波动，请稍候再试...");
-        }
+        // data = HttpClientUtil.doPost("https://way.jd.com/kaixintong/kaixintong", param);
+        data = "{\n" +
+                "    \"code\": \"10000\",\n" +
+                "    \"charge\": false,\n" +
+                "    \"remain\": 0,\n" +
+                "    \"msg\": \"查询成功\",\n" +
+                "    \"result\": \"<?xml version=\\\"1.0\\\" encoding=\\\"utf-8\\\" ?><returnsms>\\n <returnstatus>Success</returnstatus>\\n <message>ok</message>\\n <remainpoint>-1111611</remainpoint>\\n <taskID>101609164</taskID>\\n <successCounts>1</successCounts></returnsms>\"\n" +
+                "}";
         try {
             json.parseJson(data);
             xml.parseXml(json.getString("result"));
@@ -143,28 +139,22 @@ public class UserController {
         // param.put("appkey", "cd5b89522646433fad8e1c667b95b5d9");
 
         String data;
-        try {
-            // https://way.jd.com/youhuoBeijing/test
-            data = HttpClientUtil.doPost("http://127.0.0.1:18081", param);
-            data = "{\n" +
-                    "    \"code\": \"10000\",\n" +
-                    "    \"charge\": false,\n" +
-                    "    \"remain\": 1305,\n" +
-                    "    \"msg\": \"查询成功\",\n" +
-                    "    \"result\": {\n" +
-                    "        \"error_code\": 0,\n" +
-                    "        \"reason\": \"成功\",\n" +
-                    "        \"result\": {\n" +
-                    "            \"realname\": \"乐天磊\",\n" +
-                    "            \"idcard\": \"350721197702134399\",\n" +
-                    "            \"isok\": true\n" +
-                    "        }\n" +
-                    "    }\n" +
-                    "}";
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Result.error("网络波动，请稍候再试...");
-        }
+        // data = HttpClientUtil.doPost("https://way.jd.com/youhuoBeijing/test", param);
+        data = "{\n" +
+                "    \"code\": \"10000\",\n" +
+                "    \"charge\": false,\n" +
+                "    \"remain\": 1305,\n" +
+                "    \"msg\": \"查询成功\",\n" +
+                "    \"result\": {\n" +
+                "        \"error_code\": 0,\n" +
+                "        \"reason\": \"成功\",\n" +
+                "        \"result\": {\n" +
+                "            \"realname\": \"乐天磊\",\n" +
+                "            \"idcard\": \"350721197702134399\",\n" +
+                "            \"isok\": true\n" +
+                "        }\n" +
+                "    }\n" +
+                "}";
         try {
             json.parseJson(data);
         } catch (Exception e) {
@@ -222,7 +212,7 @@ public class UserController {
     @GetMapping("myCenter")
     public String myCenter(Model model, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
-        model.addAttribute("accountAmount", financeAccountService.queryAccountAmount(user.getId()));
+        model.addAttribute("financeAccount", financeAccountService.queryFinanceAccount(user.getId()));
         return "myCenter";
     }
 }
