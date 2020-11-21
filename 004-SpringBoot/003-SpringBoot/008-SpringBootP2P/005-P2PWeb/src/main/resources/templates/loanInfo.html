@@ -183,7 +183,7 @@
         <!--投资成功浮层start-->
         <div class="layer-body failureSuccess failurePayment" id="failurePayment"
              style="display:none;width:500px;height:100px;top:75%;">
-            <a class="layer-close"></a>
+            <a class="layer-close" href="javascript:void(0)" onclick="closeIt()"></a>
             <div style="background:#f2f2f2; line-height:105px;text-align:center;"><span
                     style="font-size:25px;">投资成功</span></div>
         </div>
@@ -203,6 +203,12 @@
             let context = location.pathname.substring(0, location.pathname.indexOf("/", 1))
             let curRecordPage = 1
             let bidRecordDiv = $("#bidRecordDiv")
+
+            function closeIt() {
+                $("#failurePayment").hide()
+                $("#dialog-overlay1").hide()
+                location.href = location.origin + context + "/loan/myCenter"
+            }
 
             function nextRecord() {
                 $.getJSON(
@@ -365,13 +371,8 @@
                         },
                         success: function (data) {
                             if (data.success) {
-                                let href = location.href
-
-                                if (confirm("投资成功，将刷新页面...")) {
-                                    location.href = href
-                                } else {
-                                    location.href = href
-                                }
+                                $("#failurePayment").show()
+                                $("#dialog-overlay1").show()
                             } else {
                                 investMoneyTip.html(data.msg)
                             }

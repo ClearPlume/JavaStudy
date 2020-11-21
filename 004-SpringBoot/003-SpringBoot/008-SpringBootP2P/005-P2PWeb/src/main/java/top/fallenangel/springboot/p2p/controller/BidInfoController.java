@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.fallenangel.springboot.p2p.common.Constants;
+import top.fallenangel.springboot.p2p.common.Result;
 import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
 
@@ -22,8 +23,13 @@ public class BidInfoController {
     // 用户投资
     @ResponseBody
     @PostMapping("invest")
-    public Map<String, Object> invest(HttpServletRequest request, int loanId, int bidMoney) {
+    public Map<String, Object> invest(HttpServletRequest request, int loanId, double bidMoney) {
         User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
-        return bidInfoService.invest(user, loanId, bidMoney);
+
+        // 是否已经登录
+        if (user == null) {
+            return Result.error(1, "请登录后再投资！");
+        }
+        return bidInfoService.invest(user.getId(), loanId, bidMoney);
     }
 }

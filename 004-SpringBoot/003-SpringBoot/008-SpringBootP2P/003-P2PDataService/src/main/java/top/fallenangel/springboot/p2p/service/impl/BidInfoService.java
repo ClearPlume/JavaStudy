@@ -2,12 +2,12 @@ package top.fallenangel.springboot.p2p.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.common.Result;
 import top.fallenangel.springboot.p2p.model.entity.BidInfo;
 import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
-import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.model.mapper.BidInfoMapper;
 import top.fallenangel.springboot.p2p.model.mapper.FinanceAccountMapper;
 import top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper;
@@ -67,29 +67,43 @@ public class BidInfoService implements IBidInfoService {
 
     // 用户投资
     @Override
-    @Transactional
-    public Map<String, Object> invest(User user, int loanId, int bidMoney) {
-        FinanceAccount financeAccount = financeAccountMapper.selectFinanceAccountByUserId(user.getId());
+    @Transactional(rollbackFor = RuntimeException.class)
+    public Map<String, Object> invest(int userId, int loanId, double bidMoney) {
+        int loanVersion = loanInfoMapper.selectByPrimaryKey(loanId).getVersion();
+        int num = 0;
 
         // 帐户余额
+        FinanceAccount financeAccount = financeAccountMapper.selectFinanceAccountByUserId(userId);
         Double availableMoney = financeAccount.getAvailableMoney();
         if (availableMoney < bidMoney) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.error(2, "您的帐户余额不足，请充值！");
         }
 
         financeAccount.setAvailableMoney(availableMoney - bidMoney);
-        financeAccountMapper.updateByPrimaryKeySelective(financeAccount);
+        try {
+            num = financeAccountMapper.updateByPrimaryKeySelective(financeAccount);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        if (num == 0) {
+            return Result.error(5, "系统维护中...");
+        }
 
         // 操作投资产品
         LoanInfo loanInfo = loanInfoMapper.selectByPrimaryKey(loanId);
+        loanInfo.setVersion(loanVersion);
         Double leftProductMoney = loanInfo.getLeftProductMoney();
 
         // 产品剩余可投金额是否足够
         if (leftProductMoney < bidMoney) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.error(3, "产品可投金额仅剩" + leftProductMoney + "！");
         }
         // 产品是否已满标
         if (leftProductMoney == 0) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.error(4, "产品已满标！");
         }
         loanInfo.setLeftProductMoney(leftProductMoney - bidMoney);
@@ -98,17 +112,26 @@ public class BidInfoService implements IBidInfoService {
             loanInfo.setProductStatus(1);
             loanInfo.setProductFullTime(new Date());
         }
-        loanInfoMapper.updateByPrimaryKeySelective(loanInfo);
+        try {
+            num = loanInfoMapper.updateByPrimaryKeySelective(loanInfo);
+        } catch (RuntimeException e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+        }
+        if (num == 0) {
+            return Result.error(5, "系统维护中...");
+        }
 
         // 新增投资记录
         BidInfo bidInfo = new BidInfo();
-        bidInfo.setUid(user.getId());
+        bidInfo.setUid(userId);
         bidInfo.setLoanId(loanId);
-        bidInfo.setBidMoney((double) bidMoney);
+        bidInfo.setBidMoney(bidMoney);
         bidInfo.setBidTime(new Date());
         bidInfo.setBidStatus(1);
-        bidInfoMapper.insertSelective(bidInfo);
-
+        if (bidInfoMapper.insertSelective(bidInfo) == 0) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return Result.error(5, "系统维护中...");
+        }
         return Result.success();
     }
 }

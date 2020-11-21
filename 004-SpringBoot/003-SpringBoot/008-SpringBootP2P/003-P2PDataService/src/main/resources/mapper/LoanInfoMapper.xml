@@ -272,10 +272,11 @@
                 product_desc = #{productDesc,jdbcType=VARCHAR},
             </if>
             <if test="version != null">
-                version = #{version,jdbcType=INTEGER},
+                version = version + 1
             </if>
         </set>
         where id = #{id,jdbcType=INTEGER}
+        and version = #{version,jdbcType=INTEGER}
     </update>
     <update id="updateByPrimaryKey" parameterType="top.fallenangel.springboot.p2p.model.entity.LoanInfo">
         update b_loan_info
@@ -292,7 +293,8 @@
             product_status     = #{productStatus,jdbcType=INTEGER},
             product_full_time  = #{productFullTime,jdbcType=TIMESTAMP},
             product_desc       = #{productDesc,jdbcType=VARCHAR},
-            version            = #{version,jdbcType=INTEGER}
+            version            = version + 1
         where id = #{id,jdbcType=INTEGER}
+          and version = #{version,jdbcType=INTEGER}
     </update>
 </mapper>

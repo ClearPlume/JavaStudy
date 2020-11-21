@@ -1,12 +1,12 @@
 package top.fallenangel.springboot.p2p.service;
 
-import top.fallenangel.springboot.p2p.model.entity.User;
-
 import java.util.List;
 import java.util.Map;
 
 /**
  * 投资记录Service
+ *
+ * @author FallenAngel
  */
 public interface IBidInfoService {
     /**
@@ -38,15 +38,12 @@ public interface IBidInfoService {
     /**
      * 用户投资
      * <p>
-     * 返回值中的code：
-     * 2：余额不足
-     * 3：产品可投金额不足
-     * 4：产品已满标
+     * 返回值中的code：1：当前未登录 2：余额不足 3：产品可投金额不足 4：产品已满标 5：系统维护中
      *
-     * @param user     用户
+     * @param userId   用户Id
      * @param loanId   投资产品
      * @param bidMoney 投资金额
      * @return 投资结果
      */
-    Map<String, Object> invest(User user, int loanId, int bidMoney);
+    Map<String, Object> invest(int userId, int loanId, double bidMoney);
 }
