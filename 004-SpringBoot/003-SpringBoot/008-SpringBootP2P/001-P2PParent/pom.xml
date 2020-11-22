@@ -13,6 +13,7 @@
         <module>../003-P2PDataService</module>
         <module>../004-P2PCommon</module>
         <module>../005-P2PWeb</module>
+        <module>../006-P2PTimerTask</module>
     </modules>
     <groupId>top.fallenangel.springboot.p2p</groupId>
     <artifactId>001-p2p-parent</artifactId>
@@ -107,20 +108,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring-boot.version}</version>
-            </dependency>
-
-            <!--测试-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${spring-boot.version}</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.junit.vintage</groupId>
-                        <artifactId>junit-vintage-engine</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
         </dependencies>
     </dependencyManagement>

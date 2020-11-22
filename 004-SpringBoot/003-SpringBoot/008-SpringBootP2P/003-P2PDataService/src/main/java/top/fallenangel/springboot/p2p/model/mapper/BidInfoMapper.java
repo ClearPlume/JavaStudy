@@ -39,6 +39,14 @@ public interface BidInfoMapper {
     List<Map<String, Object>> selectBidRecordByLoanId(@Param("loanId") Integer loanId, @Param("startRow") Integer startRow, @Param("pageSize") Integer pageSize);
 
     /**
+     * 根据产品id查询其投资记录
+     *
+     * @param loanId 产品id
+     * @return 某产品投资记录
+     */
+    List<BidInfo> selectAllBidRecordByLoanId(Integer loanId);
+
+    /**
      * 查询产品的投资记录数
      *
      * @param loanId 产品id

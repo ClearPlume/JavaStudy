@@ -1,5 +1,7 @@
 package top.fallenangel.springboot.p2p.service;
 
+import top.fallenangel.springboot.p2p.model.entity.BidInfo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +27,14 @@ public interface IBidInfoService {
      * @return 产品投资记录(投资人 投资金额 投资时间)
      */
     List<Map<String, Object>> queryBidRecord(Integer loanId, Integer page, Integer pageSize);
+
+    /**
+     * 根据产品id查询其投资记录
+     *
+     * @param loanId 产品id
+     * @return 某产品投资记录
+     */
+    List<BidInfo> queryBidRecord(Integer loanId);
 
     /**
      * 查询产品的投资记录总页数

@@ -14,6 +14,12 @@ public interface ILoanInfoService {
      */
     double queryAvgRate();
 
+    /**
+     * 根据指定参数查询产品信息
+     *
+     * @param param 参数
+     * @return 满足条件的产品信息
+     */
     List<LoanInfo> queryProductInfo(Map<String, Object> param);
 
     /**
@@ -42,4 +48,18 @@ public interface ILoanInfoService {
      * @return 产品信息
      */
     LoanInfo queryLoanInfo(Integer loanId);
+
+    /**
+     * 查找已满标但尚未生成收益计划的产品
+     *
+     * @return 已满标但尚未生成收益计划的产品
+     */
+    List<LoanInfo> queryFullyLoan();
+
+    /**
+     * 修改产品信息
+     *
+     * @param loanInfo 产品信息
+     */
+    void modify(LoanInfo loanInfo);
 }

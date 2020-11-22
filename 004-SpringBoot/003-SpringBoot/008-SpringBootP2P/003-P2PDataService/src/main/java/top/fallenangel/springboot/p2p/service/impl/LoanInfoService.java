@@ -23,35 +23,82 @@ public class LoanInfoService implements ILoanInfoService {
         this.redisUtil = redisUtil;
     }
 
-    // 查询产品平均收益率
+    /**
+     * 查询产品平均收益率
+     *
+     * @return 平均收益率
+     */
     @Override
     public double queryAvgRate() {
         return Double.parseDouble(redisUtil.getValueFromRedis(Constants.AVG_RATE, () -> String.valueOf(loanInfoMapper.selectAvgRate())));
     }
 
-    // 根据指定参数查询产品信息
+    /**
+     * 根据指定参数查询产品信息
+     *
+     * @param param 参数
+     * @return 满足条件的产品信息
+     */
     @Override
     public List<LoanInfo> queryProductInfo(Map<String, Object> param) {
         return loanInfoMapper.selectProductInfo(param);
     }
 
-    // 根据当前页面、页面大小查询指定类型的产品信息
+    /**
+     * 查询第XX页的产品信息
+     *
+     * @param productType 产品类型
+     * @param page        第XX页
+     * @param pageSize    页显示产品数量
+     * @return 第page页的productType类型产品
+     */
     @Override
     public PageInfo<LoanInfo> queryProductInfo(Integer productType, Integer page, Integer pageSize) {
         PageHelper.startPage(page, pageSize);
         return PageInfo.of(loanInfoMapper.selectProductInfoByType(productType));
     }
 
-    // 根据产品类型和页面大小查询总页数
+    /**
+     * 查询产品总页数
+     *
+     * @param productType 产品类型
+     * @param pageSize    页面大小
+     * @return 总页数
+     */
     @Override
     public int queryTotalPage(Integer productType, Integer pageSize) {
         int total = loanInfoMapper.selectTotalByType(productType);
         return total % pageSize == 0 ? total / pageSize : total / pageSize + 1;
     }
 
-    // 根据id查询产品信息
+    /**
+     * 查询产品信息
+     *
+     * @param loanId id
+     * @return 产品信息
+     */
     @Override
     public LoanInfo queryLoanInfo(Integer loanId) {
         return loanInfoMapper.selectByPrimaryKey(loanId);
+    }
+
+    /**
+     * 查找已满标但尚未生成收益计划的产品
+     *
+     * @return 已满标但尚未生成收益计划的产品
+     */
+    @Override
+    public List<LoanInfo> queryFullyLoan() {
+        return loanInfoMapper.queryFullyLoan();
+    }
+
+    /**
+     * 修改产品信息
+     *
+     * @param loanInfo 产品信息
+     */
+    @Override
+    public void modify(LoanInfo loanInfo) {
+        loanInfoMapper.updateByPrimaryKeySelective(loanInfo);
     }
 }

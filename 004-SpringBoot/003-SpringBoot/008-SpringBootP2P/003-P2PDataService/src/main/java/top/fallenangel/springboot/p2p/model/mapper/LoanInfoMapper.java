@@ -21,11 +21,41 @@ public interface LoanInfoMapper {
 
     LoanInfo selectByPrimaryKey(Integer id);
 
+    /**
+     * 查询产品平均收益率
+     *
+     * @return 平均收益率
+     */
     double selectAvgRate();
 
+    /**
+     * 根据指定参数查询产品信息
+     *
+     * @param param 参数
+     * @return 满足条件的产品信息
+     */
     List<LoanInfo> selectProductInfo(Map<String, Object> param);
 
+    /**
+     * 查询某类型产品信息
+     *
+     * @param productType 产品类型
+     * @return 某类型产品
+     */
     List<LoanInfo> selectProductInfoByType(@Param("productType") Integer productType);
 
+    /**
+     * 查询某类型产品总数
+     *
+     * @param productType 产品类型
+     * @return 总数
+     */
     int selectTotalByType(@Param("productType") Integer productType);
+
+    /**
+     * 查找已满标但尚未生成收益计划的产品
+     *
+     * @return 已满标但尚未生成收益计划的产品
+     */
+    List<LoanInfo> queryFullyLoan();
 }

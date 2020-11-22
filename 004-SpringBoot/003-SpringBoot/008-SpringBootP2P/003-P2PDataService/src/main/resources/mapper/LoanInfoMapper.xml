@@ -29,10 +29,12 @@
         from b_loan_info
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <!--查询产品平均收益率-->
     <select id="selectAvgRate" resultType="java.lang.Double">
         select avg(rate)
         from b_loan_info
     </select>
+    <!--根据指定参数查询产品信息-->
     <select id="selectProductInfo" resultMap="BaseResultMap">
         (select id,
                 product_name,
@@ -94,6 +96,7 @@
          order by rate desc
          limit 0, #{allNum})
     </select>
+    <!--查询某类型产品信息-->
     <select id="selectProductInfoByType" resultMap="BaseResultMap">
         select id,
                product_name,
@@ -113,10 +116,17 @@
         from b_loan_info
         where product_type = #{productType}
     </select>
+    <!--查询某类型产品总数-->
     <select id="selectTotalByType" resultType="java.lang.Integer">
         select count(1)
         from b_loan_info
         where product_type = #{productType}
+    </select>
+    <!--查找已满标但尚未生成收益计划的产品-->
+    <select id="queryFullyLoan" resultMap="BaseResultMap">
+        select *
+        from b_loan_info
+        where product_status = 1
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

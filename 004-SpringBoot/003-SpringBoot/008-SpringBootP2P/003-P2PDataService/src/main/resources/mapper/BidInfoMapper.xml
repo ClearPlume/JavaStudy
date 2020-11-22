@@ -38,6 +38,12 @@
         from b_bid_info
         where loan_id = #{loanId}
     </select>
+    <!--根据产品id查询其投资记录-->
+    <select id="selectAllBidRecordByLoanId" resultMap="BaseResultMap">
+        select *
+        from b_bid_info b
+        where loan_id = #{loanId}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from b_bid_info
