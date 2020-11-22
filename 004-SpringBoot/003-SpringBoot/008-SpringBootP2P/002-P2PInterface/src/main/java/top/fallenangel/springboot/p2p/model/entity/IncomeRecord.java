@@ -8,7 +8,7 @@ public class IncomeRecord implements Serializable {
 
     private Integer uid;
 
-    private Integer loanId;
+    private LoanInfo loanInfo;
 
     private Integer bidId;
 
@@ -36,12 +36,12 @@ public class IncomeRecord implements Serializable {
         this.uid = uid;
     }
 
-    public Integer getLoanId() {
-        return loanId;
+    public LoanInfo getLoanInfo() {
+        return loanInfo;
     }
 
-    public void setLoanId(Integer loanId) {
-        this.loanId = loanId;
+    public void setLoanInfo(LoanInfo loanInfo) {
+        this.loanInfo = loanInfo;
     }
 
     public Integer getBidId() {

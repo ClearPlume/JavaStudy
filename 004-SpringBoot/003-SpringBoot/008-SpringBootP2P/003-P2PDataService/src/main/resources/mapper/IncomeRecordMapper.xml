@@ -4,12 +4,13 @@
     <resultMap id="BaseResultMap" type="top.fallenangel.springboot.p2p.model.entity.IncomeRecord">
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="uid" jdbcType="INTEGER" property="uid"/>
-        <result column="loan_id" jdbcType="INTEGER" property="loanId"/>
         <result column="bid_id" jdbcType="INTEGER" property="bidId"/>
         <result column="bid_money" jdbcType="DOUBLE" property="bidMoney"/>
         <result column="income_date" jdbcType="DATE" property="incomeDate"/>
         <result column="income_money" jdbcType="DOUBLE" property="incomeMoney"/>
         <result column="income_status" jdbcType="INTEGER" property="incomeStatus"/>
+
+        <association property="loanInfo" resultMap="top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper.BaseResultMap"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, uid, loan_id, bid_id, bid_money, income_date, income_money, income_status
@@ -19,6 +20,18 @@
         <include refid="Base_Column_List"/>
         from b_income_record
         where id = #{id,jdbcType=INTEGER}
+    </select>
+    <!--查询指定用户的最近收益记录-->
+    <select id="queryLastIncomeRecord" resultMap="BaseResultMap">
+        select product_name,
+               income_date,
+               income_money
+        from b_income_record i
+                 left join b_loan_info l on i.loan_id = l.id
+        where uid = #{uid}
+          and income_status = 1
+        order by income_date desc, income_money desc
+        limit 0, #{num}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

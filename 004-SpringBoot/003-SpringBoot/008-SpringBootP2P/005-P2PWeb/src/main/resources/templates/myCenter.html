@@ -33,13 +33,14 @@
                                            height="90"/></span>
                                 <a th:href="@{/loan/uploadHeader}">上传头像</a>
                             </div>
-                            <h3 class="name">
-                                <!--<a th:href="@{/loan/page/realName}">请认证姓名</a>-->
-                                张三
+                            <h3 style="float: none" class="name">
+                                <a th:if="${session.LOGIN_USER.name == null}" th:href="@{/loan/page/realName}">请认证姓名</a>
+                                <span th:if="${session.LOGIN_USER.name != null}"
+                                      th:text="${session.LOGIN_USER.name}">张三</span>
                             </h3>
-                            <h4></h4>
-                            <h4 th:text="${session.LOGIN_USER.phone}">13725698888</h4>
-                            <h4>最近登录：<span
+                            <h4 style="float: none"></h4>
+                            <h4 style="float: none" th:text="${session.LOGIN_USER.phone}">13725698888</h4>
+                            <h4 style="float: none">最近登录：<span
                                     th:text="${#dates.format(session.LOGIN_USER.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}">2017-05-21 15:23:36</span>
                             </h4>
                         </div>
@@ -68,35 +69,12 @@
                                     <span class="money">投资金额</span>
                                     <span class="profit">投资时间</span>
                                 </dt>
-                                <dd>
-                                    <span class="name">1</span>
-                                    <span class="number">个人消费贷</span>
-                                    <span class="money">5000.0</span>
-                                    <span class="profit">2017-06-12</span>
-                                </dd>
-                                <dd>
-                                    <span class="name">2</span>
-                                    <span class="number">个人消费贷</span>
-                                    <span class="money">5500.0</span>
-                                    <span class="profit">2017-05-02</span>
-                                </dd>
-                                <dd>
-                                    <span class="name">3</span>
-                                    <span class="number">个人消费贷</span>
-                                    <span class="money">3000.0</span>
-                                    <span class="profit">2017-01-01</span>
-                                </dd>
-                                <dd>
-                                    <span class="name">4</span>
-                                    <span class="number">个人消费贷</span>
-                                    <span class="money">3000.0</span>
-                                    <span class="profit">2017-01-01</span>
-                                </dd>
-                                <dd>
-                                    <span class="name">5</span>
-                                    <span class="number">个人消费贷</span>
-                                    <span class="money">3000.0</span>
-                                    <span class="profit">2017-01-01</span>
+                                <dd th:each="bid:${lastBids}">
+                                    <span class="name" th:text="${bidStat.count}">1</span>
+                                    <span class="number" th:text="${bid.loanInfo.productName}">个人消费贷</span>
+                                    <span class="money"
+                                          th:text="${#numbers.formatDecimal(bid.bidMoney, 0, 2)}">5000.0</span>
+                                    <span class="profit" th:text="${#dates.format(bid.bidTime, 'yyyy-MM-dd')}">2017-06-12</span>
                                 </dd>
                             </dl>
                             <div class="more-allinvest">
@@ -113,35 +91,11 @@
                                 <span class="money">充值金额</span>
                                 <span class="money">充值时间</span>
                             </dt>
-                            <dd>
-                                <span class="name">1</span>
-                                <span class="number">支付理财</span>
-                                <span class="money">1000.0</span>
-                                <span class="profit">2017-05-01</span>
-                            </dd>
-                            <dd>
-                                <span class="name">2</span>
-                                <span class="number">支付理财</span>
-                                <span class="money">1000.0</span>
-                                <span class="profit">2017-04-01</span>
-                            </dd>
-                            <dd>
-                                <span class="name">3</span>
-                                <span class="number">支付理财</span>
-                                <span class="money">1000.0</span>
-                                <span class="profit">2017-03-01</span>
-                            </dd>
-                            <dd>
-                                <span class="name">4</span>
-                                <span class="number">支付理财</span>
-                                <span class="money">1000.0</span>
-                                <span class="profit">2017-03-01</span>
-                            </dd>
-                            <dd>
-                                <span class="name">5</span>
-                                <span class="number">支付理财</span>
-                                <span class="money">1000.0</span>
-                                <span class="profit">2017-03-01</span>
+                            <dd th:each="recharge:${lastRecharges}">
+                                <span class="name" th:text="${rechargeStat.count}">1</span>
+                                <span class="number" th:text="${recharge.rechargeDesc}">支付理财</span>
+                                <span class="money" th:text="${#numbers.formatDecimal(recharge.rechargeMoney, 0, 2)}">1000.0</span>
+                                <span class="profit" th:text="${#dates.format(recharge.rechargeTime, 'yyyy-MM-dd')}">2017-05-01</span>
                             </dd>
                         </dl>
                         <div class="more-allinvest">
@@ -158,40 +112,12 @@
                                 <span class="number name" style="text-align:center;">收益日期</span>
                                 <span class="profit">收益金额</span>
                             </dt>
-                            <dd>
-                                <span class="number" style="text-align:left;">1</span>
-                                <span class="number">新手宝</span>
-                                <span class="number name" style="text-align:center;">2017-05-12</span>
-                                <span class="profit">12.6</span>
-
-                            </dd>
-                            <dd>
-                                <span class="number" style="text-align:left;">2</span>
-                                <span class="number">个人消费贷</span>
-                                <span class="number name" style="text-align:center;">2017-04-11</span>
-                                <span class="profit">100.6</span>
-
-                            </dd>
-                            <dd>
-                                <span class="number" style="text-align:left;">3</span>
-                                <span class="number">季度宝</span>
-                                <span class="number name" style="text-align:center;">2017-03-08</span>
-                                <span class="profit">1000.0</span>
-
-                            </dd>
-                            <dd>
-                                <span class="number" style="text-align:left;">4</span>
-                                <span class="number">季度宝</span>
-                                <span class="number name" style="text-align:center;">2017-03-08</span>
-                                <span class="profit">1000.0</span>
-
-                            </dd>
-                            <dd>
-                                <span class="number" style="text-align:left;">5</span>
-                                <span class="number">季度宝</span>
-                                <span class="number name" style="text-align:center;">2017-03-08</span>
-                                <span class="profit">1000.0</span>
-
+                            <dd th:each="lastIncome:${lastIncomes}">
+                                <span class="number" style="text-align:left;" th:text="${lastIncomeStat.count}">1</span>
+                                <span class="number" th:text="${lastIncome.loanInfo.productName}">新手宝</span>
+                                <span class="number name" style="text-align:center;"
+                                      th:text="${#dates.format(lastIncome.incomeDate, 'yyyy-MM-dd')}">2017-05-12</span>
+                                <span class="profit" th:text="${#numbers.formatDecimal(lastIncome.incomeMoney, 0, 2)}">12.6</span>
                             </dd>
                         </dl>
                         <div id="moreRecentIncome" class="more-allinvest">

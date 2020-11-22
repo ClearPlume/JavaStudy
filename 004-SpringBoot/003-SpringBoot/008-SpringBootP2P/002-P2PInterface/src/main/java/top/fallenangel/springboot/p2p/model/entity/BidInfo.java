@@ -6,7 +6,7 @@ import java.util.Date;
 public class BidInfo implements Serializable {
     private Integer id;
 
-    private Integer loanId;
+    private LoanInfo loanInfo;
 
     private Integer uid;
 
@@ -24,12 +24,12 @@ public class BidInfo implements Serializable {
         this.id = id;
     }
 
-    public Integer getLoanId() {
-        return loanId;
+    public LoanInfo getLoanInfo() {
+        return loanInfo;
     }
 
-    public void setLoanId(Integer loanId) {
-        this.loanId = loanId;
+    public void setLoanInfo(LoanInfo loanInfo) {
+        this.loanInfo = loanInfo;
     }
 
     public Integer getUid() {

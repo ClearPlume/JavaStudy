@@ -161,7 +161,7 @@ public class BidInfoService implements IBidInfoService {
         // 新增投资记录
         BidInfo bidInfo = new BidInfo();
         bidInfo.setUid(userId);
-        bidInfo.setLoanId(loanId);
+        bidInfo.setLoanInfo(loanInfo);
         bidInfo.setBidMoney(bidMoney);
         bidInfo.setBidTime(new Date());
         bidInfo.setBidStatus(1);
@@ -170,5 +170,17 @@ public class BidInfoService implements IBidInfoService {
             return Result.error(5, "系统维护中...");
         }
         return Result.success();
+    }
+
+    /**
+     * 查询指定用户的最近投资记录
+     *
+     * @param uid 指定用户
+     * @param num 查询数量
+     * @return 指定用户的最近投资记录
+     */
+    @Override
+    public List<BidInfo> queryLastBid(Integer uid, int num) {
+        return bidInfoMapper.queryLastBid(uid, num);
     }
 }

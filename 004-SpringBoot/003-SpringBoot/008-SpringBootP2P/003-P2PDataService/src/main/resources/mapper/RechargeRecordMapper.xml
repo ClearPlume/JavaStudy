@@ -19,6 +19,14 @@
         from b_recharge_record
         where id = #{id,jdbcType=INTEGER}
     </select>
+    <!--查询指定用户最近充值记录-->
+    <select id="queryLastRecharges" resultMap="BaseResultMap">
+        select id, uid, recharge_no, recharge_status, recharge_money, recharge_time, recharge_desc
+        from b_recharge_record
+        where uid = #{uid}
+        order by recharge_time desc, recharge_money desc
+        limit #{num}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from b_recharge_record

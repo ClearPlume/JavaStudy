@@ -53,4 +53,13 @@ public interface BidInfoMapper {
      * @return 投资记录数
      */
     int count(@Param("loanId") Integer loanId);
+
+    /**
+     * 查询指定用户的最近投资记录
+     *
+     * @param uid 指定用户
+     * @param num 查询数量
+     * @return 指定用户的最近投资记录
+     */
+    List<BidInfo> queryLastBid(Integer uid, int num);
 }

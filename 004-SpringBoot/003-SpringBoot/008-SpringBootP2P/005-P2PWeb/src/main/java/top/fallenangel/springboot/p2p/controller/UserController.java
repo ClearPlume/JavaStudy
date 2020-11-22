@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.common.Result;
 import top.fallenangel.springboot.p2p.model.entity.User;
-import top.fallenangel.springboot.p2p.service.IBidInfoService;
-import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
-import top.fallenangel.springboot.p2p.service.IUserService;
+import top.fallenangel.springboot.p2p.service.*;
 import top.fallenangel.springboot.p2p.util.JsonUtil;
 import top.fallenangel.springboot.p2p.util.RandomUtil;
 import top.fallenangel.springboot.p2p.util.RedisUtil;
@@ -36,6 +34,12 @@ public class UserController {
 
     @Reference(interfaceClass = IFinanceAccountService.class, version = "1.0.0", timeout = 15000)
     private IFinanceAccountService financeAccountService;
+
+    @Reference(interfaceClass = IIncomeRecordService.class, version = "1.0.0", timeout = 15000)
+    private IIncomeRecordService incomeRecordService;
+
+    @Reference(interfaceClass = IRechargeService.class, version = "1.0.0", timeout = 15000)
+    private IRechargeService rechargeService;
 
     private final JsonUtil json;
     private final XmlUtil xml;
@@ -218,6 +222,9 @@ public class UserController {
     public String myCenter(Model model, HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
         model.addAttribute("financeAccount", financeAccountService.queryFinanceAccount(user.getId()));
+        model.addAttribute("lastBids", bidInfoService.queryLastBid(user.getId(), 5));
+        model.addAttribute("lastRecharges", rechargeService.queryLastRecharges(user.getId(), 5));
+        model.addAttribute("lastIncomes", incomeRecordService.queryLastIncomeRecord(user.getId(), 5));
         return "myCenter";
     }
 }

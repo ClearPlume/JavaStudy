@@ -3,11 +3,13 @@
 <mapper namespace="top.fallenangel.springboot.p2p.model.mapper.BidInfoMapper">
     <resultMap id="BaseResultMap" type="top.fallenangel.springboot.p2p.model.entity.BidInfo">
         <id column="id" jdbcType="INTEGER" property="id"/>
-        <result column="loan_id" jdbcType="INTEGER" property="loanId"/>
         <result column="uid" jdbcType="INTEGER" property="uid"/>
         <result column="bid_money" jdbcType="DOUBLE" property="bidMoney"/>
         <result column="bid_time" jdbcType="TIMESTAMP" property="bidTime"/>
         <result column="bid_status" jdbcType="INTEGER" property="bidStatus"/>
+
+        <association property="loanInfo"
+                     resultMap="top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper.BaseResultMap"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, loan_id, uid, bid_money, bid_time, bid_status
@@ -44,6 +46,17 @@
         from b_bid_info b
         where loan_id = #{loanId}
     </select>
+    <!--查询指定用户的最近投资记录-->
+    <select id="queryLastBid" resultMap="BaseResultMap">
+        select product_name,
+               bid_money,
+               bid_time
+        from b_bid_info b
+                 left join b_loan_info l on b.loan_id = l.id
+        where uid = #{uid}
+        order by bid_time desc, bid_money desc
+        limit 0, #{num}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from b_bid_info
@@ -60,7 +73,7 @@
             parameterType="top.fallenangel.springboot.p2p.model.entity.BidInfo" useGeneratedKeys="true">
         insert into b_bid_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="loanId != null">
+            <if test="loanInfo != null and loanInfo.id != null">
                 loan_id,
             </if>
             <if test="uid != null">
@@ -77,8 +90,8 @@
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="loanId != null">
-                #{loanId,jdbcType=INTEGER},
+            <if test="loanInfo != null and loanInfo.id != null">
+                #{loanInfo.id,jdbcType=INTEGER},
             </if>
             <if test="uid != null">
                 #{uid,jdbcType=INTEGER},

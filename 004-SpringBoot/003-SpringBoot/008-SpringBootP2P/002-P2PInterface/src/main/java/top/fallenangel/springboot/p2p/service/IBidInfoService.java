@@ -56,4 +56,13 @@ public interface IBidInfoService {
      * @return 投资结果
      */
     Map<String, Object> invest(int userId, int loanId, double bidMoney);
+
+    /**
+     * 查询指定用户的最近投资记录
+     *
+     * @param uid 指定用户
+     * @param num 查询数量
+     * @return 指定用户的最近投资记录
+     */
+    List<BidInfo> queryLastBid(Integer uid, int num);
 }
