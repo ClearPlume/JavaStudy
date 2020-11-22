@@ -21,7 +21,7 @@ public class RedisUtil {
      * @return 最终的value值
      */
     public String getValueFromRedis(String key, Operator operator) {
-        return getValueFromRedis(key, operator, 6, TimeUnit.HOURS);
+        return getValueFromRedis(key, operator, 5, TimeUnit.MINUTES);
     }
 
     /**
