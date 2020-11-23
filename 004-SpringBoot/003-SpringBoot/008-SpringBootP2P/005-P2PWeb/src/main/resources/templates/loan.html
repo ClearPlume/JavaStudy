@@ -64,7 +64,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <span th:text="|共${loanInfoPageInfo.total}条${loanInfoPageInfo.pages}页&nbsp;&nbsp;当前为第${loanInfoPageInfo.pageNum}页|">共20条3页&nbsp;&nbsp;当前为第2页　</span>
+                                    <span th:text="|共${loanInfoPageInfo.total}条${loanInfoPageInfo.pages}页  当前为第${loanInfoPageInfo.pageNum}页|">共20条3页&nbsp;&nbsp;当前为第2页　</span>
 
                                     <a href="javascript:void(0)" th:if="${loanInfoPageInfo.isFirstPage}">首页</a>
                                     <a th:href="@{/loaninfo/first(productType=${productType})}"
