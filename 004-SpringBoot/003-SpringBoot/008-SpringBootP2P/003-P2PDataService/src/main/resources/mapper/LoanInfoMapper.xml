@@ -122,11 +122,11 @@
         from b_loan_info
         where product_type = #{productType}
     </select>
-    <!--查找已满标但尚未生成收益计划的产品-->
-    <select id="queryFullyLoan" resultMap="BaseResultMap">
+    <!--指定状态的产品-->
+    <select id="selectLoanByStatus" resultMap="BaseResultMap">
         select *
         from b_loan_info
-        where product_status = 1
+        where product_status = #{status}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete

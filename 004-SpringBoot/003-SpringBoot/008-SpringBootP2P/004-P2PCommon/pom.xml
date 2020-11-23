@@ -58,5 +58,12 @@
             <artifactId>annotations</artifactId>
             <version>20.0.0</version>
         </dependency>
+
+        <!--公共项目-->
+        <dependency>
+            <groupId>top.fallenangel.springboot.p2p</groupId>
+            <artifactId>002-p2p-interface</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>

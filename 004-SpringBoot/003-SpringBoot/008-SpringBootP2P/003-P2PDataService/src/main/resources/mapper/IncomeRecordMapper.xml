@@ -10,7 +10,8 @@
         <result column="income_money" jdbcType="DOUBLE" property="incomeMoney"/>
         <result column="income_status" jdbcType="INTEGER" property="incomeStatus"/>
 
-        <association property="loanInfo" resultMap="top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper.BaseResultMap"/>
+        <association property="loanInfo"
+                     resultMap="top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper.BaseResultMap"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, uid, loan_id, bid_id, bid_money, income_date, income_money, income_status
@@ -33,6 +34,20 @@
         order by income_date desc, income_money desc
         limit 0, #{num}
     </select>
+    <!--查询全部已到期但还未返现的计划-->
+    <select id="selectIncomeRecordByStatus" resultMap="BaseResultMap">
+        select id,
+               uid,
+               loan_id,
+               bid_id,
+               bid_money,
+               income_date,
+               income_money,
+               income_status
+        from b_income_record
+        where income_date &lt;= curdate()
+          and income_status = 0
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from b_income_record
@@ -43,7 +58,7 @@
         insert into b_income_record (uid, loan_id, bid_id,
                                      bid_money, income_date, income_money,
                                      income_status)
-        values (#{uid,jdbcType=INTEGER}, #{loanId,jdbcType=INTEGER}, #{bidId,jdbcType=INTEGER},
+        values (#{uid,jdbcType=INTEGER}, #{loanInfo.id,jdbcType=INTEGER}, #{bidId,jdbcType=INTEGER},
                 #{bidMoney,jdbcType=DOUBLE}, #{incomeDate,jdbcType=DATE}, #{incomeMoney,jdbcType=DOUBLE},
                 #{incomeStatus,jdbcType=INTEGER})
     </insert>
@@ -54,7 +69,7 @@
             <if test="uid != null">
                 uid,
             </if>
-            <if test="loanId != null">
+            <if test="loanInfo != null and loanInfo.id != null">
                 loan_id,
             </if>
             <if test="bidId != null">
@@ -66,7 +81,7 @@
             <if test="incomeDate != null">
                 income_date,
             </if>
-            <if test="incomeMoney != null">
+            <if test="incomeMoney != null">+
                 income_money,
             </if>
             <if test="incomeStatus != null">
@@ -77,8 +92,8 @@
             <if test="uid != null">
                 #{uid,jdbcType=INTEGER},
             </if>
-            <if test="loanId != null">
-                #{loanId,jdbcType=INTEGER},
+            <if test="loanInfo != null and loanInfo.id != null">
+                #{loanInfo.id,jdbcType=INTEGER},
             </if>
             <if test="bidId != null">
                 #{bidId,jdbcType=INTEGER},
@@ -103,8 +118,8 @@
             <if test="uid != null">
                 uid = #{uid,jdbcType=INTEGER},
             </if>
-            <if test="loanId != null">
-                loan_id = #{loanId,jdbcType=INTEGER},
+            <if test="loanInfo != null and loanInfo.id != null">
+                loan_id = #{loanInfo.id,jdbcType=INTEGER},
             </if>
             <if test="bidId != null">
                 bid_id = #{bidId,jdbcType=INTEGER},
@@ -127,7 +142,7 @@
     <update id="updateByPrimaryKey" parameterType="top.fallenangel.springboot.p2p.model.entity.IncomeRecord">
         update b_income_record
         set uid           = #{uid,jdbcType=INTEGER},
-            loan_id       = #{loanId,jdbcType=INTEGER},
+            loan_id       = #{loanInfo.id,jdbcType=INTEGER},
             bid_id        = #{bidId,jdbcType=INTEGER},
             bid_money     = #{bidMoney,jdbcType=DOUBLE},
             income_date   = #{incomeDate,jdbcType=DATE},

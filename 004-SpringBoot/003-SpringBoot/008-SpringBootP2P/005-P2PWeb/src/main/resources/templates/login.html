@@ -39,6 +39,14 @@
                 color: #444;
                 text-align: right;
             }
+
+            .reg-link a {
+                color: #4f7da5;
+            }
+
+            .reg-link a:hover {
+                color: #c7000a;
+            }
         </style>
     </head>
 
@@ -53,9 +61,7 @@
             <div class="mainBox">
                 <div class="homeWap">
                     <div class="login-cnt clearfix">
-                        <div class="reg-link">
-                            没有帐号？<a style="color: #4f7da5" th:href="@{/loan/page/register}">注册</a>
-                        </div>
+                        <div class="reg-link"> 没有帐号？<a th:href="@{/loan/page/register}">注册</a></div>
                         <div class="login-form" style="height: 320px">
                             <h2>欢迎登录</h2>
                             <input type="hidden" id="prevPageURL" th:value="${returnUrl}"/>

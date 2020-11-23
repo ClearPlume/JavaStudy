@@ -53,9 +53,10 @@ public interface LoanInfoMapper {
     int selectTotalByType(@Param("productType") Integer productType);
 
     /**
-     * 查找已满标但尚未生成收益计划的产品
+     * 按状态查找产品
      *
-     * @return 已满标但尚未生成收益计划的产品
+     * @param status 产品状态
+     * @return 指定状态的产品
      */
-    List<LoanInfo> queryFullyLoan();
+    List<LoanInfo> selectLoanByStatus(@Param("status") int status);
 }

@@ -8,6 +8,7 @@ import top.fallenangel.springboot.p2p.common.Result;
 import top.fallenangel.springboot.p2p.model.entity.BidInfo;
 import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
+import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.model.mapper.BidInfoMapper;
 import top.fallenangel.springboot.p2p.model.mapper.FinanceAccountMapper;
 import top.fallenangel.springboot.p2p.model.mapper.LoanInfoMapper;
@@ -98,19 +99,19 @@ public class BidInfoService implements IBidInfoService {
      * <p>
      * 返回值中的code：1：当前未登录 2：余额不足 3：产品可投金额不足 4：产品已满标 5：系统维护中
      *
-     * @param userId   用户Id
+     * @param user     用户
      * @param loanId   投资产品
      * @param bidMoney 投资金额
      * @return 投资结果
      */
     @Override
     @Transactional
-    public Map<String, Object> invest(int userId, int loanId, double bidMoney) {
+    public Map<String, Object> invest(User user, int loanId, double bidMoney) {
         int loanVersion = loanInfoMapper.selectByPrimaryKey(loanId).getVersion();
         int num = 0;
 
         // 帐户余额
-        FinanceAccount financeAccount = financeAccountMapper.selectFinanceAccountByUserId(userId);
+        FinanceAccount financeAccount = financeAccountMapper.selectFinanceAccountByUserId(user.getId());
         Double availableMoney = financeAccount.getAvailableMoney();
         if (availableMoney < bidMoney) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -160,7 +161,7 @@ public class BidInfoService implements IBidInfoService {
 
         // 新增投资记录
         BidInfo bidInfo = new BidInfo();
-        bidInfo.setUid(userId);
+        bidInfo.setUid(user.getId());
         bidInfo.setLoanInfo(loanInfo);
         bidInfo.setBidMoney(bidMoney);
         bidInfo.setBidTime(new Date());
@@ -169,6 +170,8 @@ public class BidInfoService implements IBidInfoService {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return Result.error(5, "系统维护中...");
         }
+        // 投资成功后，将金额、手机号插入Redis
+        redisUtil.zIncrementScore(Constants.BID_RANK, user.getPhone(), bidInfo.getBidMoney());
         return Result.success();
     }
 

@@ -83,13 +83,14 @@ public class LoanInfoService implements ILoanInfoService {
     }
 
     /**
-     * 查找已满标但尚未生成收益计划的产品
+     * 按状态查找产品
      *
-     * @return 已满标但尚未生成收益计划的产品
+     * @param status 产品状态
+     * @return 指定状态的产品
      */
     @Override
-    public List<LoanInfo> queryFullyLoan() {
-        return loanInfoMapper.queryFullyLoan();
+    public List<LoanInfo> queryLoanByType(Integer status) {
+        return loanInfoMapper.selectLoanByStatus(status);
     }
 
     /**

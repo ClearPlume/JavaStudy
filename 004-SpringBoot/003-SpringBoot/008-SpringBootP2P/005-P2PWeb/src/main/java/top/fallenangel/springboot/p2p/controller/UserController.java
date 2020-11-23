@@ -72,7 +72,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("page/registerSubmit")
     public Object registerSubmit(String phone, String pwd, String authCode, HttpServletRequest request) {
-        if (!authCode.equals(redis.getValue(phone))) {
+        if (!authCode.equals(redis.getAuthCode(phone))) {
             return Result.error("验证码填写有误！");
         }
         User user = userService.register(phone, pwd);
@@ -89,7 +89,7 @@ public class UserController {
     @GetMapping("page/checkNum")
     public Object checkNum(String phone, HttpServletRequest request) {
         String authCode = RandomUtil.num(6);
-        redis.setValue(phone, authCode, 1, TimeUnit.MINUTES);
+        redis.setAuthCode(phone, authCode, 1, TimeUnit.MINUTES);
         String content = "【凯信通】您的验证码是：" + authCode;
 
         Map<String, Object> param = new HashMap<>();
@@ -135,7 +135,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("page/realNameSubmit")
     public Object realNameSubmit(String phone, String authCode, String idCard, String realName, HttpServletRequest request) {
-        if (!authCode.equals(redis.getValue(phone))) {
+        if (!authCode.equals(redis.getAuthCode(phone))) {
             return Result.error("验证码填写有误！");
         }
         Map<String, Object> param = new HashMap<>();
@@ -194,7 +194,7 @@ public class UserController {
     @ResponseBody
     @GetMapping("page/loginSubmit")
     public Object loginSubmit(String phone, String pwd, String authCode, HttpServletRequest request) {
-        if (!authCode.equals(redis.getValue(phone))) {
+        if (!authCode.equals(redis.getAuthCode(phone))) {
             return Result.error("验证码填写有误！");
         }
         User user = userService.login(phone, pwd);

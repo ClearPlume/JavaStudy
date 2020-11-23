@@ -25,4 +25,14 @@ public interface IIncomeRecordService {
      * @return 指定用户的最近收益记录
      */
     List<IncomeRecord> queryLastIncomeRecord(Integer uid, Integer num);
+
+    /**
+     * 生成收益计划
+     */
+    void generateIncomePlan();
+
+    /**
+     * 收益返现
+     */
+    void checkRecurrence();
 }

@@ -33,4 +33,12 @@ public interface IncomeRecordMapper {
      * @return 指定用户的最近收益记录
      */
     List<IncomeRecord> queryLastIncomeRecord(@Param("uid") Integer uid, @Param("num") Integer num);
+
+    /**
+     * 查询全部已到期但还未返现的计划
+     *
+     * @param status 计划状态
+     * @return 全部已到期但还未返现的计划
+     */
+    List<IncomeRecord> selectIncomeRecordByStatus(int status);
 }

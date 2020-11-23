@@ -30,6 +30,6 @@ public class BidInfoController {
         if (user == null) {
             return Result.error(1, "请登录后再投资！");
         }
-        return bidInfoService.invest(user.getId(), loanId, bidMoney);
+        return bidInfoService.invest(user, loanId, bidMoney);
     }
 }

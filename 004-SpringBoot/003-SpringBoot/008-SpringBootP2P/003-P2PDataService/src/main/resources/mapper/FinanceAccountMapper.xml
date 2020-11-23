@@ -73,4 +73,10 @@
             available_money = #{availableMoney,jdbcType=DOUBLE}
         where id = #{id,jdbcType=INTEGER}
     </update>
+    <!--为用户返现-->
+    <update id="updateAccountByUid">
+        update u_finance_account
+        set available_money = available_money + #{bidMoney} + #{incomeMoney}
+        where uid = #{uid}
+    </update>
 </mapper>

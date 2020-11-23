@@ -12,11 +12,14 @@ import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
 import top.fallenangel.springboot.p2p.model.entity.LoanInfo;
 import top.fallenangel.springboot.p2p.model.entity.User;
+import top.fallenangel.springboot.p2p.model.vo.NameValuePair;
 import top.fallenangel.springboot.p2p.service.IBidInfoService;
 import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 import top.fallenangel.springboot.p2p.service.ILoanInfoService;
+import top.fallenangel.springboot.p2p.util.RedisUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @SuppressWarnings("unused")
 @Controller
@@ -30,6 +33,12 @@ public class LoanInfoController {
 
     @Reference(interfaceClass = IFinanceAccountService.class, version = "1.0.0", timeout = 15000)
     private IFinanceAccountService financeAccountService;
+
+    private final RedisUtil redis;
+
+    public LoanInfoController(RedisUtil redis) {
+        this.redis = redis;
+    }
 
     /**
      * 某一页的产品信息
@@ -50,6 +59,10 @@ public class LoanInfoController {
         model.addAttribute("productType", productType);
         model.addAttribute("loanInfoPageInfo", loanInfoPageInfo);
         model.addAttribute("loanInfos", loanInfoPageInfo.getList());
+
+        // 从Redis中获取排行榜信息
+        List<NameValuePair> bids = redis.zReverseRangeWithScores(Constants.BID_RANK, 0, 5);
+        model.addAttribute("bids", bids);
         return "loan";
     }
 
