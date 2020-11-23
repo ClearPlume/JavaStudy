@@ -31,6 +31,14 @@
                 color: #666;
                 cursor: default;
             }
+
+            .reg-link {
+                width: 406px;
+                margin: 15px 0 0;
+                font-size: 14px;
+                color: #444;
+                text-align: right;
+            }
         </style>
     </head>
 
@@ -45,7 +53,10 @@
             <div class="mainBox">
                 <div class="homeWap">
                     <div class="login-cnt clearfix">
-                        <div class="login-form" style="margin-top: 15px; height: 320px">
+                        <div class="reg-link">
+                            没有帐号？<a style="color: #4f7da5" th:href="@{/loan/page/register}">注册</a>
+                        </div>
+                        <div class="login-form" style="height: 320px">
                             <h2>欢迎登录</h2>
                             <input type="hidden" id="prevPageURL" th:value="${returnUrl}"/>
 
