@@ -11,7 +11,6 @@ import top.fallenangel.springboot.p2p.service.IUserService;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 @Controller
 public class IndexController {
     @Reference(interfaceClass = ILoanInfoService.class, version = "1.0.0", timeout = 15000)

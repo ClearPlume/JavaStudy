@@ -13,7 +13,6 @@ import top.fallenangel.springboot.p2p.service.IBidInfoService;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
-@SuppressWarnings("unused")
 @Controller
 @RequestMapping("bid")
 public class BidInfoController {

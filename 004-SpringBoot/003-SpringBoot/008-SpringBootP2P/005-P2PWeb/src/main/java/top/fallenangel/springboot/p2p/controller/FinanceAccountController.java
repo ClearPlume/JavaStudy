@@ -12,7 +12,6 @@ import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 
 import javax.servlet.http.HttpServletRequest;
 
-@SuppressWarnings("unused")
 @Controller
 @RequestMapping("finance")
 public class FinanceAccountController {

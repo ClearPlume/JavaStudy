@@ -21,7 +21,6 @@ import top.fallenangel.springboot.p2p.util.RedisUtil;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@SuppressWarnings("unused")
 @Controller
 @RequestMapping("loaninfo")
 public class LoanInfoController {

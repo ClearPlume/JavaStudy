@@ -18,11 +18,8 @@ import top.fallenangel.springboot.p2p.util.XmlUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@SuppressWarnings("unused")
 @Controller
 @RequestMapping("loan")
 public class UserController {
@@ -87,12 +84,12 @@ public class UserController {
     // 发送短信验证码
     @ResponseBody
     @GetMapping("page/checkNum")
-    public Object checkNum(String phone, HttpServletRequest request) {
+    public Object checkNum(String phone) {
         String authCode = RandomUtil.num(6);
         redis.setAuthCode(phone, authCode, 1, TimeUnit.MINUTES);
-        String content = "【凯信通】您的验证码是：" + authCode;
+        // String content = "【凯信通】您的验证码是：" + authCode;
 
-        Map<String, Object> param = new HashMap<>();
+        // Map<String, Object> param = new HashMap<>();
         // param.put("mobile", phone);
         // param.put("content", content);
         // param.put("appkey", "cd5b89522646433fad8e1c667b95b5d9");
@@ -138,7 +135,7 @@ public class UserController {
         if (!authCode.equals(redis.getAuthCode(phone))) {
             return Result.error("验证码填写有误！");
         }
-        Map<String, Object> param = new HashMap<>();
+        // Map<String, Object> param = new HashMap<>();
         // param.put("cardNo", idCard);
         // param.put("realName", realName);
         // param.put("appkey", "cd5b89522646433fad8e1c667b95b5d9");
