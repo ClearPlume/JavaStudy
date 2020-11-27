@@ -1,0 +1,41 @@
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>动力金融网-专业的互联网金融公司</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/center.css}"/>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/security.css}"/>
+
+        <style type="text/css">
+            h2 {
+                font-size: 22px;
+            }
+        </style>
+
+        <script type="text/javascript">
+            onload = function () {
+                let closeBtn = document.querySelector("#close-btn")
+                let closeTimeRemain = 5
+
+                closeBtn.onclick = function () {
+                    window.close()
+                }
+
+                setInterval(function () {
+                    closeTimeRemain--
+                    closeBtn.innerText = `关 闭 (${closeTimeRemain})`
+
+                    if (closeTimeRemain === 0) {
+                        window.close()
+                    }
+                }, 1000)
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="unrecognized" style="display:block">
+            <h2 th:if="${success}">支付成功，将关闭当前页面...</h2>
+            <h2 th:if="${!success}">支付失败，请在当前页面关闭后重试！</h2>
+            <a class="input_btn" id="close-btn" href="javascript:void(0)">关 闭 (5)</a>
+        </div>
+    </body>
+</html>

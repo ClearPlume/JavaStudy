@@ -18,4 +18,27 @@ public interface IRechargeService {
      * @return 指定用户最近充值记录
      */
     List<RechargeRecord> queryLastRecharges(Integer uid, int num);
+
+    /**
+     * 生成充值记录
+     *
+     * @param uid           用户id
+     * @param rechargeMoney 充值金额
+     * @return 生成是否成功
+     */
+    RechargeRecord generateRechargeRecord(Integer uid, Double rechargeMoney);
+
+    /**
+     * 根据订单号查询充值记录
+     *
+     * @param outTradeNo 订单号
+     */
+    RechargeRecord getRechargeRecordByNo(String outTradeNo);
+
+    /**
+     * 更新充值记录
+     *
+     * @param record 充值记录
+     */
+    int updateRecharge(RechargeRecord record);
 }

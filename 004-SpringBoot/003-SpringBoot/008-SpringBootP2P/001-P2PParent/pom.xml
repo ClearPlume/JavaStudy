@@ -14,6 +14,7 @@
         <module>../004-P2PCommon</module>
         <module>../005-P2PWeb</module>
         <module>../006-P2PTimerTask</module>
+        <module>../007-P2PPay</module>
     </modules>
     <groupId>top.fallenangel.springboot.p2p</groupId>
     <artifactId>001-p2p-parent</artifactId>
@@ -108,6 +109,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-web</artifactId>
                 <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!--支付宝-->
+            <dependency>
+                <groupId>com.alipay.sdk</groupId>
+                <artifactId>alipay-sdk-java</artifactId>
+                <version>4.10.192.ALL</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

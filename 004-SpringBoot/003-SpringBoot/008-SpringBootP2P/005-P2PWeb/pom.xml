@@ -47,8 +47,7 @@
         <!--支付宝-->
         <dependency>
             <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-easysdk</artifactId>
-            <version>2.1.0</version>
+            <artifactId>alipay-sdk-java</artifactId>
         </dependency>
 
         <!--接口项目-->

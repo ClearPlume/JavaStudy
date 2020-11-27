@@ -31,7 +31,7 @@ public class FinanceAccountService implements IFinanceAccountService {
      * @param financeAccount 帐户信息
      */
     @Override
-    public void updateFinanceAccount(FinanceAccount financeAccount) {
-        financeAccountMapper.updateByPrimaryKeySelective(financeAccount);
+    public int updateFinanceAccount(FinanceAccount financeAccount) {
+        return financeAccountMapper.updateByPrimaryKeySelective(financeAccount);
     }
 }

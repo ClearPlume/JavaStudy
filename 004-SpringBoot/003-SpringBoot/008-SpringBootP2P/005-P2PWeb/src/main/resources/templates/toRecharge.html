@@ -18,8 +18,8 @@
             }
 
             #weixinpay img {
-                width: 115%;
-                height: 115%;
+                width: 118.4%;
+                height: 118.4%;
             }
         </style>
 
@@ -27,7 +27,11 @@
         <script type="text/javascript" th:src="@{/js/trafficStatistics.js}"></script>
 
         <script type="text/javascript">
+            let context = location.pathname.substring(0, location.pathname.indexOf("/", 1))
+
             $(document).ready(function () {
+                let rechargeAction = $("#rechargeAction")
+
                 $("#overView").removeClass("on")
                 $("#myAccount").addClass("on")
                 $('#chongzhi').addClass('on')
@@ -36,16 +40,12 @@
                 $('#alipay').click(function () {
                     $(this).addClass('img_on')
                     $(this).next().removeClass('img_on')
-
-                    let context = location.pathname.substring(0, location.pathname.indexOf("/", 1))
-                    document.querySelector("#rechargeForm").action = location.origin + context + "/loan/page/alipay"
+                    rechargeAction.val(location.origin + context + "/loan/page/alipay")
                 })
                 $('#weixinpay').click(function () {
                     $(this).addClass('img_on')
                     $(this).prev().removeClass('img_on')
-
-                    let context = location.pathname.substring(0, location.pathname.indexOf("/", 1))
-                    document.querySelector("#rechargeForm").action = location.origin + context + "/loan/page/weixinpay"
+                    rechargeAction.val(location.origin + context + "/loan/page/weixinpay")
                 })
             })
 
@@ -86,8 +86,13 @@
                     $("#div1_1").hide()
                     $("#dialog-overlay").show()
                     $("#failurePayment").show()
-                    $("#rechargeForm").submit()
+                    window.open(location.origin + context + "/newWindow", "target", "width=1280,height=720,menubar=yes,location=yes,resizable=yes,scrollbars=true,status=true")
                 }
+            }
+
+            function toRealName() {
+                let returnUrl = location.href
+                location.href = "/P2PWeb/loan/page/realName?returnUrl=" + returnUrl
             }
         </script>
     </head>
@@ -115,14 +120,15 @@
                         <div class="leftTitle"><span class="on">第三方支付平台</span></div>
 
                         <!--未认证start-->
-                        <!--<div class="unrecognized" style="display:block;" id="unrecognized1">
+                        <div class="unrecognized" style="display:block" th:if="${session.LOGIN_USER.name == null}">
                             <h3>您尚未通过实名认证，通过实名认证后可进行充值操作</h3>
-                            <a class="input_btn" th:href="@{/loan/page/realName}">认 证</a>
-                        </div>-->
+                            <a class="input_btn" href="javascript:void(0)" onclick="toRealName()">认 证</a>
+                        </div>
                         <!--未认证end-->
 
+                        <input type="hidden" name="rechargeAction" id="rechargeAction"/>
                         <!-- 充值start -->
-                        <form id="rechargeForm" method="post" target="_blank">
+                        <form method="post" th:if="${session.LOGIN_USER.name != null}">
                             <div class="payInvest" style="display:block;">
                                 <div class="investMain">
                                     <h3>请选择支付平台</h3>
@@ -145,7 +151,7 @@
                                         <label for="rechargeMoney"></label>
                                         <input type="text" name="rechargeMoney" id="rechargeMoney" value=""
                                                class="input_text" onblur="checkData()"/>
-                                        <span class="input-yuan">元</span>
+                                        <label style="display: none"><input type="text"/></label>
                                         <div class="error-hint" style="display:none" id="div1_1"><i></i>
                                             <p id="p1_1">充值金额必须是大于1的正数，且最多有两位小数</p></div>
                                     </div>

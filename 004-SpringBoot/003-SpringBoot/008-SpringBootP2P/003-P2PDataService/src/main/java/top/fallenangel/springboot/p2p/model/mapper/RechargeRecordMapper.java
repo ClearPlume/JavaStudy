@@ -28,4 +28,12 @@ public interface RechargeRecordMapper {
      * @return 指定用户最近充值记录
      */
     List<RechargeRecord> queryLastRecharges(@Param("uid") Integer uid, @Param("num") int num);
+
+    /**
+     * 根据订单号查询充值记录
+     *
+     * @param outTradeNo 订单号
+     * @return 充值记录
+     */
+    RechargeRecord selectByTradeNo(String outTradeNo);
 }

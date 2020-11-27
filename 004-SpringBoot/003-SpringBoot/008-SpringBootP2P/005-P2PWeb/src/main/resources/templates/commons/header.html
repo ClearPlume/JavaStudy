@@ -66,7 +66,7 @@
                     <div class="userinfo-up">
                         <a th:href="@{/loan/myCenter}" class="user-phone"
                            th:text="${session.LOGIN_USER.name == null ? session.LOGIN_USER.phone : session.LOGIN_USER.name}">13788889999</a>
-                        <a href="/webPage/account/member_systems.html" class="user-vip" id="member">VIP1</a><i></i>
+                        <a href="javascript:void(0)" class="user-vip" id="member">VIP1</a><i></i>
                     </div>
                     <div class="userinfo-drop-down" style="height: 0">
                         <div class="down-bk">
@@ -74,7 +74,7 @@
                             <ul class="quick-entry clearfix">
                                 <li class="icon-recharge"><a th:href="@{/loan/page/toRecharge}"><i></i><span>充值</span></a></li>
                                 <li class="icon-invest" style="margin-left:85px;"><a
-                                        href="loan/loan"><i></i><span>投资</span></a></li>
+                                        th:href="@{/}"><i></i><span>投资</span></a></li>
                             </ul>
                             <div class="enter">进入“<a th:href="@{/loan/myCenter}">我的小金库</a>”</div>
                             <div class="exit"><a th:href="@{/loan/logout}">退出</a></div>

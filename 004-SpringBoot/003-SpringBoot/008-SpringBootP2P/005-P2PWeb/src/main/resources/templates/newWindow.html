@@ -1,0 +1,21 @@
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>动力金融网-专业的互联网金融公司</title>
+
+        <script type="text/javascript">
+            onload = function () {
+                let rechargeForm = document.getElementById("rechargeForm")
+                let rechargeMoney = opener.rechargeMoney.value
+                rechargeForm.action = opener.rechargeAction.value
+                document.getElementById("rechargeMoney").value = rechargeMoney
+                rechargeForm.submit()
+            }
+        </script>
+    </head>
+
+    <body>
+        <form id="rechargeForm" method="post">
+            <input type="hidden" name="rechargeMoney" id="rechargeMoney" value=""/>
+        </form>
+    </body>
+</html>

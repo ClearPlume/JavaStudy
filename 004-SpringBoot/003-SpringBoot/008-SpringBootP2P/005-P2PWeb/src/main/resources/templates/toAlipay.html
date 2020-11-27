@@ -1,0 +1,32 @@
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>动力金融网-专业的互联网金融公司</title>
+
+        <style type="text/css">
+            a {
+                color: #4f7da5;
+                text-decoration: none;
+            }
+
+            a:hover {
+                color: #c7000a;
+            }
+        </style>
+    </head>
+
+    <body style="text-align: center">
+        <div th:if="${rechargeRecord == null}">
+            支付失败，<a th:href="@{/loan/page/toRecharge}">返回重试</a>
+        </div>
+
+        <form action="http://localhost:18083/P2PPay/pay/alipay" method="post" th:if="${rechargeRecord != null}">
+            <input type="hidden" name="rechargeNo" th:value="${rechargeRecord.rechargeNo}"/>
+            <input type="hidden" name="rechargeMoney" th:value="${rechargeRecord.rechargeMoney}"/>
+            <input type="hidden" name="rechargeDesc" th:value="${rechargeRecord.rechargeDesc}"/>
+        </form>
+
+        <script type="text/javascript" th:if="${rechargeRecord != null}">
+            document.forms[0].submit()
+        </script>
+    </body>
+</html>

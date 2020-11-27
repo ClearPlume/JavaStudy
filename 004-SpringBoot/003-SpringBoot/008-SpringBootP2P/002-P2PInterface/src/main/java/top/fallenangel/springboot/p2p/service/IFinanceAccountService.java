@@ -16,5 +16,5 @@ public interface IFinanceAccountService {
      *
      * @param financeAccount 帐户信息
      */
-    void updateFinanceAccount(FinanceAccount financeAccount);
+    int updateFinanceAccount(FinanceAccount financeAccount);
 }
