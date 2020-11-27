@@ -13,7 +13,7 @@ public final class JsonUtil {
         this.mapper = mapper;
     }
 
-    public void setNode(JsonNode node) {
+    private void setNode(JsonNode node) {
         this.node = node;
     }
 

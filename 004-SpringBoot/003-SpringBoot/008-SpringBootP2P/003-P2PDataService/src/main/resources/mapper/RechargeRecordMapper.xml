@@ -28,7 +28,7 @@
         limit #{num}
     </select>
     <!--根据订单号查询充值记录-->
-    <select id="selectByTradeNo" resultType="top.fallenangel.springboot.p2p.model.entity.RechargeRecord">
+    <select id="selectByTradeNo" resultMap="BaseResultMap">
         select id, uid, recharge_no, recharge_status, recharge_money, recharge_time, recharge_desc
         from b_recharge_record
         where recharge_no = #{outTradeNo}

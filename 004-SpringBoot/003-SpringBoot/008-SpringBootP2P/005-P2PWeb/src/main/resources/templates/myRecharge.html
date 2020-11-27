@@ -14,13 +14,22 @@
             $(function () {
                 $("#myCash").attr("class", "on");
             })
+
             $(document).ready(function () {
                 $("#overView").removeClass("on");
                 $("#myAccount").addClass("on");
             });
+
             $(document).ready(function () {
                 $("#chongzhijilu").addClass("on");
             });
+
+            function toRefund(rechargeNo) {
+                let context = location.origin + location.pathname.substring(0, location.pathname.indexOf("/", 1))
+                let url = context + "/pay/ailipay/refund?rechargeNo=" + rechargeNo.substring(1, rechargeNo.length - 1)
+
+                window.open(url, "_black", "width=1280,height=720,menubar=yes,location=yes,resizable=yes,scrollbars=true,status=true")
+            }
         </script>
     </head>
 
@@ -58,7 +67,11 @@
                                              th:text="${#dates.format(recharge.rechargeTime, 'yyyy-MM-dd HH:mm:ss')}">
                                             2016-09-18 10:23:11
                                         </div>
-                                        <div class="deal-name" th:text="${recharge.rechargeDesc}">支付理财</div>
+                                        <div class="deal-name">
+                                            <a href="javascript:void(0)"
+                                               th:onclick="toRefund('[[${recharge.rechargeNo}]]')"
+                                               th:text="${recharge.rechargeDesc}">支付理财</a>
+                                        </div>
                                         <div class="deal-type" style="width:120px">充值</div>
                                         <div class="deal-money"
                                              th:text="${#numbers.formatDecimal(recharge.rechargeMoney, 1, 2)}">100.0

@@ -48,7 +48,7 @@ public class UserController {
         this.redis = redis;
     }
 
-    // 跳转登录页面
+    // 跳转注册页面
     @GetMapping("page/register")
     public String register() {
         return "register";

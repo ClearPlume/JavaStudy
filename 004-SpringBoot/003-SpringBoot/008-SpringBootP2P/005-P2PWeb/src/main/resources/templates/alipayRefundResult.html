@@ -23,8 +23,8 @@
 
     <body>
         <div class="unrecognized" style="display:block">
-            <h2 th:if="${success}">支付成功，请关闭当前页面...</h2>
-            <h2 th:if="${!success}">支付失败，请关闭当前页面后重试！</h2>
+            <h2 th:if="${success}">退款成功，您可关闭当前页面...</h2>
+            <h2 th:if="${!success}">退款失败，请关闭当前页面后重试...</h2>
             <a class="input_btn" id="close-btn" href="javascript:void(0)">关 闭</a>
         </div>
     </body>

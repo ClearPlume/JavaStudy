@@ -42,7 +42,7 @@
                     <h3>动力金融网历史年化收益率</h3>
                     <h4><span id="avg" th:text="${#numbers.formatDecimal(avgRate, 0, 2)}">13.8</span> %</h4>
                     <div class="bn_register"><a th:href="@{/loan/page/register}" class="btn-1">注册领888大红包</a></div>
-                    <div class="login">有账号? <a th:href="@{/loan/page/login}">立即登录</a></div>
+                    <div class="login">有账号? <a href="javascript:void(0)" onclick="toLogin()">立即登录</a></div>
                 </div>
                 <!-- 登录状态 -->
                 <div class="register welcome" th:if="${session.LOGIN_USER != null}">
@@ -321,34 +321,40 @@
         <script type="text/javascript">
             //加载轮播图
             $(document).ready(function () {
-                loadCarouselPicture();
-            });
+                loadCarouselPicture()
+            })
+
+            function toLogin() {
+                let returnUrl = location.href
+                let context = location.origin + location.pathname.substring(0, location.pathname.indexOf("/", 1))
+                location.href = context + "/loan/page/login?returnUrl=" + returnUrl
+            }
 
             //轮播图(先静态写死)
             function loadCarouselPicture() {
-                let liStr = "<li data-opacity='0.2' style='display: none; background: url(";
-                liStr += "img/001.jpg) 50% 50% no-repeat;'><a href='";
-                liStr += "javascript:void(0)";
-                liStr += "' target='_blank'></a></li>";
-                liStr += "   ";
-                liStr += "<li data-opacity='0.2' style='display: none; background: url(";
-                liStr += "img/002.jpg) 50% 50% no-repeat;'><a href='";
-                liStr += "javascript:void(0)";
-                liStr += "' target='_blank'></a></li>";
-                liStr += "   ";
-                liStr += "<li data-opacity='0.2' style='display: none; background: url(";
-                liStr += "img/003.jpg) 50% 50% no-repeat;'><a href='";
-                liStr += "javascript:void(0)";
-                liStr += "' target='_blank'></a></li>";
-                liStr += "   ";
-                liStr += "<li data-opacity='0.2' style='display: none; background: url(";
-                liStr += "img/004.jpg) 50% 50% no-repeat;'><a href='";
-                liStr += "javascript:void(0)";
-                liStr += "' target='_blank'></a></li>";
-                liStr += "   ";
-                $("#slider").html(liStr);
+                let liStr = "<li data-opacity='0.2' style='display: none; background: url("
+                liStr += "img/001.jpg) 50% 50% no-repeat;'><a href='"
+                liStr += "javascript:void(0)"
+                liStr += "' target='_blank'></a></li>"
+                liStr += "   "
+                liStr += "<li data-opacity='0.2' style='display: none; background: url("
+                liStr += "img/002.jpg) 50% 50% no-repeat;'><a href='"
+                liStr += "javascript:void(0)"
+                liStr += "' target='_blank'></a></li>"
+                liStr += "   "
+                liStr += "<li data-opacity='0.2' style='display: none; background: url("
+                liStr += "img/003.jpg) 50% 50% no-repeat;'><a href='"
+                liStr += "javascript:void(0)"
+                liStr += "' target='_blank'></a></li>"
+                liStr += "   "
+                liStr += "<li data-opacity='0.2' style='display: none; background: url("
+                liStr += "img/004.jpg) 50% 50% no-repeat;'><a href='"
+                liStr += "javascript:void(0)"
+                liStr += "' target='_blank'></a></li>"
+                liStr += "   "
+                $("#slider").html(liStr)
                 //初始化轮播图
-                slideSwitch();
+                slideSwitch()
             }
         </script>
         <script type="text/javascript" src="/static/js/scroll.1.3.js" th:src="@{/js/scroll.1.3.js}"></script>

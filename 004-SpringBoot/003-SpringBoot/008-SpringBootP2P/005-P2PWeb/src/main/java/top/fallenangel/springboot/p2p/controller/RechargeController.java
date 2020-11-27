@@ -1,11 +1,16 @@
 package top.fallenangel.springboot.p2p.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
+import com.alipay.api.request.AlipayTradeFastpayRefundQueryRequest;
 import com.alipay.api.request.AlipayTradeQueryRequest;
+import com.alipay.api.request.AlipayTradeRefundRequest;
+import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.alipay.api.response.AlipayTradeRefundResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -88,21 +93,22 @@ public class RechargeController {
             model.addAttribute("queryResponse", queryResponse);
 
             RechargeRecord record = rechargeService.getRechargeRecordByNo(outTradeNo);
-            if (queryResponse.isSuccess()) {
-                success = true;
-                record.setRechargeStatus("1");
 
-                User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
-                FinanceAccount financeAccount = financeAccountService.queryFinanceAccount(user.getId());
-                financeAccount.setAvailableMoney(financeAccount.getAvailableMoney() + Double.parseDouble(request.getParameter("total_amount")));
-                int num = financeAccountService.updateFinanceAccount(financeAccount);
-                if (num < 1) {
-                    success = false;
+            if (queryResponse.getCode().equals("10000")) {
+                if (queryResponse.getTradeStatus().equals("TRADE_SUCCESS")) {
+                    success = true;
+                    record.setRechargeStatus("1");
+
+                    User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
+                    FinanceAccount financeAccount = financeAccountService.queryFinanceAccount(user.getId());
+                    financeAccount.setAvailableMoney(financeAccount.getAvailableMoney() + Double.parseDouble(request.getParameter("total_amount")));
+                    int num = financeAccountService.updateFinanceAccount(financeAccount);
+                    if (num < 1) {
+                        success = false;
+                    }
                 }
-            } else {
-                success = false;
-                record.setRechargeStatus("2");
             }
+            record.setRechargeStatus(success ? "1" : "2");
             int num = rechargeService.updateRecharge(record);
             if (num < 1) {
                 success = false;
@@ -110,6 +116,63 @@ public class RechargeController {
         }
         model.addAttribute("success", success);
         return "alipayBack";
+    }
+
+    @GetMapping("pay/ailipay/refund")
+    public String alipayRefund(Model model, String rechargeNo) {
+        // 查询订单信息
+        RechargeRecord rechargeRecord = rechargeService.getRechargeRecordByNo(rechargeNo);
+
+        // 初始化AlipayClient
+        AlipayClient alipay = new DefaultAlipayClient(AlipayConfig.gatewayUrl, AlipayConfig.app_id, AlipayConfig.merchant_private_key, "json", AlipayConfig.charset, AlipayConfig.alipay_public_key, AlipayConfig.sign_type);
+
+        // 设置请求参数
+        AlipayTradeRefundRequest refundRequest = new AlipayTradeRefundRequest();
+        refundRequest.setBizContent("{\"out_trade_no\":\"" + rechargeNo + "\"," +
+                "\"refund_amount\":\"" + rechargeRecord.getRechargeMoney() + "\"" +
+                "}");
+
+        // 退款信息
+        AlipayTradeRefundResponse refundResponse;
+        boolean refundSuccess = false;
+        try {
+            refundResponse = alipay.execute(refundRequest);
+        } catch (AlipayApiException e) {
+            e.printStackTrace();
+            model.addAttribute("success", false);
+            return "alipayRefundResult";
+        }
+        if (refundResponse.isSuccess()) {
+            if (refundResponse.getFundChange().equals("Y")) {
+                AlipayTradeFastpayRefundQueryRequest refundQueryRequest = new AlipayTradeFastpayRefundQueryRequest();
+                refundQueryRequest.setBizContent("{\"out_trade_no\":\"" + rechargeNo + "\"," +
+                        "\"out_request_no\":\"" + rechargeNo + "\""
+                        + "}");
+                AlipayTradeFastpayRefundQueryResponse refundQueryResponse;
+                try {
+                    refundQueryResponse = alipay.execute(refundQueryRequest);
+                } catch (AlipayApiException e) {
+                    e.printStackTrace();
+                    model.addAttribute("success", false);
+                    return "alipayRefundResult";
+                }
+                if (refundQueryResponse.isSuccess()) {
+                    if (refundQueryResponse.getCode().equals("10000")) {
+                        String refundStatus = refundQueryResponse.getRefundStatus();
+                        if (refundStatus == null || refundStatus.equals("REFUND_SUCCESS")) {
+                            refundSuccess = true;
+
+                            // 更新帐户余额
+                            FinanceAccount financeAccount = financeAccountService.queryFinanceAccount(rechargeRecord.getUid());
+                            financeAccount.setAvailableMoney(financeAccount.getAvailableMoney() - rechargeRecord.getRechargeMoney());
+                            financeAccountService.updateFinanceAccount(financeAccount);
+                        }
+                    }
+                }
+            }
+        }
+        model.addAttribute("success", refundSuccess);
+        return "alipayRefundResult";
     }
 
     @PostMapping("loan/page/weixinpay")
