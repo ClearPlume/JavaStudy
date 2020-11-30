@@ -24,7 +24,7 @@ public interface IRechargeService {
      *
      * @param uid           用户id
      * @param rechargeMoney 充值金额
-     * @return 生成是否成功
+     * @return 生成结果
      */
     RechargeRecord generateRechargeRecord(Integer uid, Double rechargeMoney);
 

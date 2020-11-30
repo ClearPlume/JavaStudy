@@ -50,6 +50,23 @@
             <artifactId>alipay-sdk-java</artifactId>
         </dependency>
 
+        <!--微信-->
+        <dependency>
+            <groupId>com.github.wxpay</groupId>
+            <artifactId>wxpay-sdk</artifactId>
+        </dependency>
+
+        <!--二维码(zxing)-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+        </dependency>
+
         <!--接口项目-->
         <dependency>
             <groupId>top.fallenangel.springboot.p2p</groupId>

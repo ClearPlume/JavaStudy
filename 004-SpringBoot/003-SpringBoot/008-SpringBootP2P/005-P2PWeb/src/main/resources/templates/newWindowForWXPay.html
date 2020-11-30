@@ -1,0 +1,10 @@
+<html lang="zh" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>动力金融网-专业的互联网金融公司</title>
+    </head>
+
+    <body>
+        <img src="" alt=""
+             th:src="@{/pay/weixinQRCode(rechargeNo=${rechargeRecord.rechargeNo},rechargeMoney=${rechargeRecord.rechargeMoney})}"/>
+    </body>
+</html>

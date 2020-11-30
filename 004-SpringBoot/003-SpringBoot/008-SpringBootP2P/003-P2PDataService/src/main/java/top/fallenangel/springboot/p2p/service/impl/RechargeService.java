@@ -41,7 +41,7 @@ public class RechargeService implements IRechargeService {
      *
      * @param uid           用户id
      * @param rechargeMoney 充值金额
-     * @return 生成是否成功
+     * @return 生成结果
      */
     @Override
     public RechargeRecord generateRechargeRecord(Integer uid, Double rechargeMoney) {
@@ -57,7 +57,7 @@ public class RechargeService implements IRechargeService {
         rechargeRecord.setRechargeStatus("0");
         rechargeRecord.setRechargeMoney(rechargeMoney);
         rechargeRecord.setRechargeTime(now);
-        rechargeRecord.setRechargeDesc("支付宝余额充值");
+        rechargeRecord.setRechargeDesc("帐户余额充值");
 
         int i = rechargeRecordMapper.insertSelective(rechargeRecord);
         if (i == 0) {

@@ -117,6 +117,26 @@
                 <artifactId>alipay-sdk-java</artifactId>
                 <version>4.10.192.ALL</version>
             </dependency>
+
+            <!--微信-->
+            <dependency>
+                <groupId>com.github.wxpay</groupId>
+                <artifactId>wxpay-sdk</artifactId>
+                <version>0.0.3</version>
+            </dependency>
+
+            <!--二维码(zxing)-->
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>3.4.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>3.4.1</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

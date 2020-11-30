@@ -11,10 +11,16 @@ import com.alipay.api.request.AlipayTradeRefundRequest;
 import com.alipay.api.response.AlipayTradeFastpayRefundQueryResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
 import com.alipay.api.response.AlipayTradeRefundResponse;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 import top.fallenangel.springboot.p2p.common.Constants;
 import top.fallenangel.springboot.p2p.config.AlipayConfig;
 import top.fallenangel.springboot.p2p.model.entity.FinanceAccount;
@@ -22,8 +28,11 @@ import top.fallenangel.springboot.p2p.model.entity.RechargeRecord;
 import top.fallenangel.springboot.p2p.model.entity.User;
 import top.fallenangel.springboot.p2p.service.IFinanceAccountService;
 import top.fallenangel.springboot.p2p.service.IRechargeService;
+import top.fallenangel.springboot.p2p.util.HttpClientUtil;
+import top.fallenangel.springboot.p2p.util.JsonUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +45,19 @@ public class RechargeController {
     @Reference(interfaceClass = IFinanceAccountService.class, version = "1.0.0", timeout = 15000)
     private IFinanceAccountService financeAccountService;
 
+    private final JsonUtil json;
+
+    public RechargeController(JsonUtil json) {
+        this.json = json;
+    }
+
     @GetMapping("loan/page/toRecharge")
     public String toRecharge() {
         return "toRecharge";
     }
 
-    @GetMapping("newWindow")
-    public void newWindowForRecharge() { }
+    @GetMapping("newWindowForAlipay")
+    public void newWindowForAlipay() { }
 
     @PostMapping("loan/page/alipay")
     public String alipay(HttpServletRequest request, Model model, Double rechargeMoney) {
@@ -63,7 +78,7 @@ public class RechargeController {
 
     @GetMapping("pay/alipayBack")
     public String alipayBack(HttpServletRequest request, Model model) throws Exception {
-        //获取支付宝GET过来反馈信息
+        //获取支付宝GET反馈过来的信息
         Map<String, String> params = new HashMap<>();
         Map<String, String[]> requestParams = request.getParameterMap();
         for (String name : requestParams.keySet()) {
@@ -175,9 +190,38 @@ public class RechargeController {
         return "alipayRefundResult";
     }
 
-    @PostMapping("loan/page/weixinpay")
-    public String weixinpay() {
-        return "toRecharge";
+    @GetMapping("newWindowForWXPay")
+    public String newWindowForWXPay(Model model, HttpServletRequest request, Double rechargeMoney) {
+        /*
+         * 微信支付流程
+         *   1、用户选择微信支付
+         *   2、生成未支付订单，插入数据库
+         *   3、携带参数(公众帐号id、商户号、随机字符串、签名、商品描述、商户订单号、标价金额、终端ip、通知地址、交易类型、商品id)请求微信(https://api.mch.weixin.qq.com/pay/unifiedorder)接口
+         *   4、接收二维码链接，生成二维码图片
+         */
+        User user = (User) request.getSession().getAttribute(Constants.LOGIN_USER);
+        RechargeRecord rechargeRecord = rechargeService.generateRechargeRecord(user.getId(), rechargeMoney);
+        model.addAttribute("rechargeRecord", rechargeRecord);
+        return "newWindowForWXPay";
+    }
+
+    @GetMapping("pay/weixinQRCode")
+    public ModelAndView weixinQRCode(HttpServletResponse response, String rechargeNo, Double rechargeMoney) {
+        Map<EncodeHintType, String> qrparam = new HashMap<>();
+        qrparam.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+        MultiFormatWriter qrWriter = new MultiFormatWriter();
+        Map<String, Object> param = new HashMap<>();
+        param.put("rechargeNo", rechargeNo);
+        param.put("rechargeMoney", rechargeMoney);
+        try {
+            String codeUrlJSON = HttpClientUtil.doPost("http://localhost:18083/P2PPay/pay/wxQRCode", param);
+            json.parseJson(codeUrlJSON);
+            BitMatrix qrMatrix = qrWriter.encode(json.getString("code_url"), BarcodeFormat.QR_CODE, 400, 400, qrparam);
+            MatrixToImageWriter.writeToStream(qrMatrix, "jpg", response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @GetMapping("loan/myRecharge")

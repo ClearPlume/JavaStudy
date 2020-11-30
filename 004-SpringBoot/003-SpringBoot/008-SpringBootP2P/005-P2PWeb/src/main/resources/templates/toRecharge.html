@@ -28,6 +28,7 @@
 
         <script type="text/javascript">
             let context = location.pathname.substring(0, location.pathname.indexOf("/", 1))
+            let payPath
 
             $(document).ready(function () {
                 let rechargeAction = $("#rechargeAction")
@@ -41,11 +42,12 @@
                     $(this).addClass('img_on')
                     $(this).next().removeClass('img_on')
                     rechargeAction.val(location.origin + context + "/loan/page/alipay")
+                    payPath = "newWindowForAlipay"
                 })
                 $('#weixinpay').click(function () {
                     $(this).addClass('img_on')
                     $(this).prev().removeClass('img_on')
-                    rechargeAction.val(location.origin + context + "/loan/page/weixinpay")
+                    payPath = "newWindowForWXPay?rechargeMoney=" + $("#rechargeMoney").val()
                 })
             })
 
@@ -86,7 +88,7 @@
                     $("#div1_1").hide()
                     $("#dialog-overlay").show()
                     $("#failurePayment").show()
-                    window.open(location.origin + context + "/newWindow", "_black", "width=1280,height=720,menubar=yes,location=yes,resizable=yes,scrollbars=true,status=true")
+                    window.open(location.origin + context + "/" + payPath, "_black", "width=1280,height=720,menubar=yes,location=yes,resizable=yes,scrollbars=true,status=true")
                 }
             }
 

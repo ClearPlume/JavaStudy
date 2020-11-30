@@ -33,10 +33,23 @@
             <artifactId>alipay-sdk-java</artifactId>
         </dependency>
 
+        <!--微信-->
+        <dependency>
+            <groupId>com.github.wxpay</groupId>
+            <artifactId>wxpay-sdk</artifactId>
+        </dependency>
+
         <!--接口工程-->
         <dependency>
             <groupId>top.fallenangel.springboot.p2p</groupId>
             <artifactId>002-p2p-interface</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <!--公共项目-->
+        <dependency>
+            <groupId>top.fallenangel.springboot.p2p</groupId>
+            <artifactId>004-p2p-common</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

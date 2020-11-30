@@ -6,6 +6,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -48,6 +49,23 @@ public class HttpClientUtil {
     public static String doPost(String url, Map<String, Object> param) throws IOException {
         HttpPost post = new HttpPost(url);
         setParam(post, param);
+        response = client.execute(post);
+        return EntityUtils.toString(response.getEntity());
+    }
+
+    /**
+     * 发送Post请求
+     *
+     * @param url 请求地址
+     * @param xml 请求参数
+     * @return 响应结果
+     */
+    public static String doPost(String url, String xml) throws IOException {
+        HttpPost post = new HttpPost(url);
+        //设置请求参数
+        post.setEntity(new StringEntity(xml, "UTF-8"));
+        //设置请求头内容
+        post.addHeader("Content-Type", "text/xml");
         response = client.execute(post);
         return EntityUtils.toString(response.getEntity());
     }
