@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjpowernode.model.dao.AuthMapper">
+    <resultMap id="BaseResultMap" type="com.bjpowernode.entity.Auth">
+        <id column="auth_id" jdbcType="INTEGER" property="authId"/>
+        <result column="auth_name" jdbcType="VARCHAR" property="authName"/>
+        <result column="auth_code" jdbcType="VARCHAR" property="authCode"/>
+        <result column="auth_url" jdbcType="VARCHAR" property="authUrl"/>
+        <result column="auth_status" jdbcType="INTEGER" property="authStatus"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        auth_id, auth_name, auth_code, auth_url, auth_status
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_auth
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_auth
+    </select>
+
+    <!-- 用户拥有的权限id -->
+    <select id="selectByUser" resultType="java.lang.Integer">
+        select a.auth_id
+        from t_auth a
+        where exists(select *
+                     from t_user_auth ua
+                     where ua.user_id = #{userId}
+                       and a.auth_id = ua.auth_id)
+        union
+        select ra.auth_id
+        from t_role_auth ra,
+             t_role r
+        where exists(select *
+                     from t_user_role ur
+                     where ur.user_id = #{userId}
+                       and r.role_id = ur.role_id)
+          and ra.role_id = r.role_id
+    </select>
+
+    <!-- 角色拥有的权限 -->
+    <select id="selectByRole" resultMap="BaseResultMap">
+        select a.auth_id,
+               a.auth_name,
+               a.auth_code,
+               a.auth_url,
+               a.auth_status
+        from t_auth a
+                 left join t_role_auth ra on ra.auth_id = a.auth_id
+        where ra.role_id = #{roleId,jdbcType=INTEGER}
+    </select>
+
+    <!--批量删除-->
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_auth
+        where auth_id in
+        <foreach collection="array" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insert" parameterType="com.bjpowernode.entity.Auth">
+        insert into t_auth (auth_id, auth_name, auth_code,
+                            auth_url, auth_status)
+        values (#{authId,jdbcType=INTEGER}, #{authName,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR},
+                #{authUrl,jdbcType=VARCHAR}, #{authStatus,jdbcType=INTEGER})
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.bjpowernode.entity.Auth">
+        insert into t_auth
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="authId != null">
+                auth_id,
+            </if>
+            <if test="authName != null">
+                auth_name,
+            </if>
+            <if test="authCode != null">
+                auth_code,
+            </if>
+            <if test="authUrl != null">
+                auth_url,
+            </if>
+            <if test="authStatus != null">
+                auth_status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="authId != null">
+                #{authId,jdbcType=INTEGER},
+            </if>
+            <if test="authName != null">
+                #{authName,jdbcType=VARCHAR},
+            </if>
+            <if test="authCode != null">
+                #{authCode,jdbcType=VARCHAR},
+            </if>
+            <if test="authUrl != null">
+                #{authUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="authStatus != null">
+                #{authStatus,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.entity.Auth">
+        update t_auth
+        <set>
+            <if test="authName != null">
+                auth_name = #{authName,jdbcType=VARCHAR},
+            </if>
+            <if test="authCode != null">
+                auth_code = #{authCode,jdbcType=VARCHAR},
+            </if>
+            <if test="authUrl != null">
+                auth_url = #{authUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="authStatus != null">
+                auth_status = #{authStatus,jdbcType=INTEGER},
+            </if>
+        </set>
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.entity.Auth">
+        update t_auth
+        set auth_name   = #{authName,jdbcType=VARCHAR},
+            auth_code   = #{authCode,jdbcType=VARCHAR},
+            auth_url    = #{authUrl,jdbcType=VARCHAR},
+            auth_status = #{authStatus,jdbcType=INTEGER}
+        where auth_id = #{authId,jdbcType=INTEGER}
+    </update>
+</mapper>

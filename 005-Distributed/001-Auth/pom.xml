@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.5.RELEASE</version>
+    </parent>
+    <groupId>com.bjpowernode</groupId>
+    <artifactId>001-auth</artifactId>
+    <version>1.0.0</version>
+    <packaging>war</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- web开发包：包含核心包(spring-boot-starter),Tomcat和Springmvc -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- aop -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- mybatis,mybatis-spring集成, -->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <version>2.1.3</version>
+        </dependency>
+
+        <!-- jstl标签库 -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
+        <!--集成thymeleaf-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- spring与shiro集成包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+
+        <!--  mysql jdbc包-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- 按道理来说xml文件应该放在resources下面才对，如果非要放在java目录下，则要做此设置(或者如果需要编译时出现在classes下也要做此设置)-->
+        <resources>
+            <resource>
+                <directory>src/main/java</directory><!---设置编译的包 -->
+                <includes>
+                    <include>**/*.xml</include><!---该路径下的.xml类型文件也要编译 -->
+                    <include>**/*.properties</include><!---该路径下的.properties类型文件也要编译-->
+                </includes>
+            </resource>
+
+            <resource>
+                <directory>src/main/resources</directory><!---设置编译的包 -->
+            </resource>
+        </resources>
+        <finalName>auth</finalName>
+        <!--<pluginManagement>&lt;!&ndash; lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) &ndash;&gt;
+          <plugins>
+            <plugin>
+              <artifactId>maven-clean-plugin</artifactId>
+              <version>3.1.0</version>
+            </plugin>
+            &lt;!&ndash; see http://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_war_packaging &ndash;&gt;
+            <plugin>
+              <artifactId>maven-resources-plugin</artifactId>
+              <version>3.0.2</version>
+            </plugin>
+            <plugin>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <version>3.8.0</version>
+            </plugin>
+            <plugin>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <version>2.22.1</version>
+            </plugin>
+            <plugin>
+              <artifactId>maven-war-plugin</artifactId>
+              <version>3.2.2</version>
+            </plugin>
+            <plugin>
+              <artifactId>maven-install-plugin</artifactId>
+              <version>2.5.2</version>
+            </plugin>
+            <plugin>
+              <artifactId>maven-deploy-plugin</artifactId>
+              <version>2.8.2</version>
+            </plugin>
+          </plugins>
+        </pluginManagement>-->
+        <plugins>
+            <!-- mybatis生成器-->
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <!-- 所需配置文件的路径 -->
+                    <configurationFile>
+                        src/main/resources/mybatis-generator.xml
+                    </configurationFile>
+                </configuration>
+
+                <dependencies>
+                    <!--  mysql jdbc包-->
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>5.1.47</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+</project>
