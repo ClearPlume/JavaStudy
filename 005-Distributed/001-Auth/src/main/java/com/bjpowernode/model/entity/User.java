@@ -1,4 +1,4 @@
-package com.bjpowernode.entity;
+package com.bjpowernode.model.entity;
 
 import java.util.List;
 

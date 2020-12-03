@@ -1,6 +1,6 @@
 package com.bjpowernode.model.dao;
 
-import com.bjpowernode.entity.Auth;
+import com.bjpowernode.model.entity.Auth;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

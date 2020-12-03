@@ -1,4 +1,4 @@
-package com.bjpowernode.model.service;
+package com.bjpowernode.service;
 
 public interface IUserRoleService {
 

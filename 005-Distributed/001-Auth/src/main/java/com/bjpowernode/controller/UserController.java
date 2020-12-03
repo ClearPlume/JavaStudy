@@ -1,10 +1,9 @@
 package com.bjpowernode.controller;
 
-import com.bjpowernode.entity.Role;
-import com.bjpowernode.entity.User;
-import com.bjpowernode.model.service.*;
+import com.bjpowernode.model.entity.Role;
+import com.bjpowernode.model.entity.User;
+import com.bjpowernode.service.*;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +16,28 @@ import java.util.List;
 @Controller
 @RequestMapping("user")
 public class UserController {
-    @Autowired
-    IUserService userService;//用户服务
+    // 用户服务
+    private final IUserService userService;
 
-    @Autowired
-    IAuthService authService;//权限服务
+    // 权限服务
+    private final IAuthService authService;
 
-    @Autowired
-    IRoleService roleService;//角色服务
+    // 角色服务
+    private final IRoleService roleService;
 
-    @Autowired
-    IUserAuthService userAuthService;//用户权限服务
+    // 用户权限服务
+    private final IUserAuthService userAuthService;
 
-    @Autowired
-    IUserRoleService userRoleService;//用户角色服务
+    // 用户角色服务
+    private final IUserRoleService userRoleService;
+
+    public UserController(IUserService userService, IAuthService authService, IRoleService roleService, IUserAuthService userAuthService, IUserRoleService userRoleService) {
+        this.userService = userService;
+        this.authService = authService;
+        this.roleService = roleService;
+        this.userAuthService = userAuthService;
+        this.userRoleService = userRoleService;
+    }
 
     @GetMapping("list")
     String list(Model model) {
@@ -55,13 +62,13 @@ public class UserController {
         } else {
             userService.update(user);
         }
-        return "redirect:list";
+        return "redirect:/user/list";
     }
 
     @PostMapping("delete")
     String delete(int[] userId) {
         userService.delete(userId);
-        return "redirect:list";
+        return "redirect:/user/list";
     }
 
     @GetMapping("auth")
@@ -102,6 +109,6 @@ public class UserController {
 
         // 保存用户角色
         userRoleService.update(user.getUserId(), roleIds);
-        return "redirect:list";
+        return "redirect:/user/list";
     }
 }

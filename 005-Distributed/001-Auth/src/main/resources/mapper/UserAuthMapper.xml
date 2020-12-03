@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.model.dao.UserAuthMapper">
-    <resultMap id="BaseResultMap" type="com.bjpowernode.entity.UserAuth">
+    <resultMap id="BaseResultMap" type="com.bjpowernode.model.entity.UserAuth">
         <id column="user_auth_id" jdbcType="INTEGER" property="userAuthId"/>
         <result column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="auth_id" jdbcType="INTEGER" property="authId"/>
@@ -28,7 +28,7 @@
     </delete>
 
 
-    <insert id="insert" parameterType="com.bjpowernode.entity.UserAuth">
+    <insert id="insert" parameterType="com.bjpowernode.model.entity.UserAuth">
         insert into t_user_auth (user_auth_id, user_id, auth_id)
         values (#{userAuthId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER})
     </insert>
@@ -41,7 +41,7 @@
         </foreach>
     </insert>
 
-    <insert id="insertSelective" parameterType="com.bjpowernode.entity.UserAuth">
+    <insert id="insertSelective" parameterType="com.bjpowernode.model.entity.UserAuth">
         insert into t_user_auth
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userAuthId != null">
@@ -66,7 +66,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.entity.UserAuth">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.model.entity.UserAuth">
         update t_user_auth
         <set>
             <if test="userId != null">
@@ -78,7 +78,7 @@
         </set>
         where user_auth_id = #{userAuthId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.entity.UserAuth">
+    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.model.entity.UserAuth">
         update t_user_auth
         set user_id = #{userId,jdbcType=INTEGER},
             auth_id = #{authId,jdbcType=INTEGER}

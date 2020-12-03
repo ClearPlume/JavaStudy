@@ -1,8 +1,7 @@
 package com.bjpowernode.controller;
 
-import com.bjpowernode.entity.User;
-import com.bjpowernode.model.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.bjpowernode.model.entity.User;
+import com.bjpowernode.service.IUserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,8 +10,11 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class LoginController {
-    @Autowired
-    IUserService userService;
+    private final IUserService userService;
+
+    public LoginController(IUserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping("login")
     void login() { }
@@ -25,7 +27,7 @@ public class LoginController {
 
         if (userDB != null) {
             session.setAttribute("loginUser", userDB);
-            return "redirect:/index";
+            return "redirect:index";
         } else {
             user.setMsg("登录失败请检查用户名或密码！");
             return "login";

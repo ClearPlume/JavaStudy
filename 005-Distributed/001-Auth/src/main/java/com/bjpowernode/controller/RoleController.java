@@ -1,12 +1,11 @@
 package com.bjpowernode.controller;
 
-import com.bjpowernode.entity.Role;
-import com.bjpowernode.entity.RoleAuth;
-import com.bjpowernode.model.service.IAuthService;
-import com.bjpowernode.model.service.IRoleAuthService;
-import com.bjpowernode.model.service.IRoleService;
+import com.bjpowernode.model.entity.Role;
+import com.bjpowernode.model.entity.RoleAuth;
+import com.bjpowernode.service.IAuthService;
+import com.bjpowernode.service.IRoleAuthService;
+import com.bjpowernode.service.IRoleService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +18,17 @@ import java.util.List;
 @Controller
 @RequestMapping("role")
 public class RoleController {
-    @Autowired
-    IRoleService roleService;
+    private final IRoleService roleService;
 
-    @Autowired
-    IAuthService authService;
+    private final IAuthService authService;
 
-    @Autowired
-    IRoleAuthService roleAuthService;
+    private final IRoleAuthService roleAuthService;
+
+    public RoleController(IRoleService roleService, IAuthService authService, IRoleAuthService roleAuthService) {
+        this.roleService = roleService;
+        this.authService = authService;
+        this.roleAuthService = roleAuthService;
+    }
 
     @GetMapping("list")
     String list(Model model) {
@@ -81,13 +83,13 @@ public class RoleController {
         }
         // 角色权限信息存入角色权限表
         roleAuthService.save(role.getRoleId(), role.getAuthIds());
-        return "redirect:list";
+        return "redirect:/role/list";
     }
 
     @PostMapping("delete")
     String delete(int[] roleId) {
         roleService.delete(roleId);
-        return "redirect:list";
+        return "redirect:/role/list";
     }
 
     @RequestMapping("role")

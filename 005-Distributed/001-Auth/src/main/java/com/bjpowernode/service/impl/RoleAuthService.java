@@ -1,7 +1,8 @@
-package com.bjpowernode.model.service;
+package com.bjpowernode.service.impl;
 
-import com.bjpowernode.entity.RoleAuth;
 import com.bjpowernode.model.dao.RoleAuthMapper;
+import com.bjpowernode.model.entity.RoleAuth;
+import com.bjpowernode.service.IRoleAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class RoleAuthService implements  IRoleAuthService {
+public class RoleAuthService implements IRoleAuthService {
     @Autowired
     RoleAuthMapper roleAuthMapper;
 

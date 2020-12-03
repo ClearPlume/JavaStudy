@@ -1,6 +1,6 @@
 package com.bjpowernode.model.dao;
 
-import com.bjpowernode.entity.UserAuth;
+import com.bjpowernode.model.entity.UserAuth;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 

@@ -1,6 +1,6 @@
 package com.bjpowernode.model.dao;
 
-import com.bjpowernode.entity.Role;
+import com.bjpowernode.model.entity.Role;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

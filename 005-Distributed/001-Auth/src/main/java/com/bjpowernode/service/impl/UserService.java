@@ -1,7 +1,8 @@
-package com.bjpowernode.model.service;
+package com.bjpowernode.service.impl;
 
-import com.bjpowernode.entity.User;
 import com.bjpowernode.model.dao.UserMapper;
+import com.bjpowernode.model.entity.User;
+import com.bjpowernode.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.bjpowernode.util.interceptor;
 
-import com.bjpowernode.entity.User;
+import com.bjpowernode.model.entity.User;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

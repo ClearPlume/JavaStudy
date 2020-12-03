@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.model.dao.UserMapper">
-    <resultMap id="BaseResultMap" type="com.bjpowernode.entity.User">
+    <resultMap id="BaseResultMap" type="com.bjpowernode.model.entity.User">
         <id column="user_id" jdbcType="INTEGER" property="userId"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="user_pwd" jdbcType="VARCHAR" property="userPwd"/>
@@ -40,13 +40,13 @@
             #{id}
         </foreach>
     </delete>
-    <insert id="insert" parameterType="com.bjpowernode.entity.User">
+    <insert id="insert" parameterType="com.bjpowernode.model.entity.User">
         insert into t_user (user_id, user_name, user_pwd,
                             user_sex, user_age)
         values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
                 #{userSex,jdbcType=INTEGER}, #{userAge,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" parameterType="com.bjpowernode.entity.User">
+    <insert id="insertSelective" parameterType="com.bjpowernode.model.entity.User">
         insert into t_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">
@@ -83,7 +83,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.entity.User">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.model.entity.User">
         update t_user
         <set>
             <if test="userName != null">
@@ -101,7 +101,7 @@
         </set>
         where user_id = #{userId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.entity.User">
+    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.model.entity.User">
         update t_user
         set user_name = #{userName,jdbcType=VARCHAR},
             user_pwd  = #{userPwd,jdbcType=VARCHAR},

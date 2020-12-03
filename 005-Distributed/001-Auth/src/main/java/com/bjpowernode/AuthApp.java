@@ -10,9 +10,9 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * Hello world!
  */
 @SpringBootApplication
-@MapperScan(basePackages = "com.bjpowernode.model.dao") //dao接口所在的目录
+@MapperScan("com.bjpowernode.model.dao") //dao接口所在的目录
 //@ServletComponentScan
-//@ImportResource("spring-shiro.xml")
+// @ImportResource("classpath:spring-shiro.xml")
 public class AuthApp extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(AuthApp.class, args);

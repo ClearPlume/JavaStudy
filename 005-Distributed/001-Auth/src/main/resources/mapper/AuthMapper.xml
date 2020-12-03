@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.model.dao.AuthMapper">
-    <resultMap id="BaseResultMap" type="com.bjpowernode.entity.Auth">
+    <resultMap id="BaseResultMap" type="com.bjpowernode.model.entity.Auth">
         <id column="auth_id" jdbcType="INTEGER" property="authId"/>
         <result column="auth_name" jdbcType="VARCHAR" property="authName"/>
         <result column="auth_code" jdbcType="VARCHAR" property="authCode"/>
@@ -65,14 +65,14 @@
         </foreach>
     </delete>
 
-    <insert id="insert" parameterType="com.bjpowernode.entity.Auth">
+    <insert id="insert" parameterType="com.bjpowernode.model.entity.Auth">
         insert into t_auth (auth_id, auth_name, auth_code,
                             auth_url, auth_status)
         values (#{authId,jdbcType=INTEGER}, #{authName,jdbcType=VARCHAR}, #{authCode,jdbcType=VARCHAR},
                 #{authUrl,jdbcType=VARCHAR}, #{authStatus,jdbcType=INTEGER})
     </insert>
 
-    <insert id="insertSelective" parameterType="com.bjpowernode.entity.Auth">
+    <insert id="insertSelective" parameterType="com.bjpowernode.model.entity.Auth">
         insert into t_auth
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="authId != null">
@@ -109,7 +109,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.entity.Auth">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.model.entity.Auth">
         update t_auth
         <set>
             <if test="authName != null">
@@ -127,7 +127,7 @@
         </set>
         where auth_id = #{authId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.entity.Auth">
+    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.model.entity.Auth">
         update t_auth
         set auth_name   = #{authName,jdbcType=VARCHAR},
             auth_code   = #{authCode,jdbcType=VARCHAR},

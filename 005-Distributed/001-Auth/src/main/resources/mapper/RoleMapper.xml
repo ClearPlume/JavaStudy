@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.model.dao.RoleMapper">
-    <resultMap id="BaseResultMap" type="com.bjpowernode.entity.Role">
+    <resultMap id="BaseResultMap" type="com.bjpowernode.model.entity.Role">
         <id column="role_id" jdbcType="INTEGER" property="roleId"/>
         <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
         <result column="role_code" jdbcType="VARCHAR" property="roleCode"/>
@@ -41,14 +41,14 @@
             #{id}
         </foreach>
     </delete>
-    <insert id="insert" parameterType="com.bjpowernode.entity.Role" keyColumn="role_id" keyProperty="roleId"
+    <insert id="insert" parameterType="com.bjpowernode.model.entity.Role" keyColumn="role_id" keyProperty="roleId"
             useGeneratedKeys="true">
         insert into t_role (role_id, role_name, role_code,
                             role_status)
         values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{roleCode,jdbcType=VARCHAR},
                 #{roleStatus,jdbcType=INTEGER})
     </insert>
-    <insert id="insertSelective" parameterType="com.bjpowernode.entity.Role" keyColumn="role_id" keyProperty="roleId"
+    <insert id="insertSelective" parameterType="com.bjpowernode.model.entity.Role" keyColumn="role_id" keyProperty="roleId"
             useGeneratedKeys="true">
         insert into t_role
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -80,7 +80,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.entity.Role">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.model.entity.Role">
         update t_role
         <set>
             <if test="roleName != null">
@@ -95,7 +95,7 @@
         </set>
         where role_id = #{roleId,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.entity.Role">
+    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.model.entity.Role">
         update t_role
         set role_name   = #{roleName,jdbcType=VARCHAR},
             role_code   = #{roleCode,jdbcType=VARCHAR},

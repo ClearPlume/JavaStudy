@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bjpowernode.model.dao.RoleAuthMapper">
-    <resultMap id="BaseResultMap" type="com.bjpowernode.entity.RoleAuth">
+    <resultMap id="BaseResultMap" type="com.bjpowernode.model.entity.RoleAuth">
         <id column="role_auth_id" jdbcType="INTEGER" property="roleAuthId"/>
         <result column="role_id" jdbcType="INTEGER" property="roleId"/>
         <result column="auth_id" jdbcType="INTEGER" property="authId"/>
@@ -45,12 +45,12 @@
         </foreach>
     </delete>
 
-    <insert id="insert" parameterType="com.bjpowernode.entity.RoleAuth">
+    <insert id="insert" parameterType="com.bjpowernode.model.entity.RoleAuth">
         insert into t_role_auth (role_auth_id, role_id, auth_id)
         values (#{roleAuthId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER})
     </insert>
 
-    <insert id="insertSelective" parameterType="com.bjpowernode.entity.RoleAuth">
+    <insert id="insertSelective" parameterType="com.bjpowernode.model.entity.RoleAuth">
         insert into t_role_auth
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="roleAuthId != null">
@@ -85,7 +85,7 @@
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.entity.RoleAuth">
+    <update id="updateByPrimaryKeySelective" parameterType="com.bjpowernode.model.entity.RoleAuth">
         update t_role_auth
         <set>
             <if test="roleId != null">
@@ -98,7 +98,7 @@
         where role_auth_id = #{roleAuthId,jdbcType=INTEGER}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.entity.RoleAuth">
+    <update id="updateByPrimaryKey" parameterType="com.bjpowernode.model.entity.RoleAuth">
         update t_role_auth
         set role_id = #{roleId,jdbcType=INTEGER},
             auth_id = #{authId,jdbcType=INTEGER}

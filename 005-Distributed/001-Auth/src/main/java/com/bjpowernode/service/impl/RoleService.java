@@ -1,8 +1,9 @@
-package com.bjpowernode.model.service;
+package com.bjpowernode.service.impl;
 
-import com.bjpowernode.entity.Role;
 import com.bjpowernode.model.dao.RoleAuthMapper;
 import com.bjpowernode.model.dao.RoleMapper;
+import com.bjpowernode.model.entity.Role;
+import com.bjpowernode.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

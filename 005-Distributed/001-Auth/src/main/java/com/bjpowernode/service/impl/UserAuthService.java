@@ -1,6 +1,7 @@
-package com.bjpowernode.model.service;
+package com.bjpowernode.service.impl;
 
 import com.bjpowernode.model.dao.UserAuthMapper;
+import com.bjpowernode.service.IUserAuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

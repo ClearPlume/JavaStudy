@@ -1,4 +1,4 @@
-package com.bjpowernode.entity;
+package com.bjpowernode.model.entity;
 
 public class UserAuth {
     private Integer userAuthId;

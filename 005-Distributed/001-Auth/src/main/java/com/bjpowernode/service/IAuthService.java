@@ -1,6 +1,6 @@
-package com.bjpowernode.model.service;
+package com.bjpowernode.service;
 
-import com.bjpowernode.entity.Auth;
+import com.bjpowernode.model.entity.Auth;
 
 import java.util.List;
 

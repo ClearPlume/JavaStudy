@@ -1,6 +1,6 @@
 package com.bjpowernode.model.dao;
 
-import com.bjpowernode.entity.RoleAuth;
+import com.bjpowernode.model.entity.RoleAuth;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
