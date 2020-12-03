@@ -16,7 +16,7 @@ public class AuthRealm extends AuthorizingRealm {
     }
 
     /**
-     * 权限校验
+     * 权限配置
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
