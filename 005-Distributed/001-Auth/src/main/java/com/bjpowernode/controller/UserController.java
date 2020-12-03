@@ -39,11 +39,15 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("edit")
-    String edit(Model model, User user) {
-        if (user.getUserId() != null) {
-            BeanUtils.copyProperties(userService.get(user.getUserId()), user);
-        }
+    @GetMapping("add")
+    String add(Model model, User user) {
+        model.addAttribute("user", user);
+        return "user/edit";
+    }
+
+    @GetMapping("modify")
+    String modify(Model model, User user) {
+        BeanUtils.copyProperties(userService.get(user.getUserId()), user);
         model.addAttribute("user", user);
         return "user/edit";
     }

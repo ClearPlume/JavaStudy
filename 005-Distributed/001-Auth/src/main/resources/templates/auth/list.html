@@ -8,14 +8,14 @@
 
         <script th:inline="javascript">
             function add() {
-                window.location.href = "[(@{/auth/edit})]"
+                window.location.href = "[(@{/auth/add})]"
             }
 
             function edit() {
                 let selectedAuthes = $("[name=\"authId\"]:checked")
 
                 if (selectedAuthes.length === 1) {
-                    window.location.href = "[(@{/auth/edit})]?authId=" + selectedAuthes.val()
+                    window.location.href = "[(@{/auth/modify})]?authId=" + selectedAuthes.val()
                 }
             }
 
