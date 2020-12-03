@@ -32,6 +32,13 @@
         where user_name = #{userName} and user_pwd = #{userPwd}
     </select>
 
+    <!--根据用户名查询用户-->
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        select user_id, user_name, user_pwd, user_sex, user_age
+        from t_user
+        where user_name = #{username}
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_user

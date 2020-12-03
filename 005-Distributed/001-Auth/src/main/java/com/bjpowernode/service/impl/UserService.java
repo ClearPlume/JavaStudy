@@ -42,4 +42,15 @@ public class UserService implements IUserService {
     public void delete(int[] userId) {
         userMapper.deleteByPrimaryKey(userId);
     }
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username 用户名
+     * @return 数据库中的用户。不存在名为“username”的用户则返回null
+     */
+    @Override
+    public User get(String username) {
+        return userMapper.selectByUsername(username);
+    }
 }

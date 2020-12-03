@@ -22,4 +22,12 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username 用户名
+     * @return 数据库中的用户。不存在名为“username”的用户则返回null
+     */
+    User selectByUsername(String username);
 }

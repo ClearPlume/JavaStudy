@@ -5,14 +5,14 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.context.annotation.ImportResource;
 
 /**
  * Hello world!
  */
 @SpringBootApplication
-@MapperScan("com.bjpowernode.model.dao") //dao接口所在的目录
-//@ServletComponentScan
-// @ImportResource("classpath:spring-shiro.xml")
+@MapperScan("com.bjpowernode.model.dao")
+@ImportResource("classpath:spring-shiro.xml")
 public class AuthApp extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(AuthApp.class, args);

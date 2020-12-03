@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--Realm对象-->
+    <bean id="loginRealm" class="com.bjpowernode.util.shiro.LoginRealm"/>
+
+    <!--安全管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="loginRealm"/>
+    </bean>
+
+    <!--安全管理过滤器-->
+    <bean id="filterFactoryBean" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!--引用安全管理器-->
+        <property name="securityManager" ref="securityManager"/>
+
+        <!--登录页面地址-->
+        <property name="loginUrl" value="/login"/>
+
+        <!--登录成功后跳转地址-->
+        <!--<property name="successUrl" value="/index"/>-->
+
+        <!--未授权错误页面-->
+        <property name="unauthorizedUrl" value="/no_auth"/>
+
+        <!--用户权限配置-->
+        <property name="filterChainDefinitionMap">
+            <map>
+                <!--anno: 不登录也可访问-->
+                <entry key="/login" value="anon"/>
+                <entry key="/saveLogin" value="anon"/>
+                <entry key="/error" value="anon"/>
+                <entry key="/**/imgs/**" value="anon"/>
+                <entry key="/**/css/**" value="anon"/>
+                <entry key="/**/js/**" value="anon"/>
+                <entry key="/**" value="authc"/>
+            </map>
+        </property>
+    </bean>
+
+    <!--启用Shiro的Thymeleaf支持-->
+    <bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>
+</beans>
