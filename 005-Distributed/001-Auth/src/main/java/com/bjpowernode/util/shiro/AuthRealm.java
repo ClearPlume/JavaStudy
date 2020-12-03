@@ -4,13 +4,14 @@ import com.bjpowernode.model.entity.User;
 import com.bjpowernode.service.IUserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-public class LoginRealm extends AuthorizingRealm {
+public class AuthRealm extends AuthorizingRealm {
     private final IUserService userService;
 
-    public LoginRealm(IUserService userService) {
+    public AuthRealm(IUserService userService) {
         this.userService = userService;
     }
 
@@ -19,7 +20,12 @@ public class LoginRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+
+        authorizationInfo.addStringPermission("auth_list");
+        authorizationInfo.addStringPermission("user_list");
+
+        return authorizationInfo;
     }
 
     /**

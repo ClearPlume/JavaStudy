@@ -18,4 +18,10 @@ public class IndexController {
      */
     @RequestMapping("/right")
     void right() { }
+
+    /**
+     * 权限不足页面
+     */
+    @RequestMapping("/no_auth")
+    void noAuth() { }
 }

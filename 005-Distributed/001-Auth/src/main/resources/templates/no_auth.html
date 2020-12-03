@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="/inc/public::baseStyle"/>
+
+        <meta charset="UTF-8">
+        <title>权限不足</title>
+    </head>
+    <body>
+        <div>
+            <div style="position: relative; left: 30px; top: -10px;">
+                <div class="page-header">
+                    <h3>没有访问权限</h3>
+                </div>
+            </div>
+        </div>
+
+        <div style="position: relative; left: 30px; top: 20px;">
+            您没有拥有此地址的访问权限，请您联系管理员授权后再进行访问！
+        </div>
+    </body>
+</html>
