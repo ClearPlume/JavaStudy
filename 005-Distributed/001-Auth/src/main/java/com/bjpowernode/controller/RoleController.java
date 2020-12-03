@@ -6,6 +6,7 @@ import com.bjpowernode.model.service.IAuthService;
 import com.bjpowernode.model.service.IRoleAuthService;
 import com.bjpowernode.model.service.IRoleService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,17 +19,14 @@ import java.util.List;
 @Controller
 @RequestMapping("role")
 public class RoleController {
-    private final IRoleService roleService;
+    @Autowired
+    IRoleService roleService;
 
-    private final IAuthService authService;
+    @Autowired
+    IAuthService authService;
 
-    private final IRoleAuthService roleAuthService;
-
-    public RoleController(IRoleService roleService, IAuthService authService, IRoleAuthService roleAuthService) {
-        this.roleService = roleService;
-        this.authService = authService;
-        this.roleAuthService = roleAuthService;
-    }
+    @Autowired
+    IRoleAuthService roleAuthService;
 
     @GetMapping("list")
     String list(Model model) {
@@ -38,37 +36,28 @@ public class RoleController {
     }
 
     /**
-     * 新增解角色入口
-     */
-    @GetMapping("add")
-    String add(Model model) {
-        Role role = new Role();
-        role.setRoleStatus(1);
-
-        model.addAttribute("role", role);
-        model.addAttribute("authList", authService.list());
-
-        return "role/edit";
-    }
-
-    /**
-     * 修改角色入口
+     * 编辑角色，对应新增解角色和修改角色入口
      *
-     * @param role 接收前台提交的角色数据
+     * @param role 由Spring新建或接收前台改过的角色数据
      */
-    @GetMapping("modify")
-    String modify(Model model, Role role) {
-        // 根据角色id，从角色表中查询角色基本信息
-        BeanUtils.copyProperties(roleService.get(role.getRoleId()), role);
+    @GetMapping("edit")
+    String edit(Model model, Role role) {
+        // 角色id为空，代表这是在新建角色，这个role是由Spring创建的
+        if (role.getRoleId() == null) {
+            role.setRoleStatus(1);
+        } else {
+            // 根据角色id，从角色表中查询角色基本信息
+            BeanUtils.copyProperties(roleService.get(role.getRoleId()), role);
 
-        // 根据角色id，从角色权限表中查询角色所拥有的权限
-        List<RoleAuth> roleAuths = roleAuthService.list(role.getRoleId());
-        List<Integer> roleAuthsId = new ArrayList<>();
+            // 根据角色id，从角色权限表中查询角色所拥有的权限
+            List<RoleAuth> roleAuths = roleAuthService.list(role.getRoleId());
+            List<Integer> roleAuthsId = new ArrayList<>();
 
-        for (RoleAuth roleAuth : roleAuths) {
-            roleAuthsId.add(roleAuth.getAuthId());
+            for (RoleAuth roleAuth : roleAuths) {
+                roleAuthsId.add(roleAuth.getAuthId());
+            }
+            role.setAuthIds(roleAuthsId);
         }
-        role.setAuthIds(roleAuthsId);
 
         model.addAttribute("role", role);
         model.addAttribute("authList", authService.list());

@@ -8,14 +8,14 @@
 
         <script th:inline="javascript">
             function add() {
-                window.location.href = "[(@{/role/add})]"
+                window.location.href = "[(@{/role/edit})]"
             }
 
             function edit() {
                 let selectedRoles = $("[name=\"roleId\"]:checked")
 
                 if (selectedRoles.length === 1) {
-                    window.location.href = "[(@{/role/modify})]?roleId=" + selectedRoles.val()
+                    window.location.href = "[(@{/role/edit})]?roleId=" + selectedRoles.val()
                 }
             }
 
