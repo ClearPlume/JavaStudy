@@ -39,6 +39,27 @@
         where user_name = #{username}
     </select>
 
+    <!--根据用户id查询用户所有的权限Code-->
+    <select id="selectAllAuthCodeById" resultType="java.lang.String">
+        select a.auth_code
+        from t_auth a
+        where exists(select *
+                     from t_user_auth ua
+                     where ua.user_id = #{userId}
+                       and a.auth_id = ua.auth_id)
+        union
+        select a.auth_code
+        from t_role_auth ra
+                 join
+             t_role r on ra.role_id = r.role_id
+                 join
+             t_auth a on ra.auth_id = a.auth_id
+        where exists(select *
+                     from t_user_role ur
+                     where ur.user_id = #{userId}
+                       and r.role_id = ur.role_id)
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_user

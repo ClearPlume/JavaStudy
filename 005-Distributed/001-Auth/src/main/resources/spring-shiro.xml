@@ -26,22 +26,13 @@
         <property name="unauthorizedUrl" value="/no_auth"/>
 
         <!--用户权限配置-->
-        <property name="filterChainDefinitionMap">
-            <map>
-                <!--anno: 不登录也可访问-->
-                <entry key="/saveLogin" value="anon"/>
-                <entry key="/error" value="anon"/>
-                <entry key="/**/imgs/**" value="anon"/>
-                <entry key="/**/css/**" value="anon"/>
-                <entry key="/**/js/**" value="anon"/>
-
-                <entry key="/auth/list" value="perms[auth_list]"/>
-                <entry key="/user/list" value="perms[user_list]"/>
-
-                <entry key="/**" value="authc"/>
-            </map>
-        </property>
+        <property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"/>
     </bean>
+
+    <bean id="filterChainDefinitionMapBuilder" class="com.bjpowernode.util.FilterChainDefinitionMapBuilder"/>
+
+    <bean id="filterChainDefinitionMap" factory-bean="filterChainDefinitionMapBuilder"
+          factory-method="buildFilterChainDefinitionMap"/>
 
     <!--启用Shiro的Thymeleaf支持-->
     <bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>

@@ -2,11 +2,14 @@ package com.bjpowernode.util.shiro;
 
 import com.bjpowernode.model.entity.User;
 import com.bjpowernode.service.IUserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+
+import java.util.List;
 
 public class AuthRealm extends AuthorizingRealm {
     private final IUserService userService;
@@ -22,8 +25,14 @@ public class AuthRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
 
-        authorizationInfo.addStringPermission("auth_list");
-        authorizationInfo.addStringPermission("user_list");
+        User user = (User) SecurityUtils.getSubject().getPrincipal();
+
+        List<String> userAuthCodes = userService.listAuthCode(user.getUserId());
+
+        for (String userAuthCode : userAuthCodes)
+        {
+            authorizationInfo.addStringPermission(userAuthCode);
+        }
 
         return authorizationInfo;
     }

@@ -4,7 +4,8 @@ import com.bjpowernode.model.entity.User;
 
 import java.util.List;
 
-public interface IUserService {
+public interface IUserService
+{
 
     List<User> list();
 
@@ -25,4 +26,12 @@ public interface IUserService {
      * @return 数据库中的用户。不存在名为“username”的用户则返回null
      */
     User get(String username);
+
+    /**
+     * 根据用户id查询用户所有的权限Code
+     *
+     * @param userId 用户id
+     * @return 权限Code列表
+     */
+    List<String> listAuthCode(int userId);
 }
