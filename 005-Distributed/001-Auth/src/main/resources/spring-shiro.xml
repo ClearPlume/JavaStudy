@@ -4,7 +4,16 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!--Realm对象-->
-    <bean id="loginRealm" class="com.bjpowernode.util.shiro.AuthRealm"/>
+    <bean id="loginRealm" class="com.bjpowernode.util.shiro.AuthRealm">
+        <!--是否启用权限校验的缓存-->
+        <property name="authenticationCachingEnabled" value="true"/>
+
+        <!--指定缓存管理器-->
+        <property name="cacheManager" ref="ehCacheManager"/>
+
+        <!--密码加密比较器-->
+        <property name="credentialsMatcher" ref="passwordMatcher"/>
+    </bean>
 
     <!--安全管理器-->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
@@ -36,4 +45,13 @@
 
     <!--启用Shiro的Thymeleaf支持-->
     <bean class="at.pollux.thymeleaf.shiro.dialect.ShiroDialect"/>
+
+    <!--Shiro的缓存管理器-->
+    <bean id="ehCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"/>
+
+    <!--密码加密服务-->
+    <bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService"/>
+
+    <!--密码加密比较器-->
+    <bean id="passwordMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher"/>
 </beans>
