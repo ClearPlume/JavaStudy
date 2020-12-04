@@ -3,6 +3,7 @@ package com.bjpowernode.service.impl;
 import com.bjpowernode.model.dao.UserMapper;
 import com.bjpowernode.model.entity.User;
 import com.bjpowernode.service.IUserService;
+import org.apache.shiro.authc.credential.PasswordService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.List;
 public class UserService implements IUserService
 {
     private final UserMapper userMapper;
+    private final PasswordService passwordService;
 
-    public UserService(UserMapper userMapper)
+    public UserService(UserMapper userMapper, PasswordService passwordService)
     {
         this.userMapper = userMapper;
+        this.passwordService = passwordService;
     }
 
     @Override
@@ -38,12 +41,16 @@ public class UserService implements IUserService
     @Override
     public void save(User user)
     {
+        user.setUserPwd(passwordService.encryptPassword(user.getUserPwd()));
+
         userMapper.insertSelective(user);
     }
 
     @Override
     public void update(User user)
     {
+        user.setUserPwd(passwordService.encryptPassword(user.getUserPwd()));
+
         userMapper.updateByPrimaryKey(user);
     }
 

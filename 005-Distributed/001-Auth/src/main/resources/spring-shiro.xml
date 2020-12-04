@@ -10,6 +10,9 @@
 
         <!--指定缓存管理器-->
         <property name="cacheManager" ref="ehCacheManager"/>
+
+        <!--密码加密比较器-->
+        <property name="credentialsMatcher" ref="passwordMatcher"/>
     </bean>
 
     <!--安全管理器-->
@@ -45,4 +48,10 @@
 
     <!--Shiro的缓存管理器-->
     <bean id="ehCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager"/>
+
+    <!--密码加密服务-->
+    <bean id="passwordService" class="org.apache.shiro.authc.credential.DefaultPasswordService"/>
+
+    <!--密码加密比较器-->
+    <bean id="passwordMatcher" class="org.apache.shiro.authc.credential.PasswordMatcher"/>
 </beans>
