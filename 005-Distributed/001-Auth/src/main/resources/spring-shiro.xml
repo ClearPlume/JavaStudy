@@ -40,7 +40,7 @@
         <property name="filterChainDefinitionMap" ref="filterChainDefinitionMap"/>
     </bean>
 
-    <bean id="filterChainDefinitionMapBuilder" class="com.bjpowernode.util.FilterChainDefinitionMapBuilder"/>
+    <bean id="filterChainDefinitionMapBuilder" class="com.bjpowernode.util.shiro.FilterChainDefinitionMapBuilder"/>
 
     <bean id="filterChainDefinitionMap" factory-bean="filterChainDefinitionMapBuilder"
           factory-method="buildFilterChainDefinitionMap"/>
@@ -64,7 +64,7 @@
 
     <!--用来记住密码的Cookie-->
     <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg value="rememberMedsadsadd"/>
+        <constructor-arg value="rememberMe"/>
         <property name="httpOnly" value="true"/>
         <property name="maxAge" value="2592000"/>
     </bean>

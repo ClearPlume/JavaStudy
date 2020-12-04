@@ -8,15 +8,13 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class AuthRealm extends AuthorizingRealm {
-    private final IUserService userService;
-
-    public AuthRealm(IUserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private IUserService userService;
 
     /**
      * 权限配置

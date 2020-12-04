@@ -1,7 +1,8 @@
-package com.bjpowernode.util;
+package com.bjpowernode.util.shiro;
 
 import com.bjpowernode.model.entity.Auth;
 import com.bjpowernode.service.impl.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -9,12 +10,8 @@ import java.util.Map;
 
 public class FilterChainDefinitionMapBuilder
 {
-    private final AuthService authService;
-
-    public FilterChainDefinitionMapBuilder(AuthService authService)
-    {
-        this.authService = authService;
-    }
+    @Autowired
+    private AuthService authService;
 
     public Map<String, String> buildFilterChainDefinitionMap()
     {
