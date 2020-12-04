@@ -3,7 +3,6 @@ package com.bjpowernode.service.impl;
 import com.bjpowernode.model.dao.UserMapper;
 import com.bjpowernode.model.entity.User;
 import com.bjpowernode.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,8 +10,12 @@ import java.util.List;
 @Service
 public class UserService implements IUserService
 {
-    @Autowired
-    UserMapper userMapper;
+    private final UserMapper userMapper;
+
+    public UserService(UserMapper userMapper)
+    {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public List<User> list()
