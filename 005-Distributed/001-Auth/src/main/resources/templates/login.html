@@ -22,7 +22,7 @@
                 CRM &nbsp;<span style="font-size: 12px;">&copy;2020&nbsp;动力节点</span></div>
         </div>
 
-        <div style="position: absolute; top: 120px; right: 100px;width:450px;height:400px;border:1px solid #D5D5D5">
+        <div style="position: absolute; top: 120px; right: 100px;width:450px;height:430px;border:1px solid #D5D5D5">
             <div style="position: absolute; top: 0; right: 60px;">
                 <div class="page-header">
                     <h1>登录</h1>
@@ -39,7 +39,10 @@
                             <input id="userPwd" class="form-control" type="password" placeholder="密码" name="userPwd">
                         </div>
                         <div class="checkbox" style="position: relative;top: 30px; left: 10px;">
-                            <span id="msg"><span style="color: red">[[${user?.msg}]]</span></span>
+                            <label> <input type="checkbox" name="remember" value="true"/> 记住密码</label>
+                        </div>
+                        <div class="checkbox" style="position: relative;top: 30px; left: 10px;">
+                            <span id="msg"><span style="color: red" th:text="${user?.msg}"></span></span>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg btn-block"
                                 style="width: 350px; position: relative;top: 45px;">登录

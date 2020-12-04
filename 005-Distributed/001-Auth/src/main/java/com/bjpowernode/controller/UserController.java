@@ -100,15 +100,12 @@ public class UserController {
     }
 
     @RequestMapping("saveAuth")
-    String saveAuth(User user, int[] authIds, int[] roleIds) {
-        // 保存用户
-        userService.update(user);
-
+    String saveAuth(int userId, int[] authIds, int[] roleIds) {
         // 保存用户权限
-        userAuthService.update(user.getUserId(), authIds);
+        userAuthService.update(userId, authIds);
 
         // 保存用户角色
-        userRoleService.update(user.getUserId(), roleIds);
+        userRoleService.update(userId, roleIds);
         return "redirect:/user/list";
     }
 }

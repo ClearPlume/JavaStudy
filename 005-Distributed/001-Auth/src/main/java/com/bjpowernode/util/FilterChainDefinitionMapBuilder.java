@@ -37,7 +37,7 @@ public class FilterChainDefinitionMapBuilder
             }
         }
 
-        authMap.put("/**", "authc");
+        authMap.put("/**", "user");
 
         return authMap;
     }

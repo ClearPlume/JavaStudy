@@ -1,8 +1,10 @@
 package com.bjpowernode.model.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+public class User implements Serializable
+{
     private Integer userId;
 
     private String userName;
