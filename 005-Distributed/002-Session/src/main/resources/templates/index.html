@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>首页</title>
+
+        <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <div th:if="${session.loginUser == null}">
+            欢迎，请<a th:href="@{/login}">登录</a>！
+        </div>
+        <div th:unless="${session.loginUser == null}">
+            欢迎，<span th:text="${session.loginUser}"></span>！<a th:href="@{/logout}">退出</a>
+        </div>
+        <img th:src="@{/img/home.png}" src="" alt="">
+    </body>
+</html>
