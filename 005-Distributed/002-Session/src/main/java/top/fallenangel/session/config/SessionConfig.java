@@ -12,6 +12,7 @@ public class SessionConfig {
 
         DefaultCookieSerializer cookieSerializer = new DefaultCookieSerializer();
         cookieSerializer.setCookiePath("/");
+        cookieSerializer.setDomainName("163.com");
 
         return cookieSerializer;
     }
