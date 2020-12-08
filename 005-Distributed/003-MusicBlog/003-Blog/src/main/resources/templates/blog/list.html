@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>我的博客</title>
+    </head>
+    <body>
+        人民日报：马保国闹剧哗众取宠招摇撞骗 该立刻收场<br/>
+        中国对澳葡萄酒出手 澳学者:中方"这一课"将响彻全球<br/>
+        特朗普发推：宾州1126940张选票凭空产生！<br/>
+        这届年轻人，把下厨房变成了炸厨房<br/>
+        <br/>
+        以下信息来源于：橘子音乐
+        <div th:each="music : ${musicList}">
+            <div th:text="|${music.id}, ${music.name}-${music.singer}|"></div>
+        </div>
+    </body>
+</html>
