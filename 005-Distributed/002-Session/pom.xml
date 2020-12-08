@@ -43,8 +43,6 @@
     </dependencies>
 
     <build>
-        <finalName>session</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
