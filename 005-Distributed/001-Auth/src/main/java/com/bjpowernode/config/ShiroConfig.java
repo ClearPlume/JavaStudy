@@ -8,29 +8,35 @@ import org.apache.shiro.authc.credential.DefaultPasswordService;
 import org.apache.shiro.authc.credential.PasswordMatcher;
 import org.apache.shiro.authc.credential.PasswordService;
 import org.apache.shiro.cache.CacheManager;
-import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.RememberMeManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.Cookie;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.crazycake.shiro.RedisCacheManager;
+import org.crazycake.shiro.RedisManager;
+import org.crazycake.shiro.RedisSessionDAO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ShiroConfig
-{
+public class ShiroConfig {
+
+    @Value("${spring.redis.host}")
+    private String host;
+
     /**
      * 引入Realm对象
      */
     @Bean
-    public AuthRealm createRealm(CacheManager cacheManager, CredentialsMatcher credentialsMatcher)
-    {
+    public AuthRealm createRealm(CacheManager cacheManager, CredentialsMatcher credentialsMatcher) {
         AuthRealm authRealm = new AuthRealm();
 
         authRealm.setAuthenticationCachingEnabled(true);
@@ -44,8 +50,7 @@ public class ShiroConfig
      * 引入安全管理器
      */
     @Bean
-    public SecurityManager createSecurityManager(Realm realm, RememberMeManager rememberMeManager, SessionManager sessionManager)
-    {
+    public SecurityManager createSecurityManager(Realm realm, RememberMeManager rememberMeManager, SessionManager sessionManager) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
 
         securityManager.setRealm(realm);
@@ -59,8 +64,7 @@ public class ShiroConfig
      * 引入安全管理过滤器
      */
     @Bean
-    public ShiroFilterFactoryBean createShiroFilterFactoryBean(SecurityManager securityManager, FilterChainDefinitionMapBuilder filterChainDefinitionMapBuilder)
-    {
+    public ShiroFilterFactoryBean createShiroFilterFactoryBean(SecurityManager securityManager, FilterChainDefinitionMapBuilder filterChainDefinitionMapBuilder) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
         shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -75,8 +79,7 @@ public class ShiroConfig
      * 用户权限map构造器
      */
     @Bean
-    public FilterChainDefinitionMapBuilder createFilterChainDefinitionMapBuilder()
-    {
+    public FilterChainDefinitionMapBuilder createFilterChainDefinitionMapBuilder() {
         return new FilterChainDefinitionMapBuilder();
     }
 
@@ -84,8 +87,7 @@ public class ShiroConfig
      * 启用Shiro的Thymeleaf支持
      */
     @Bean
-    public ShiroDialect createShiroDialect()
-    {
+    public ShiroDialect createShiroDialect() {
         return new ShiroDialect();
     }
 
@@ -93,17 +95,32 @@ public class ShiroConfig
      * 引入缓存管理器
      */
     @Bean
-    public CacheManager createCacheManager()
-    {
-        return new EhCacheManager();
+    public CacheManager createCacheManager(RedisManager redisManager) {
+
+        RedisCacheManager redisCacheManager = new RedisCacheManager();
+        redisCacheManager.setRedisManager(redisManager);
+
+        return redisCacheManager;
+    }
+
+    /**
+     * 引入RedisManager
+     */
+    @Bean
+    public RedisManager createRedisManager() {
+
+        RedisManager redisManager = new RedisManager();
+        redisManager.setHost(host);
+        redisManager.setExpire(3600);
+
+        return redisManager;
     }
 
     /**
      * 引入密码加密服务
      */
     @Bean
-    public PasswordService createPasswordService()
-    {
+    public PasswordService createPasswordService() {
         return new DefaultPasswordService();
     }
 
@@ -111,8 +128,7 @@ public class ShiroConfig
      * 引入密码加密比较器
      */
     @Bean
-    public CredentialsMatcher createCredentialsMatcher()
-    {
+    public CredentialsMatcher createCredentialsMatcher() {
         return new PasswordMatcher();
     }
 
@@ -120,8 +136,7 @@ public class ShiroConfig
      * 引入记住密码管理器
      */
     @Bean
-    public RememberMeManager createRememberMeManager(Cookie cookie)
-    {
+    public RememberMeManager createRememberMeManager(Cookie cookie) {
         CookieRememberMeManager rememberMeManager = new CookieRememberMeManager();
 
         rememberMeManager.setCookie(cookie);
@@ -133,8 +148,7 @@ public class ShiroConfig
      * 引入记住密码Cookie
      */
     @Bean
-    public Cookie createRememberMeCookie()
-    {
+    public Cookie createRememberMeCookie() {
         SimpleCookie rememberMeCookie = new SimpleCookie("rememberMe");
 
         rememberMeCookie.setHttpOnly(true);
@@ -147,12 +161,26 @@ public class ShiroConfig
      * 会话管理器
      */
     @Bean
-    public SessionManager createSessionManager()
-    {
+    public SessionManager createSessionManager(SessionDAO sessionDAO) {
+
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
 
         sessionManager.setSessionIdUrlRewritingEnabled(false);
+        sessionManager.setSessionDAO(sessionDAO);
 
         return sessionManager;
+    }
+
+    /**
+     * RedisSessionDAO
+     */
+    @Bean
+    public SessionDAO createSessionDAO(RedisManager redisManager) {
+
+        RedisSessionDAO sessionDAO = new RedisSessionDAO();
+
+        sessionDAO.setRedisManager(redisManager);
+
+        return sessionDAO;
     }
 }
