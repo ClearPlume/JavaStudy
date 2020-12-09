@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "fallenangel.music.service",
+      "type": "java.lang.String",
+      "description": "音乐服务名."
+    },
+    {
+      "name": "fallenangel.music.music-service",
+      "type": "java.lang.String",
+      "description": "音乐服务URL."
+    }
+  ]
+}

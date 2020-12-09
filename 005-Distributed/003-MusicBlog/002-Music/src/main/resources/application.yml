@@ -1,0 +1,18 @@
+server:
+  port: 18081
+  servlet:
+    context-path: /music
+
+spring:
+  application:
+    # 服务名
+    name: music-service
+
+eureka:
+  client:
+    # 注册中心的地址
+    service-url.defaultZone: http://localhost:18100/eureka_server/eureka
+    # 是否在注册中心注册
+    register-with-eureka: true
+    # 是否从注册中心获取信息
+    fetch-registry: false

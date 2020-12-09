@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -9,14 +8,15 @@
 		<version>2.3.5.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>top.fallenangel.music</groupId>
-	<artifactId>002-music</artifactId>
+	<groupId>top.fallenangel.eureka</groupId>
+	<artifactId>004-eureka-server</artifactId>
 	<version>1.0.0</version>
-	<name>002-Music</name>
-	<description>音乐服务项目</description>
+	<name>004-EurekaServer</name>
+	<description>Eureka服务端</description>
 
 	<properties>
 		<java.version>11</java.version>
+		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
 	</properties>
 
 	<dependencies>
@@ -29,12 +29,6 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
 		</dependency>
-
-		<dependency>
-			<groupId>top.fallenangel.music</groupId>
-			<artifactId>001-music-interface</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -42,7 +36,7 @@
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>Hoxton.SR9</version>
+				<version>${spring-cloud.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
