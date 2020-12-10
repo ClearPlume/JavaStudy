@@ -1,5 +1,5 @@
 server:
-  port: 18081
+  port: 18080
   servlet:
     context-path: /music
 
@@ -11,7 +11,7 @@ spring:
 eureka:
   client:
     # 注册中心的地址
-    service-url.defaultZone: http://localhost:18100/eureka_server/eureka
+    service-url.defaultZone: http://zpc:123456@localhost:18100/eureka_server/eureka
     # 是否在注册中心注册
     register-with-eureka: true
     # 是否从注册中心获取信息

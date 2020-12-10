@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.security.basic.enable",
+      "type": "java.lang.Boolean",
+      "description": "是否开启基于Http Basic的认证."
+    }
+  ]
+}
