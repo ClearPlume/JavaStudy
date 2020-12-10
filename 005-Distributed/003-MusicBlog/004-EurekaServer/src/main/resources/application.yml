@@ -21,11 +21,11 @@ eureka:
     hostname: localhost
   client:
     # 客户端访问URL
-    service-url.defaultZone: http://${spring.secutity.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:${server.port}${server.servlet.context-path}/eureka
+    service-url.defaultZone: http://${spring.security.user.name}:${spring.security.user.password}@${eureka.instance.hostname}:18101${server.servlet.context-path}/eureka
     # 是否在注册中心注册
-    register-with-eureka: false
+    register-with-eureka: true
     # 是否从注册中心获取服务
-    fetch-registry: false
+    fetch-registry: true
   server:
     # 关闭自我保护模式
     enable-self-preservation: false
