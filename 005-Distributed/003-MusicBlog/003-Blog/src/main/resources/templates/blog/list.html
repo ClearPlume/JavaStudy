@@ -10,7 +10,7 @@
         特朗普发推：宾州1126940张选票凭空产生！<br/>
         这届年轻人，把下厨房变成了炸厨房<br/>
         <br/>
-        以下信息来源于：橘子音乐
+        以下信息来源于：橘子音乐 <span th:text="${musicView}" style="color: cornflowerblue"></span>
         <div th:each="music : ${musicList}">
             <div th:text="|${music.id}, ${music.name}-${music.singer}|"></div>
         </div>

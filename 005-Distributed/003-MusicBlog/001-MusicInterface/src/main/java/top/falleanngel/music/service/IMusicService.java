@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IMusicService {
     List<Music> list();
+
+    String view();
 }

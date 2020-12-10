@@ -22,4 +22,10 @@ public class MusicController {
     public List<Music> list() {
         return musicService.list();
     }
+
+    @GetMapping("view")
+    @ResponseBody
+    public String view () {
+        return musicService.view();
+    }
 }

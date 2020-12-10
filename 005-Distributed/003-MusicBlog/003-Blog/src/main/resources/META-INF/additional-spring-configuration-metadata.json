@@ -9,6 +9,16 @@
       "name": "fallenangel.music.music-service",
       "type": "java.lang.String",
       "description": "音乐服务URL."
+    },
+    {
+      "name": "fallenangel.music.music-view",
+      "type": "java.lang.String",
+      "description": "音乐服务名."
+    },
+    {
+      "name": "app-music.ribbon.NFLoadBalancerRuleClassName",
+      "type": "java.lang.String",
+      "description": "负载均衡策略."
     }
   ]
 }

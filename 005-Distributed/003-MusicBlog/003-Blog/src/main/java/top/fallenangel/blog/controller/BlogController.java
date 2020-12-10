@@ -18,6 +18,7 @@ public class BlogController {
     public String list(Model model) {
 
         model.addAttribute("musicList", musicService.list());
+        model.addAttribute("musicView", musicService.view());
 
         return "blog/list";
     }

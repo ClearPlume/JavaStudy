@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "application-name",
+      "type": "java.lang.String",
+      "description": "应用名称."
+    }
+  ]
+}

@@ -3,6 +3,8 @@ server:
   servlet:
     context-path: /music
 
+application-name: music-80
+
 spring:
   application:
     # 服务名

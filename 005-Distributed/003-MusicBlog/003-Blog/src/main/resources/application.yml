@@ -19,5 +19,11 @@ eureka:
 
 fallenangel:
   music:
-    service: music-service
-    music-service: http://${fallenangel.music.service}/music/music/list
+    service: http://music-service
+    music-service: ${fallenangel.music.service}/music/music/list
+    music-view: ${fallenangel.music.service}/music/music/view
+
+app-music:
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+
