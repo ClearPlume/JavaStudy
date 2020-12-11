@@ -19,6 +19,11 @@
       "name": "app-music.ribbon.NFLoadBalancerRuleClassName",
       "type": "java.lang.String",
       "description": "负载均衡策略."
+    },
+    {
+      "name": "hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds",
+      "type": "java.lang.String",
+      "description": "服务降级之前的超时时间，以毫秒计."
     }
   ]
 }

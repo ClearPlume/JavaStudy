@@ -14,5 +14,7 @@
         <div th:each="music : ${musicList}">
             <div th:text="|${music.id}, ${music.name}-${music.singer}|"></div>
         </div>
+
+        <div th:text="${error}" style="color: red"></div>
     </body>
 </html>
