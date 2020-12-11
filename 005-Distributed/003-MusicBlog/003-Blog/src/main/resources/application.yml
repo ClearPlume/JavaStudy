@@ -20,8 +20,8 @@ eureka:
 fallenangel:
   music:
     service: http://music-service
-    music-service: ${fallenangel.music.service}/music/music/list
-    music-view: ${fallenangel.music.service}/music/music/view
+    music-service: /music/music/list
+    music-view: /music/music/view
 
 app-music:
   ribbon:

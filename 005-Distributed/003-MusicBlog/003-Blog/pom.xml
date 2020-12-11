@@ -41,6 +41,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>top.fallenangel.music</groupId>
             <artifactId>001-music-interface</artifactId>
             <version>1.0-SNAPSHOT</version>
