@@ -13,4 +13,15 @@
     <!--对模型视图名称的映射解析-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:prefix="/WEB-INF/pages/"
           p:suffix=".jsp"/>
+
+    <!-- 拦截器配置 -->
+    <mvc:interceptors>
+        <!-- 多个拦截器将顺序执行 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/login"/>
+            <mvc:exclude-mapping path="/saveLogin"/>
+            <bean class="top.fallenangel.crm.util.LoginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>
