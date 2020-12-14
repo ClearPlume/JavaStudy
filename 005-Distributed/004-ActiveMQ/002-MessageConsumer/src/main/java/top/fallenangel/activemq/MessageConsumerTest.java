@@ -17,6 +17,10 @@ public class MessageConsumerTest {
 
         // 创建并启动连接
         Connection connection = connectionFactory.createConnection();
+
+        // 设置连接ID
+        connection.setClientID("001");
+
         connection.start();
 
         // 创建会话
@@ -25,11 +29,11 @@ public class MessageConsumerTest {
         // 创建目的地
         Topic topic = session.createTopic(TOPIC_NAME);
 
-        // 创建消息消费者
-        MessageConsumer messageConsumer = session.createConsumer(topic);
+        // 创建消息订阅者
+        TopicSubscriber topicSubscriber = session.createDurableSubscriber(topic, TOPIC_NAME);
 
         // 接收消息
-        messageConsumer.setMessageListener(message -> {
+        topicSubscriber.setMessageListener(message -> {
             if (message instanceof TextMessage) {
                 TextMessage textMessage = (TextMessage) message;
                 try {
@@ -46,7 +50,7 @@ public class MessageConsumerTest {
         System.out.println("消息接收完毕");
 
         // 关闭资源
-        messageConsumer.close();
+        topicSubscriber.close();
         session.close();
         connection.close();
     }

@@ -18,7 +18,6 @@ public class MessageProducerTest {
 
         // 创建并启动连接
         Connection connection = connectionFactory.createConnection();
-        connection.start();
 
         // 创建会话
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -28,6 +27,12 @@ public class MessageProducerTest {
 
         // 创建消息生产者
         MessageProducer producer = session.createProducer(topic);
+
+        // 设置消息持久化
+        producer.setDeliveryMode(DeliveryMode.PERSISTENT);
+
+        // 由于使用了持久化，消息的启动需在设置持久化之后
+        connection.start();
 
         for (int i = 1; i <= 3; i++) {
             // 创建并发送消息
