@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class MessageConsumerTest {
 
     private static final String MQ_URL = "tcp://192.168.137.201:61616";
-    private static final String QUEUE_NAME = "Queue 001";
+    private static final String TOPIC_NAME = "Topic 001";
 
     public static void main(String[] args) throws Exception {
 
@@ -23,10 +23,10 @@ public class MessageConsumerTest {
         Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
         // 创建目的地
-        Queue queue = session.createQueue(QUEUE_NAME);
+        Topic topic = session.createTopic(TOPIC_NAME);
 
         // 创建消息消费者
-        MessageConsumer messageConsumer = session.createConsumer(queue);
+        MessageConsumer messageConsumer = session.createConsumer(topic);
 
         // 接收消息
         messageConsumer.setMessageListener(message -> {
@@ -41,7 +41,7 @@ public class MessageConsumerTest {
             }
         });
 
-        TimeUnit.SECONDS.sleep(3);
+        TimeUnit.MINUTES.sleep(3);
 
         System.out.println("消息接收完毕");
 
