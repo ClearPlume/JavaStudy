@@ -3,6 +3,7 @@ package top.fallenangel.activemq;
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
+import java.util.concurrent.TimeUnit;
 
 public class MessageConsumerTest {
 
@@ -40,7 +41,8 @@ public class MessageConsumerTest {
             }
         });
 
-        System.out.println(System.in.read());
+        TimeUnit.SECONDS.sleep(3);
+
         System.out.println("消息接收完毕");
 
         // 关闭资源
