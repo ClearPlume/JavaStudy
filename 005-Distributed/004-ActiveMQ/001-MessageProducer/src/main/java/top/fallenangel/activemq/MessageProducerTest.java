@@ -34,6 +34,8 @@ public class MessageProducerTest {
             producer.send(session.createTextMessage("Msg --> " + i));
         }
 
+        System.out.println("消息发送完毕");
+
         // 关闭资源
         producer.close();
         session.close();

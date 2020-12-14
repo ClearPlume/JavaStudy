@@ -9,7 +9,7 @@ public class MessageConsumerTest {
     private static final String MQ_URL = "tcp://192.168.137.201:61616";
     private static final String QUEUE_NAME = "Queue 001";
 
-    public static void main(String[] args) throws JMSException {
+    public static void main(String[] args) throws Exception {
 
         // 创建连接工厂
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(MQ_URL);
@@ -28,13 +28,19 @@ public class MessageConsumerTest {
         MessageConsumer messageConsumer = session.createConsumer(queue);
 
         // 接收消息
-        Message message;
+        messageConsumer.setMessageListener(message -> {
+            if (message instanceof TextMessage) {
+                TextMessage textMessage = (TextMessage) message;
+                try {
+                    System.out.println("textMessage = " + textMessage.getText());
+                }
+                catch (JMSException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
-        while ((message = messageConsumer.receive(1000)) != null) {
-            TextMessage textMessage = (TextMessage) message;
-            System.out.println("textMessage = " + textMessage.getText());
-        }
-
+        System.out.println(System.in.read());
         System.out.println("消息接收完毕");
 
         // 关闭资源
