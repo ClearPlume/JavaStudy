@@ -9,16 +9,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>top.fallenangel.activemq</groupId>
-    <artifactId>003-spring-boot-activemq-producer</artifactId>
+    <artifactId>004-spring-boot-activemq-consumer</artifactId>
     <version>1.0.0</version>
-    <name>003-SpringBootActiveMQProducer</name>
-    <description>Spring Boot 的ActiveMQ消息生产者</description>
+    <name>004-SpringBootActiveMQConsumer</name>
+    <description>Spring Boot 的ActiveMQ消息消费者</description>
 
     <properties>
         <java.version>11</java.version>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-activemq</artifactId>
@@ -32,7 +33,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
         </dependency>
 
         <dependency>

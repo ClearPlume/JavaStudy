@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "spring.activemq.dest",
+      "type": "java.lang.String",
+      "description": "消息队列的目的地名称."
+    }
+  ]
+}

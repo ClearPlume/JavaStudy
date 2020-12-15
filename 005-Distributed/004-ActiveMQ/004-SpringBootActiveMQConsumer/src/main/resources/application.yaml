@@ -1,0 +1,15 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /message-consumer
+
+spring:
+  activemq:
+    broker-url: tcp://192.168.137.201:61616
+    user: admin
+    password: admin
+    dest: Boot Queue 001
+
+  jms:
+    # \u662F\u5426\u662F\u4E3B\u9898\u6D88\u606F
+    pub-sub-domain: false
