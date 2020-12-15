@@ -5,24 +5,24 @@ import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.jms.Queue;
+import javax.jms.Topic;
 import java.util.UUID;
 
 @Component
 public class MessageProducer {
 
     @Autowired
-    private Queue queue;
+    private Topic topic;
 
     @Autowired
     private JmsMessagingTemplate messaging;
 
     public void send() {
-        messaging.convertAndSend(queue, UUID.randomUUID().toString());
+        messaging.convertAndSend(topic, UUID.randomUUID().toString());
     }
 
     @Scheduled(fixedDelay = 3000L)
     public void timedSend() {
-        messaging.convertAndSend(queue, UUID.randomUUID().toString());
+        messaging.convertAndSend(topic, UUID.randomUUID().toString());
     }
 }

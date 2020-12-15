@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 18091
   servlet:
     context-path: /message-consumer
 
@@ -12,4 +12,4 @@ spring:
 
   jms:
     # \u662F\u5426\u662F\u4E3B\u9898\u6D88\u606F
-    pub-sub-domain: false
+    pub-sub-domain: true
