@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="/inc/public::baseStyle"/>
+
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+
+    <body>
+        <form class="form-horizontal" role="form" th:action="@{/role/save}"
+              method="post" th:object="${role}">
+            <div style="position:  relative; left: 30px;">
+                <h3 th:text="|${role.roleId != null ? '修改' : '新增'}角色|">角色</h3>
+                <div style="position: relative; top: -40px; left: 70%;width: 200px;">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-default" onclick="window.history.back()">取消</button>
+                </div>
+                <hr style="position: relative; top: -40px;">
+            </div>
+
+            <div class="form-group">
+                <label for="roleId" class="col-sm-2 control-label">角色名称<span
+                        style="font-size: 15px; color: red;">*</span></label>
+                <div class="col-sm-10" style="width: 300px;">
+                    <input type="hidden" th:field="*{roleId}">
+                    <input id="roleId" type="text" class="form-control" style="width: 200%;" th:field="*{roleName}">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="roleCode" class="col-sm-2 control-label">编码</label>
+                <div class="col-sm-10" style="width: 300px;">
+                    <input id="roleCode" type="text" class="form-control" th:field="*{roleCode}" style="width: 200%;">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">启用</label>
+                <div class="col-sm-10" style="width: 300px;">
+                    <label>
+                        <input type="radio" value="1" th:field="*{roleStatus}"> 是
+                    </label>
+                    <label>
+                        <input type="radio" value="0" th:field="*{roleStatus}"> 否
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">拥有的权限</label>
+                <div class="col-sm-10" style="width:600px;">
+                    <th:block th:each="auth:${authList}">
+                        <div style="width: 100px;float: left;">
+                            <label>
+                                <input type="checkbox" th:value="${auth.authId}" th:field="*{authIds}">
+                                <span style="font-weight: normal" th:text="| ${auth.authName}|"></span>
+                            </label>
+                        </div>
+                    </th:block>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

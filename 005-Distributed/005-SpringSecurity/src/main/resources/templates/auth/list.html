@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="/inc/public::baseStyle"/>
+
+        <meta charset="UTF-8">
+        <title></title>
+
+        <script th:inline="javascript">
+            function add() {
+                window.location.href = "[(@{/auth/add})]"
+            }
+
+            function edit() {
+                let selectedAuthes = $("[name=\"authId\"]:checked")
+
+                if (selectedAuthes.length === 1) {
+                    window.location.href = "[(@{/auth/modify})]?authId=" + selectedAuthes.val()
+                }
+            }
+
+            function del() {
+                let selectedAuthes = $("[name=\"authId\"]:checked")
+
+                if (selectedAuthes.length >= 1) {
+                    $("#delete-auth-batch")[0].submit()
+                }
+            }
+
+            function auth() {
+                window.location.href = "[(@{/auth/auth})]?authId=" + $("[name=\"authId\"]:checked").val()
+            }
+
+        </script>
+    </head>
+    <body>
+
+        <div>
+            <div style="position: relative; left: 30px; top: -10px;">
+                <div class="page-header">
+                    <h3>权限列表</h3>
+                </div>
+            </div>
+        </div>
+        <div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative">
+            <div class="btn-group" style="position: relative; top: 18%;">
+                <button type="button" class="btn btn-primary" onclick="add()"><span
+                        class="glyphicon glyphicon-plus"></span> 新增
+                </button>
+                <button type="button" class="btn btn-default" onclick="edit()"><span
+                        class="glyphicon glyphicon-edit"></span> 编辑
+                </button>
+                <button type="button" class="btn btn-danger" onclick="del()"><span
+                        class="glyphicon glyphicon-minus"></span> 删除
+                </button>
+            </div>
+        </div>
+        <div style="position: relative; left: 30px; top: 20px;">
+            <form id="delete-auth-batch" th:action="@{/auth/delete}">
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="color: #B3B3B3;">
+                            <td>
+                                <label>
+                                    <input type="checkbox"/>
+                                </label>
+                            </td>
+                            <td>序号</td>
+                            <td>权限名称</td>
+                            <td>编码</td>
+                            <td>访问地址</td>
+                            <td>是否启用</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="active" th:each="auth,vs : ${authList}">
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="authId" th:value="${auth.authId}"/>
+                                </label>
+                            </td>
+                            <td th:text="${vs.count}"></td>
+                            <td th:text="${auth.authName}"></td>
+                            <td th:text="${auth.authCode}"></td>
+                            <td th:text="${auth.authUrl}"></td>
+                            <td>
+                                <th:block th:if="${auth.authStatus eq 1}">
+                                    <span style="color:green">启用</span>
+                                </th:block>
+                                <th:block th:if="${auth.authStatus eq 0}">
+                                    <span style="color:red">禁用</span>
+                                </th:block>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>

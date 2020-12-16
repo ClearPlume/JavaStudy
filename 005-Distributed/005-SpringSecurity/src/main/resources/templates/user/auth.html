@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="/inc/public::baseStyle"/>
+
+        <meta charset="UTF-8">
+        <title></title>
+    </head>
+    <body>
+        <form class="form-horizontal" role="form" th:action="@{/user/saveAuth}" method="post" th:object="${user}">
+            <div style="position:  relative; left: 30px;">
+                <h3>用户授权</h3>
+                <div style="position: relative; top: -40px; left: 70%;width: 200px;">
+                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-default" onclick="window.history.back()">取消</button>
+                </div>
+                <hr style="position: relative; top: -40px;">
+            </div>
+
+            <div style="position: relative; top: -30px;">
+                <input type="hidden" th:field="*{userId}">
+                <div style="position: relative; left: 40px; height: 30px;">
+                    <div style="width: 300px; color: gray;">用户名</div>
+                    <div style="width: 300px;position: relative; left: 200px; top: -20px;">
+                        <b th:text="${user.userName}"></b>
+                    </div>
+                    <div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">性别</div>
+                    <div style="width: 300px;position: relative; left: 650px; top: -60px;">
+                        <b th:text="${user.userSex eq 1 ? '男' : '女'}"></b></div>
+                    <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -50px;"></div>
+                    <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -50px; left: 450px;"></div>
+                </div>
+
+                <div style="position: relative; left: 40px; height: 30px; top: 20px;">
+                    <div style="width: 300px; color: gray;">年龄</div>
+                    <div style="width: 300px;position: relative; left: 200px; top: -20px;">
+                        <b th:text="${user.userAge}"></b>
+                    </div>
+                    <div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;"></div>
+                    <div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -10px;"></div>
+                </div>
+
+            </div>
+
+            <div style="position: relative; top: 30px; left: 40px;">
+                <div class="page-header">
+                    <h4>权限设置</h4>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">拥有的权限</label>
+                    <div class="col-sm-10" style="width:600px;">
+                        <th:block th:each="auth:${authList}">
+                            <div style="width: 100px;float: left;">
+                                <label>
+                                    <input type="checkbox" th:value="${auth.authId}" th:field="*{authIds}"/>
+                                    <span style="font-weight: normal" th:text="${auth.authName}"></span>
+                                </label>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">拥有的角色</label>
+                    <div class="col-sm-10" style="width:600px;">
+                        <th:block th:each="role:${roleList}">
+                            <div style="width: 100px;float: left;">
+                                <label>
+                                    <input type="checkbox" th:value="${role.roleId}" th:field="*{roleIds}"/>
+                                    <span style="font-weight: normal" th:text="${role.roleName}"></span>
+                                </label>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+
+                <!--<div class="form-group">
+                    <label for="create-describe" class="col-sm-2 control-label">描述</label>
+                    <div class="col-sm-10" style="width: 300px;">
+                        <textarea class="form-control" rows="3" id="describe" style="width: 200%;"></textarea>
+                    </div>
+                </div>-->
+            </div>
+        </form>
+    </body>
+</html>

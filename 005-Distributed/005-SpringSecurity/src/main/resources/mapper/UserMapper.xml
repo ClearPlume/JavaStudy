@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.fallenangel.security.model.dao.UserMapper">
+    <resultMap id="BaseResultMap" type="top.fallenangel.security.model.entity.User">
+        <id column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_pwd" jdbcType="VARCHAR" property="userPwd"/>
+        <result column="user_sex" jdbcType="INTEGER" property="userSex"/>
+        <result column="user_age" jdbcType="INTEGER" property="userAge"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        user_id, user_name, user_pwd, user_sex, user_age
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where user_id = #{userId,jdbcType=INTEGER}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+    </select>
+
+    <select id="login" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_user
+        where user_name = #{userName} and user_pwd = #{userPwd}
+    </select>
+
+    <!--根据用户名查询用户-->
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        select user_id, user_name, user_pwd, user_sex, user_age
+        from t_user
+        where user_name = #{username}
+    </select>
+
+    <!--根据用户id查询用户所有的权限Code-->
+    <select id="selectAllAuthCodeById" resultType="java.lang.String">
+        select a.auth_code
+        from t_auth a
+        where exists(select *
+                     from t_user_auth ua
+                     where ua.user_id = #{userId}
+                       and a.auth_id = ua.auth_id)
+        union
+        select a.auth_code
+        from t_role_auth ra
+                 join
+             t_role r on ra.role_id = r.role_id
+                 join
+             t_auth a on ra.auth_id = a.auth_id
+        where exists(select *
+                     from t_user_role ur
+                     where ur.user_id = #{userId}
+                       and r.role_id = ur.role_id)
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_user
+        where user_id in
+        <foreach collection="array" open="(" separator="," close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="insert" parameterType="top.fallenangel.security.model.entity.User">
+        insert into t_user (user_id, user_name, user_pwd,
+                            user_sex, user_age)
+        values (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPwd,jdbcType=VARCHAR},
+                #{userSex,jdbcType=INTEGER}, #{userAge,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" parameterType="top.fallenangel.security.model.entity.User">
+        insert into t_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userPwd != null">
+                user_pwd,
+            </if>
+            <if test="userSex != null">
+                user_sex,
+            </if>
+            <if test="userAge != null">
+                user_age,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPwd != null">
+                #{userPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userSex != null">
+                #{userSex,jdbcType=INTEGER},
+            </if>
+            <if test="userAge != null">
+                #{userAge,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="top.fallenangel.security.model.entity.User">
+        update t_user
+        <set>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPwd != null">
+                user_pwd = #{userPwd,jdbcType=VARCHAR},
+            </if>
+            <if test="userSex != null">
+                user_sex = #{userSex,jdbcType=INTEGER},
+            </if>
+            <if test="userAge != null">
+                user_age = #{userAge,jdbcType=INTEGER},
+            </if>
+        </set>
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="top.fallenangel.security.model.entity.User">
+        update t_user
+        set user_name = #{userName,jdbcType=VARCHAR},
+            user_pwd  = #{userPwd,jdbcType=VARCHAR},
+            user_sex  = #{userSex,jdbcType=INTEGER},
+            user_age  = #{userAge,jdbcType=INTEGER}
+        where user_id = #{userId,jdbcType=INTEGER}
+    </update>
+</mapper>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:include="/inc/public::baseStyle"/>
+
+        <meta charset="UTF-8">
+        <title></title>
+
+        <script th:inline="javascript">
+            function add() {
+                window.location.href = "[(@{/user/edit})]"
+            }
+
+            function edit() {
+                let selectedUser = $("[name=\"userId\"]:checked")
+
+                if (selectedUser.length === 1) {
+                    window.location.href = "[(@{/user/edit})]?userId=" + selectedUser.val()
+                }
+            }
+
+            function auth() {
+                let selectedUser = $("[name=\"userId\"]:checked")
+
+                if (selectedUser.length === 1) {
+                    window.location.href = "[(@{/user/auth})]?userId=" + selectedUser.val()
+                }
+            }
+
+            function del() {
+                let selectedUser = $("[name=\"userId\"]:checked")
+
+                if (selectedUser.length > 0) {
+                    $("#delete-user-batch")[0].submit()
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <div>
+            <div style="position: relative; left: 30px; top: -10px;">
+                <div class="page-header">
+                    <h3>员工列表</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative">
+            <div class="btn-group" style="position: relative; top: 18%;">
+                <button type="button" class="btn btn-primary" onclick="add()"><span
+                        class="glyphicon glyphicon-plus"></span> 新增
+                </button>
+                <button type="button" class="btn btn-default" onclick="edit()"><span
+                        class="glyphicon glyphicon-edit"></span> 编辑
+                </button>
+                <button type="button" class="btn btn-danger" onclick="del()"><span
+                        class="glyphicon glyphicon-minus"></span> 删除
+                </button>
+                <button type="button" class="btn btn-success" onclick="auth()"><span
+                        class="glyphicon glyphicon-edit"></span> 授权
+                </button>
+            </div>
+        </div>
+
+        <div style="position: relative; left: 30px; top: 20px;">
+            <form id="delete-user-batch" th:action="@{/user/delete}" method="post">
+                <table class="table table-hover">
+                    <thead>
+                        <tr style="color: #B3B3B3;">
+                            <td>
+                                <label>
+                                    <input type="checkbox"/>
+                                </label>
+                            </td>
+                            <td>序号</td>
+                            <td>用户名</td>
+                            <td>性别</td>
+                            <td>年龄</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="active" th:each="user,vs : ${userList}">
+                            <td>
+                                <label>
+                                    <input type="checkbox" name="userId" th:value="${user.userId}"/>
+                                </label>
+                            </td>
+                            <td th:text="${vs.count}"></td>
+                            <td th:text="${user.userName}"></td>
+                            <td th:text="${user.userSex eq 1 ? '男' : '女'}"></td>
+                            <td th:text="${user.userAge}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </body>
+</html>
