@@ -13,6 +13,7 @@ import top.fallenangel.security.service.IAuthService;
 import java.util.List;
 
 @Controller
+// @Secured("ROLE_admin")
 @RequestMapping("auth")
 public class AuthController {
 

@@ -29,6 +29,7 @@
                 </div>
                 <form th:action="@{/saveLogin}" method="post" class="form-horizontal" role="form">
                     <div class="form-group form-group-lg">
+                        <input type="hidden" th:value="${_csrf.token}">
                         <div style="width: 350px;">
                             <label for="userName"></label>
                             <input id="userName" class="form-control" type="text" placeholder="用户名" name="userName"

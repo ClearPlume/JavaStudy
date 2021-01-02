@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head>
         <th:block th:include="/inc/public::baseStyle"/>
 
@@ -48,8 +48,11 @@
                     </div>
                     <div class="modal-body">
                         <div style="position: relative; left: 40px;">
-                            姓名：<b>张三</b><br><br>
-                            登录帐号：<b>zhangsan</b><br><br>
+                            姓名：<b sec:authentication="name">张三</b><br><br>
+                            登录帐号：<b sec:authentication="principal.username">zhangsan</b><br><br>
+                            凭证：<b sec:authentication="credentials"></b><br><br>
+                            权限：<b sec:authentication="authorities"></b><br><br>
+                            客户端信息：<b sec:authentication="details"></b><br><br>
                             组织机构：<b>1005，市场部，二级部门</b><br><br>
                             邮箱：<b>zhangsan@bjpowernode.com</b><br><br>
                             失效时间：<b>2017-02-14 10:10:10</b><br><br>
@@ -140,7 +143,7 @@
                         <a href="javascript:void(0)" style="text-decoration: none; color: white;"
                            class="dropdown-toggle" data-toggle="dropdown">
                             <span class="glyphicon glyphicon-user"></span>
-                            <span th:text="${session.user.userName}"></span>
+                            <span sec:authentication="principal.username"></span>
                             <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right">
@@ -160,7 +163,8 @@
             <!-- 导航 -->
             <div id="navigation" style="left: 0; width: 18%; position: relative; height: 100%; overflow:auto;">
                 <ul id="no1" class="nav nav-pills nav-stacked">
-                    <li class="liClass"><a th:href="@{/right}" target="workareaFrame"><span
+                    <li class="liClass" sec:authorize="hasRole('admin')"><a th:href="@{/right}"
+                                                                                target="workareaFrame"><span
                             class="glyphicon glyphicon-home"></span> 工作台</a></li>
 
                     <li class="liClass"><a th:href="@{/user/list}" target="workareaFrame"><span
